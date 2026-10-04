@@ -86,21 +86,34 @@ Requires PHP 8 and a web server; the project is developed under XAMPP.
 # 1. serve the directory (XAMPP: drop it in htdocs, or:)
 php -S localhost:8000
 
-# 2. create your local config, which is gitignored
-cp config.php config.local.php
-# then fill in the marketplace API keys you have
+# 2. create your local config from the example, which is gitignored
+cp config.local.example.php config.local.php
+# then fill in whichever marketplace API keys you have
 ```
 
 `config.local.php` holds every credential and is never committed. Without it
-the site runs, but the marketplace endpoints return no data.
+the pages still render, but the marketplace endpoints return no data.
 
-To recompile a page component after editing it:
+### Rebuilding a page component
+
+The compiled bundles (`react/*.build.js`) are committed, so **no build step
+is needed to run the site** - this matters only if you edit a component.
+
+The project normally uses a vendored esbuild binary under `node_modules/`,
+which is not committed. Install esbuild to rebuild:
 
 ```bash
-./node_modules/@esbuild/win32-x64/esbuild.exe react/deals-page.jsx \
+npm install --no-save esbuild
+
+npx esbuild react/deals-page.jsx \
   --jsx=transform --format=iife --charset=utf8 \
   --outfile=react/deals-page.build.js
 ```
+
+One caveat worth knowing: `react/` contains both `.jsx` and `.tsx` files, and
+for some pages the two are *not* the same component — `item-page.build.js` is
+built from `item-page.tsx`, while most other pages build from `.jsx`. Check
+which source a bundle corresponds to before editing it.
 
 ---
 
@@ -113,6 +126,8 @@ Trimmed deliberately, to keep it reviewable:
 - **3D weapon models** (~18 GB) — regenerate with
   `scripts/export_base_weapon_models.ps1`.
 - **Price caches** under `assets/*-cache/` — repopulated by the sync scripts.
+  The catalogue indexes under `assets/data/` *are* committed, since the app
+  reads them at runtime.
 - **Deployment configuration and credentials** (`deploy/`,
   `config.local.php`).
 - **Scratch and debug artifacts** from development.

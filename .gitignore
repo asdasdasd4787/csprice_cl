@@ -22,8 +22,12 @@ misc/
 # Price and marketplace caches (repopulated by the sync scripts)
 assets/*-cache/
 assets/cache/
-assets/data/
 assets/*.log
+
+# assets/data holds the catalogue indexes the app reads at runtime, so those
+# ARE committed. Only the backups and the TF2 sister-site data are excluded.
+assets/data/*.bak*
+assets/data/tf2/
 
 # 3D models (regenerate: scripts/export_base_weapon_models.ps1)
 assets/models/
