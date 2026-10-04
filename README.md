@@ -34,15 +34,55 @@ the dealt items' 30-day trend.
 **Skin Crafter.** A 3D viewer for placing stickers and charms on a weapon
 before committing real money to the craft.
 
-**Mark, the assistant.** A chat assistant with the catalogue and price history
-in context, for questions like "is this worth buying now" or "compare these two
-wears".
+**Mark, the assistant.** A market assistant grounded in the site's own data
+rather than a general chatbot bolted on. See [The assistant](#the-assistant)
+below.
 
 **Inventory.** Steam sign-in reads your inventory, values it at current prices
 and exports to Excel.
 
 The site also runs a Team Fortress 2 edition at https://tf2price.eu, sharing
 this codebase with a separate catalogue and its own deployment.
+
+---
+
+## The assistant
+
+"Mark" is the chat assistant on the home page, and the engine behind the
+per-item **AI analysis** and **inventory analysis** actions. The design
+principle is that it answers from the site's data, not from model recall —
+prices change hourly and a model's training set cannot know them.
+
+**Grounding.** Before a reply is generated, `ai_chat_helpers.php` assembles
+only the context a question needs, from the same sources the pages use:
+
+- the catalogue, and a catalogue search for the items a question names
+- live prices across all eleven marketplaces, plus the cheapest current listing
+- listing distribution per market, so "where is supply" is answerable
+- the day's movers and a cached market pulse
+- the signed-in user's Steam inventory, when the question is about it
+
+**Structured replies.** Answers come back as rendered item cards with live
+prices and a link to the cheapest listing, not just prose — the reply is
+post-processed so quoted prices are reconciled against the live figures rather
+than left as whatever the model wrote.
+
+**Portfolio mode.** Given a budget ("build me a €500 portfolio"), it selects
+candidates, allocates quantities against the budget and returns the basket
+priced at the cheapest available listings.
+
+**Price forecasting.** `ai_arima.php` is a from-scratch ARIMA(p,d,q)
+implementation in PHP, run over weekly-resampled price history, used to
+produce the prediction context. The forecast is arithmetic, not a model
+guess; the assistant explains it rather than inventing it.
+
+**Model-agnostic.** Any OpenAI-compatible endpoint works — set `api_key`,
+`model` and `base_url` in `config.local.php`. The default is `gpt-5-nano`.
+Without a key the site runs normally and the assistant degrades to a
+non-AI fallback reply rather than erroring.
+
+The TF2 edition has the same assistant over its own catalogue
+(`tf2_ai_helpers.php`).
 
 ---
 
