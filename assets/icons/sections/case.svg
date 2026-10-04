@@ -1,0 +1,8 @@
+<!-- Cases: a weapon case seen face on. Drawn rather than traced because the
+     desktop nav has no case icon - see collection.svg for the same approach.
+     Bold lid seam and a centred latch so it still reads as a case at 22px. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <path fill="#ffffff" d="M7 14a3 3 0 0 1 3-3h28a3 3 0 0 1 3 3v6H7v-6Z"/>
+  <path fill="#ffffff" d="M7 23h14v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4h14v11a3 3 0 0 1-3 3H10a3 3 0 0 1-3-3V23Z"/>
+  <rect fill="#ffffff" x="21" y="19" width="6" height="6" rx="1"/>
+</svg>

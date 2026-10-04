@@ -1,0 +1,7470 @@
+/* Home = Mark AI  -  same deep navy base as Item Database / site pages */
+
+html:has(body.page-home) {
+  background: #0a0e1a;
+}
+
+body.page-home {
+  --home-ai-chrome: #020617;
+  --home-ai-text: #f8fafc;
+  --home-ai-muted: #94a3b8;
+  --home-ai-accent: #60a5fa;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* Solid deep navy under the wave-line hero (.home-ai-waves), continuous
+     under the navbar. */
+  background: #070b1c !important;
+  background-attachment: scroll !important;
+}
+
+/* Shared index.css paints a lighter navy glow on body; keep home dark on every entry. */
+body.page-home::before {
+  content: none !important;
+  display: none !important;
+}
+
+body.page-home #cs2-nav-root,
+body.page-home .navbar {
+  flex: 0 0 auto;
+}
+
+/* Use the shared navbar.css chrome (do not restyle vs Market Explorer) */
+body.page-home #cs2-nav-root {
+  background: transparent;
+}
+
+body.page-home .nav-category-preview {
+  background: rgba(8, 13, 24, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  box-shadow: none;
+}
+
+body.page-home #cs2-footer-root,
+body.page-home .site-footer,
+body.page-home #cs2-chat-root,
+body.page-home .cs2-chat {
+  display: none !important;
+}
+
+body.page-home #root {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.home-ai {
+  --home-ai-bg: #020617;
+  --home-ai-panel: #0a1220;
+  --home-ai-panel-2: #111827;
+  --home-ai-line: rgba(148, 163, 184, 0.14);
+  --home-ai-text: #f8fafc;
+  --home-ai-muted: #94a3b8;
+  --home-ai-accent: #60a5fa;
+  --home-ai-mint: #2dd4bf;
+  --home-ai-blue: #2563eb;
+  --home-ai-cyan: #22d3ee;
+  --home-ai-rail: 96px;
+  --home-ai-glass: rgba(8, 14, 26, 0.72);
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  gap: 0;
+  overflow: hidden;
+  /* Base colour lives on body.page-home so the navbar strip matches. */
+  background: transparent;
+  position: relative;
+  isolation: isolate;
+  height: 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   Wave-line hero background (react/home-page.jsx, HeroWaves).
+
+   The layer sits at z-index -1 inside .home-ai's own stacking context
+   (isolation: isolate above), so it is under every child of the hero but
+   still over the page colour. The SVG is twice the hero's width and slides
+   left by half of itself in a loop; the wave periods tile at that point, so
+   the seam is invisible. Only transform animates, so it stays on the GPU.
+
+   Speed: --home-ai-waves-speed. Edge fade: the mask below. Colours, count,
+   amplitude and glow: HERO_WAVES in home-page.jsx.
+   --------------------------------------------------------------------------- */
+.home-ai {
+  --home-ai-waves-speed: 80s;
+}
+
+.home-ai-waves {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 25%, transparent 82%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 25%, transparent 82%);
+}
+
+.home-ai-waves svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 200%;
+  height: 100%;
+  will-change: transform;
+  animation: homeAiWavesDrift var(--home-ai-waves-speed) linear infinite;
+}
+
+@keyframes homeAiWavesDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Film grain: a static feTurbulence tile, overlay-blended at 8%. Toggled by
+   HERO_WAVES.grain in home-page.jsx. */
+.home-ai-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 240px 240px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-waves svg {
+    animation: none;
+  }
+}
+
+.home-ai::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    /* Even out left/right brightness: gently darken toward the right edge. */
+    linear-gradient(
+      90deg,
+      rgba(2, 6, 18, 0) 0%,
+      rgba(2, 6, 18, 0) 32%,
+      rgba(2, 6, 18, 0.65) 100%
+    ),
+    /* Focused glow behind the headline (~800x400 ellipse). */
+    radial-gradient(
+      800px 400px at 50% 42%,
+      rgba(56, 132, 255, 0.15) 0%,
+      transparent 72%
+    );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  animation: homeAiHeroGlow 18s ease-in-out infinite;
+}
+
+/* No square grid behind the hero any more: the owner asked for it removed on
+   25 Sept 2026 once the wave lines (.home-ai-waves) became the landing
+   background. Kept as `content: none` so the phone override further down
+   stays inert. */
+.home-ai::after {
+  content: none;
+}
+
+/* No dot field / planets: the owner reverted to the grid above. These stay as
+   explicit no-ops so a stale rule elsewhere cannot bring the dots back. */
+body.page-home #root::before,
+body.page-home #root::after {
+  content: none;
+}
+
+/* Numbered lists in explainer answers keep their numbers. */
+.home-ai-row.is-assistant .home-ai-text ol.home-ai-md-ol {
+  counter-reset: home-ai-md;
+}
+
+.home-ai-row.is-assistant .home-ai-text ol.home-ai-md-ol li::before {
+  counter-increment: home-ai-md;
+  content: counter(home-ai-md) ".";
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  color: var(--home-ai-accent, #60a5fa);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Typing caret that follows the reveal of a formatted answer. */
+.home-ai-typing-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  border-radius: 1px;
+  background: var(--home-ai-accent, #60a5fa);
+  animation: homeAiCaretBlink 0.9s steps(2, start) infinite;
+}
+
+@keyframes homeAiCaretBlink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Soften ambient glow/grid once chat answers are on screen so text stays readable. */
+.home-ai:has(.home-ai-main:not(.is-welcome))::before {
+  opacity: 0.26;
+  animation: none;
+}
+
+.home-ai:has(.home-ai-main:not(.is-welcome))::after {
+  opacity: 0.12;
+}
+
+@keyframes homeAiHeroGlow {
+  0%,
+  100% {
+    opacity: 1;
+    background-position: 50% 42%;
+  }
+  50% {
+    opacity: 0.72;
+    background-position: 54% 38%;
+  }
+}
+
+@keyframes homeAiAccentShift {
+  0%,
+  100% {
+    background-position: 8% 50%;
+  }
+  50% {
+    background-position: 72% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai::before,
+  .home-ai-empty-accent {
+    animation: none;
+  }
+}
+
+.home-ai-sidebar-backdrop {
+  display: none;
+}
+
+/* The profile page has no chat rail: the floating sidebar and its phone
+   backdrop are gone while panelMode is "profile" (home-page.jsx). The rail is
+   absolutely positioned, so nothing else moves. */
+.home-ai.is-profile .home-ai-sidebar,
+.home-ai.is-profile .home-ai-sidebar-backdrop,
+.home-ai.is-profile .home-ai-mobile-sidebar {
+  display: none !important;
+}
+
+.home-ai-sidebar {
+  --home-ai-sidebar-collapsed: 72px;
+  --home-ai-sidebar-expanded: 240px;
+  position: absolute;
+  z-index: 30;
+  isolation: isolate;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--home-ai-sidebar-expanded);
+  max-height: min(78vh, calc(100% - 40px));
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 12, 22, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  padding: 12px 10px;
+  overflow: visible;
+  transition:
+    width 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.32s ease,
+    box-shadow 0.32s ease;
+}
+
+.home-ai.is-sidebar-collapsed .home-ai-sidebar {
+  width: var(--home-ai-sidebar-collapsed);
+  max-height: min(520px, calc(100% - 48px));
+  padding: 12px 10px;
+  border-radius: 24px;
+  align-items: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+.home-ai-sidebar-top {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: 4px;
+  min-width: 0;
+}
+
+.home-ai-sidebar-divider {
+  flex: 0 0 auto;
+  height: 1px;
+  margin: 10px 8px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(148, 163, 184, 0.28),
+    transparent
+  );
+}
+
+.home-ai-sidebar-divider-soft {
+  opacity: 0.7;
+}
+
+.home-ai.is-sidebar-collapsed .home-ai-sidebar-divider-soft {
+  display: none;
+}
+
+.home-ai-sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-height: 40px;
+  min-width: 0;
+  padding: 0 2px;
+}
+
+.home-ai-sidebar-brand-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: #f8fafc;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.home-ai-sidebar-brand-label i {
+  color: #60a5fa;
+  font-size: 14px;
+}
+
+.home-ai-sidebar-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.home-ai-sidebar-search-btn,
+.home-ai-mobile-sidebar {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 15px;
+  display: grid;
+  place-items: center;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.home-ai-sidebar-search-btn:hover,
+.home-ai-sidebar-search-btn.is-active,
+.home-ai-mobile-sidebar:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.home-ai-sidebar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 12px;
+  background: rgba(6, 11, 22, 0.72);
+}
+
+.home-ai-sidebar-search > i {
+  color: rgba(248, 250, 252, 0.7);
+  font-size: 13px;
+}
+
+.home-ai-sidebar-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.home-ai-sidebar-search input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.home-ai-sidebar-search-clear {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(248, 250, 252, 0.7);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.home-ai-sidebar-search-clear:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.home-ai-prompt-search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(37, 99, 235, 0.14), transparent 42%),
+    rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.home-ai-prompt-search-box {
+  width: min(460px, calc(100vw - 32px));
+  max-height: min(520px, calc(100dvh - 48px));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(24, 34, 54, 0.98), rgba(12, 19, 34, 0.98));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+  animation: homeAiPromptSearchIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes homeAiPromptSearchIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.home-ai-prompt-search-input-row {
+  display: grid;
+  /* icon | field | search spinner | close */
+  grid-template-columns: 18px 1fr 16px 32px;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  margin: 0;
+  padding: 0 14px;
+  border-bottom: 0;
+}
+
+.home-ai-prompt-search-box.has-results .home-ai-prompt-search-input-row {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.home-ai-prompt-search-input-row > i {
+  color: rgba(248, 250, 252, 0.78);
+  font-size: 14px;
+}
+
+.home-ai-prompt-search-input-row input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f8fafc;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.home-ai-prompt-search-input-row input::placeholder {
+  color: rgba(148, 163, 184, 0.62);
+}
+
+.home-ai-prompt-search-input-row button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(203, 213, 225, 0.72);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.home-ai-prompt-search-input-row button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.home-ai-prompt-search-results {
+  overflow: auto;
+  padding: 8px;
+  min-height: 0;
+}
+
+.home-ai-prompt-search-empty {
+  margin: 18px 10px;
+  color: rgba(148, 163, 184, 0.72);
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.home-ai-prompt-search-hit {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #f8fafc;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.home-ai-prompt-search-hit:hover {
+  background: rgba(30, 41, 59, 0.72);
+}
+
+.home-ai-prompt-search-hit > i {
+  margin-top: 2px;
+  color: rgba(248, 250, 252, 0.75);
+  width: 16px;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.home-ai-prompt-search-hit span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.home-ai-prompt-search-hit strong {
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-ai-prompt-search-hit small {
+  color: rgba(148, 163, 184, 0.85);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-ai-prompt-search-spin {
+  font-size: 13px;
+  color: rgba(148, 163, 184, 0.8);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.home-ai-prompt-search-spin.is-on {
+  opacity: 1;
+}
+
+/* Item hits: the search is the site's, so rows carry the item's art. */
+.home-ai-prompt-search-hit.is-item {
+  align-items: center;
+  text-decoration: none;
+}
+
+.home-ai-prompt-search-hit.is-item img {
+  width: 40px;
+  height: 30px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.65);
+}
+
+.home-ai-prompt-search-head {
+  margin: 10px 10px 4px;
+  color: rgba(148, 163, 184, 0.7);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-ai-prompt-search-create:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.home-ai-new {
+  flex: 0 0 auto;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 14px;
+  background: rgba(41, 98, 255, 0.18);
+  color: #e0f2fe;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: visible;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1px rgba(41, 98, 255, 0.22);
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.home-ai-new i {
+  flex: 0 0 auto;
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  color: #93c5fd;
+}
+
+.home-ai-new span {
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  opacity: 1;
+  max-width: 160px;
+  transition: opacity 0.2s ease, max-width 0.28s ease;
+}
+
+.home-ai-new:hover {
+  background: rgba(41, 98, 255, 0.32);
+  color: #ffffff;
+  transform: translateX(2px) scale(1.04);
+}
+
+.home-ai-mobile-sidebar {
+  display: none;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 15px;
+  place-items: center;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+@media (min-width: 961px) {
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar {
+    padding: 12px 10px;
+    align-items: center;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-brand,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-brand-label,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-tools {
+    display: none;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-search,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-search-btn,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-search-btn span {
+    display: none;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-top {
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-toggle {
+    width: 44px;
+    min-width: 44px;
+    margin: 0 auto;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-new {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    margin: 2px auto 0;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+    border-radius: 50%;
+    background: #2962ff;
+    box-shadow:
+      0 8px 20px rgba(41, 98, 255, 0.38),
+      0 0 0 1px rgba(147, 197, 253, 0.25);
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-new i {
+    color: #ffffff;
+    width: auto;
+    font-size: 18px;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-new:hover {
+    transform: scale(1.08);
+    filter: brightness(1.06);
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-new:hover i {
+    transform: none;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-scroll {
+    display: none;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-nav {
+    width: 100%;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-new span,
+  .home-ai.is-sidebar-collapsed .home-ai-nav-item span,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-toggle span,
+  .home-ai.is-sidebar-collapsed .home-ai-section-label,
+  .home-ai.is-sidebar-collapsed .home-ai-history-item span,
+  .home-ai.is-sidebar-collapsed .home-ai-history-empty,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-profile-copy {
+    display: none;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-nav-item {
+    width: 44px;
+    min-width: 44px;
+    margin: 0 auto;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-nav-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    margin: 0;
+    min-width: 8px;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    font-size: 0;
+    background: #ef4444;
+    box-shadow: 0 0 0 2px rgba(15, 20, 35, 0.9);
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-footer {
+    padding-top: 4px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-profile {
+    width: 44px;
+    min-width: 44px;
+    margin: 0 auto;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-btn[data-tip]::after,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-profile[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-4px);
+    z-index: 40;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    color: #f8fafc;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: 0 10px 28px rgba(2, 6, 23, 0.45);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-btn[data-tip]:hover::after,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar-profile[data-tip]:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.home-ai-sidebar-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 2px;
+}
+
+.home-ai-sidebar-footer {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding-top: 2px;
+  border-top: none;
+}
+
+.home-ai-sidebar-profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 6px 10px;
+  border-radius: 14px;
+  color: #f8fafc;
+  text-decoration: none;
+  overflow: visible;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.home-ai-sidebar-profile:hover {
+  background: rgba(37, 99, 235, 0.14);
+  transform: translateX(2px) scale(1.03);
+}
+
+.home-ai-sidebar-profile-avatar-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+}
+
+.home-ai-sidebar-profile-avatar,
+.home-ai-sidebar-profile-fallback {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.home-ai-sidebar-profile-fallback {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.home-ai-sidebar-online {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #22c55e;
+  border: 2px solid rgba(15, 20, 35, 0.95);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.45);
+}
+
+.home-ai-sidebar-profile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.home-ai-sidebar-profile-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.home-ai-sidebar-profile-copy small {
+  color: rgba(148, 163, 184, 0.85);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.home-ai-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-ai-nav-item,
+.home-ai-sidebar-btn.home-ai-nav-item,
+.home-ai-sidebar-btn.home-ai-sidebar-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: visible;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.home-ai-nav-item i,
+.home-ai-sidebar-btn > i:first-child {
+  width: 22px;
+  text-align: center;
+  color: rgba(203, 213, 225, 0.88);
+  font-size: 15px;
+  flex: 0 0 auto;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.home-ai-nav-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-ai-nav-item:hover,
+.home-ai-sidebar-btn.home-ai-sidebar-toggle:hover,
+.home-ai-sidebar-btn.home-ai-nav-item:hover {
+  background: rgba(37, 99, 235, 0.16);
+  color: #ffffff;
+  transform: translateX(2px) scale(1.08);
+}
+
+.home-ai-nav-item:hover i,
+.home-ai-sidebar-btn:hover > i:first-child {
+  color: #ffffff;
+  transform: rotate(5deg);
+}
+
+.home-ai-nav-item.is-active {
+  background: rgba(41, 98, 255, 0.22);
+  color: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.28),
+    0 0 18px rgba(37, 99, 235, 0.22);
+}
+
+.home-ai-nav-item.is-active i {
+  color: #ffffff;
+}
+
+.home-ai-nav-badge {
+  margin-left: auto;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #2962ff;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 18px;
+  text-align: center;
+}
+
+.home-ai-section-label {
+  color: rgba(248, 250, 252, 0.92);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  margin: 0 8px 6px;
+}
+
+.home-ai-history {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-ai-history-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  padding: 0 6px 0 4px;
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(226, 232, 240, 0.82);
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.home-ai-history-item:hover,
+.home-ai-history-item.is-active {
+  background: rgba(30, 41, 59, 0.72);
+  color: var(--home-ai-text);
+}
+
+.home-ai-history-open {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 0 8px 0 8px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-ai-history-open i {
+  width: 22px;
+  font-size: 17px;
+  text-align: center;
+  opacity: 0.95;
+  flex: 0 0 auto;
+}
+
+.home-ai-history-open span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-ai-history-delete {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(148, 163, 184, 0.55);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.16s ease, color 0.16s ease, background 0.16s ease;
+}
+
+.home-ai-history-item:hover .home-ai-history-delete,
+.home-ai-history-item.is-active .home-ai-history-delete,
+.home-ai-history-delete:focus-visible {
+  opacity: 1;
+}
+
+.home-ai-history-delete:hover,
+.home-ai-history-delete:focus-visible {
+  color: #ef4444;
+  background: transparent;
+}
+
+.home-ai-history-delete i {
+  width: auto;
+  font-size: 15px;
+}
+
+.home-ai-history-empty {
+  margin: 0 10px;
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.home-ai-main {
+  grid-column: 1;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  /* Equal side rails so thread + composer stay viewport-centered (sidebar floats over left rail). */
+  padding-left: var(--home-ai-rail);
+  padding-right: var(--home-ai-rail);
+  box-sizing: border-box;
+}
+
+/* Welcome: keep prompt centered; only lift the main title */
+.home-ai-main.is-welcome {
+  justify-content: center;
+  padding-top: 0;
+}
+
+.home-ai-main.is-welcome .home-ai-stage {
+  flex: 0 0 auto;
+  overflow: visible;
+  padding-bottom: 0;
+}
+
+.home-ai-main.is-welcome .home-ai-empty {
+  min-height: 0;
+  padding: 12px 12px 8px;
+  justify-content: center;
+  /* Do not set transform here  -  homeAiFadeUp ends at transform:none and would wipe it */
+  gap: 14px;
+}
+
+.home-ai-main.is-welcome .home-ai-empty h1,
+.home-ai-welcome-headline {
+  position: relative;
+  top: auto;
+  margin-bottom: 0;
+  transform: translateY(clamp(-18px, -2vh, -8px));
+  font-size: clamp(28px, 3.6vw, 46px);
+  letter-spacing: -0.02em;
+}
+
+.home-ai-main.is-welcome .home-ai-composer-wrap {
+  flex: 0 0 auto;
+  padding-top: 8px;
+  padding-bottom: max(28px, env(safe-area-inset-bottom));
+  transform: none;
+}
+
+.home-ai-topbar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px 6px;
+}
+
+.home-ai-brand {
+  display: none;
+}
+
+.home-ai-brand strong {
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.home-ai-brand span {
+  color: #7dd3fc;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.home-ai-stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-ai-main:not(.is-welcome) .home-ai-stage {
+  padding-top: 8px;
+  padding-bottom: 100px;
+}
+
+.home-ai-thread {
+  width: min(100%, 920px);
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Outer inset: same above the question bubble as below the last answer. */
+  padding-top: 12px;
+  padding-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.home-ai-empty {
+  min-height: min(52vh, 520px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 24px 12px 8px;
+  animation: homeAiFadeUp 0.45s ease both;
+}
+
+.home-ai-empty-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.45);
+}
+
+.home-ai-empty h1 {
+  margin: 0;
+  max-width: min(100%, 1100px);
+  color: #ffffff;
+  font-size: clamp(28px, 4.6vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.home-ai-empty-lead {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+/* drop-shadow on a wrapper: filter + background-clip:text conflict on the same node. */
+.home-ai-empty-accent-wrap {
+  display: inline-block;
+  filter: drop-shadow(0 0 20px rgba(79, 172, 254, 0.4));
+}
+
+.home-ai-empty-accent {
+  white-space: nowrap;
+  font-weight: 900;
+  color: #4facfe;
+  background-image: linear-gradient(90deg, #4facfe 0%, #00d4ff 48%, #ffffff 100%);
+  background-size: 120% 100%;
+  background-position: 20% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: homeAiAccentShift 18s ease-in-out infinite;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .home-ai-empty-accent {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.home-ai-empty-sub {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--home-ai-muted);
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 400;
+}
+
+.home-ai-preview {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.home-ai-preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 148px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: var(--home-ai-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.28);
+  text-align: left;
+}
+
+.home-ai-preview-card span {
+  color: var(--home-ai-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.home-ai-preview-card strong {
+  color: #f8fafc;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.home-ai-preview-card em {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.home-ai-preview-card em.is-up {
+  color: #34d399;
+}
+
+.home-ai-ticker {
+  width: min(720px, 100%);
+  overflow: hidden;
+  /* The rows are ~19px of text. Padding widens the band that counts as "on the
+     strip" so the scroll stops while the pointer is still on its way down to a
+     row, instead of the row sliding away from under the click. The negative
+     margins cancel the padding again so the text and everything below it stay
+     exactly where they were (margin-top was 2px before the 9px padding). */
+  padding: 9px 0;
+  margin-top: -7px;
+  margin-bottom: -9px;
+}
+
+.home-ai-ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 22px;
+  animation: homeAiTicker 32s linear infinite;
+}
+
+.home-ai-ticker-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+  color: #cbd5e1;
+  font-size: 13px;
+}
+
+/* Each row links to its item page. The strip scrolls, so it stops as soon as the
+   pointer is anywhere over the strip - not just over a row - otherwise the row
+   slides out from under the cursor between aiming and clicking. */
+.home-ai-ticker:hover .home-ai-ticker-track,
+.home-ai-ticker:focus-within .home-ai-ticker-track {
+  animation-play-state: paused;
+}
+
+a.home-ai-ticker-item,
+a.home-ai-ticker-item strong,
+a.home-ai-ticker-item em {
+  text-decoration: none;
+}
+
+a.home-ai-ticker-item {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin: -2px -6px;
+  transition: background 140ms ease;
+}
+
+a.home-ai-ticker-item:hover,
+a.home-ai-ticker-item:focus-visible {
+  background: rgba(148, 163, 184, 0.14);
+}
+
+a.home-ai-ticker-item:hover strong {
+  color: #f8fafc;
+}
+
+.home-ai-ticker-item strong {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.home-ai-ticker-item em {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.home-ai-ticker-item.is-up em {
+  color: #34d399;
+}
+
+.home-ai-ticker-item.is-down em {
+  color: #f87171;
+}
+
+@keyframes homeAiTicker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-ticker-track {
+    animation: none;
+  }
+}
+
+.home-ai-empty-icon {
+  font-size: 52px;
+  color: rgba(248, 250, 252, 0.75);
+}
+
+.home-ai-empty.compact {
+  min-height: min(48vh, 480px);
+  gap: 16px;
+}
+
+.home-ai-empty.compact h1 {
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  max-width: none;
+  white-space: normal;
+  color: #f8fafc;
+}
+
+.home-ai-empty.compact p {
+  font-size: 17px;
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.home-ai-charts-panel {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 12px 8px 48px;
+}
+
+/* Opening the charts, watchlist or profile panel eases it in: each panel is
+   mounted fresh when the sidebar switches to it, so the animation plays on
+   every open. */
+.home-ai-charts-panel,
+.home-ai-watchlist-panel,
+.home-ai-profile-panel {
+  animation: homeAiFadeUp 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-charts-panel,
+  .home-ai-watchlist-panel,
+  .home-ai-profile-panel {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Account settings (index.html?panel=profile).
+
+   Colours are the theme tokens from styles/css/theme.css (--bg, --card,
+   --border, --field, --text, --muted, --accent, --accent-2, --on-accent,
+   --tint, --positive, --negative), defined there for both themes. Inter,
+   14px, line height 1.4; no card shadows, no gradients.
+   --------------------------------------------------------------------------- */
+
+/* No rail on this view and no stage padding: the content wrapper below sets
+   its own 28px 32px 48px. */
+.home-ai.is-profile .home-ai-main {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.home-ai.is-profile .home-ai-stage {
+  padding: 0;
+  align-items: stretch;
+}
+
+.home-ai.is-profile .home-ai-profile-panel {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.acct {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  width: 100%;
+  max-width: 100%;
+  padding: 28px 32px 48px;
+  box-sizing: border-box;
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.acct * {
+  box-sizing: border-box;
+}
+
+.acct :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.acct-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- shared components ------------------------------------------------- */
+.acct-card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  /* The token, not a literal: it is `none` in dark — the flat look this page
+     was built with — and the spec's 0 1px 3px rgba(16,24,64,.06) in light. */
+  box-shadow: var(--card-shadow);
+}
+
+.acct-label {
+  display: block;
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.acct-input {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--field);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.acct-textarea {
+  display: block;
+  width: 100%;
+  min-height: 104px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--field);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.acct-input::placeholder,
+.acct-textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.acct-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.acct-btn svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+.acct-btn .acct-brand {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.acct-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Light theme: the site's shared primary treatment from theme.css
+   (--accent-grad / --accent-depth, the same as .u-btn-primary and the
+   drawer's New chat). The flat accent is the fallback where those tokens
+   are missing. The dark theme overrides this below with the translucent
+   Login-button look. */
+.acct-btn--primary {
+  background: var(--accent);
+  background: var(--accent-grad, var(--accent));
+  box-shadow: var(--accent-depth, none);
+  color: var(--on-accent);
+}
+
+.acct-btn--primary:hover:not(:disabled) {
+  background: var(--accent-grad-hover, var(--accent));
+  box-shadow: var(--accent-depth-hover, none);
+}
+
+.acct-btn--primary:active:not(:disabled) {
+  background: var(--accent-grad-active, var(--accent));
+  box-shadow: var(--accent-depth-active, none);
+}
+
+.acct-btn--secondary {
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+.acct-btn--secondary:hover:not(:disabled) {
+  background: var(--tint);
+}
+
+.acct-btn--steam {
+  border-color: #2a2f3a;
+  background: #171a21;
+  color: #fff;
+}
+
+.acct-btn--discord {
+  background: #5865F2;
+  color: #fff;
+}
+
+.acct-spinner {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: acctSpin 0.7s linear infinite;
+}
+
+@keyframes acctSpin {
+  to { transform: rotate(360deg); }
+}
+
+.acct-iconbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.acct-iconbox svg {
+  width: 18px;
+  height: 18px;
+}
+
+.acct-iconbox .acct-brand,
+.acct-iconbox i {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.acct-iconbox--steam { background: #171a21; }
+.acct-iconbox--discord { background: #5865F2; }
+.acct-iconbox--tint {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+.acct-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.acct-tag--ok {
+  background: rgba(34, 197, 94, 0.14);
+  color: #22c55e;
+}
+
+.acct-info {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.acct-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  font-size: 13.5px;
+}
+
+.acct-info-row dt {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.acct-info-row dd {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+}
+
+.acct-email {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acct-eye {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.acct-eye:hover,
+.acct-eye.is-on {
+  color: var(--text);
+}
+
+.acct-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.acct-error {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--negative);
+}
+
+.acct-notice {
+  grid-column: 1 / -1;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 13.5px;
+  color: var(--text);
+}
+
+.acct-notice.is-ok {
+  border-color: rgba(34, 197, 94, 0.4);
+  color: var(--positive);
+}
+
+.acct-notice.is-error {
+  border-color: rgba(255, 90, 106, 0.4);
+  color: var(--negative);
+}
+
+.acct-verify {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.acct-verify .acct-error {
+  flex-basis: 100%;
+}
+
+/* ---- card 1: profile ---------------------------------------------------- */
+.acct-card--profile {
+  grid-column: 1;
+  grid-row: span 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.acct-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 128px;
+  height: 128px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--tint);
+  color: var(--text);
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.acct-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.acct-profile-id {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.acct-username {
+  margin: 14px 0 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.acct-member {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.acct-avatar-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0 22px;
+  flex-wrap: wrap;
+}
+
+.acct-profile-body {
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+}
+
+.acct-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acct-row .acct-input {
+  flex: 1 1 auto;
+}
+
+.acct-label--account {
+  margin: 22px 0 4px;
+}
+
+.acct-pending {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--field);
+  text-align: left;
+}
+
+.acct-pending strong {
+  font-size: 13.5px;
+  color: var(--text);
+}
+
+.acct-pending span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.acct-pending-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+/* ---- card 2: AI personality -------------------------------------------- */
+.acct-card--ai {
+  grid-column: 2 / 4;
+}
+
+.acct-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.acct-card-head .acct-label {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.acct-presets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.acct-preset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--field);
+  color: var(--text);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.acct-preset:hover {
+  border-color: var(--accent);
+}
+
+.acct-preset.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--tint);
+}
+
+.acct-preset-title {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.acct-preset-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.acct-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.acct-counter {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.acct-spacer {
+  flex: 1 1 auto;
+}
+
+/* ---- card 3: connections ------------------------------------------------ */
+.acct-card--connections {
+  grid-column: 2;
+}
+
+.acct-conn-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.acct-conn-row + .acct-conn-row {
+  border-top: 1px solid var(--border);
+}
+
+.acct-card--connections .acct-conn-row:last-of-type {
+  padding-bottom: 0;
+}
+
+.acct-conn-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.acct-conn-text strong {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.acct-conn-text span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.acct-conn-state {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.acct-textbtn {
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.acct-textbtn:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.acct-textbtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---- card 4: appearance ------------------------------------------------- */
+.acct-card--appearance {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.acct-appearance-block {
+  min-width: 0;
+}
+
+.acct-segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--field);
+}
+
+.acct-segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.acct-segment svg {
+  width: 15px;
+  height: 15px;
+}
+
+.acct-segment.is-active {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* Language: the input look, flag + name on the left, chevron on the right;
+   the list opens below with a flag on every entry. */
+.home-ai-lang-picker {
+  position: relative;
+  width: 300px;
+  max-width: 100%;
+}
+
+.home-ai-lang-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--field);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.home-ai-lang-picker.is-open .home-ai-lang-trigger {
+  border-color: var(--accent);
+}
+
+.home-ai-lang-trigger-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.home-ai-lang-picker .home-ai-lang-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  background-size: cover;
+  background-position: center;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.home-ai-lang-picker .home-ai-lang-flag.is-auto {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.home-ai-lang-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-ai-lang-caret {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+  transition: transform 0.18s ease;
+}
+
+.home-ai-lang-picker.is-open .home-ai-lang-caret {
+  transform: rotate(180deg);
+}
+
+.home-ai-lang-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  max-height: 300px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.home-ai-lang-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-ai-lang-option:hover {
+  background: var(--tint);
+}
+
+.home-ai-lang-option.is-active {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+.home-ai-lang-check {
+  flex: 0 0 auto;
+  width: 13px;
+  height: 13px;
+  color: var(--accent);
+}
+
+/* ---- card 5: security --------------------------------------------------- */
+.acct-card--security {
+  grid-column: 2 / 4;
+  display: flex;
+  flex-direction: column;
+}
+
+.acct-card--security .acct-label {
+  margin-bottom: 4px;
+}
+
+/* Password row above the email row, a hairline between them. */
+.acct-sec-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+}
+
+.acct-sec-row + .acct-sec-row {
+  border-top: 1px solid var(--border);
+}
+
+.acct-card--security .acct-sec-row:last-of-type {
+  padding-bottom: 0;
+}
+
+/* Change-email form: address and password side by side, then the button. */
+.acct-email-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  flex-basis: 100%;
+  margin-top: 2px;
+}
+
+.acct-email-form .acct-hint,
+.acct-email-form .acct-error {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.acct-security-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acct-inline-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--positive);
+}
+
+.acct-card--security .acct-error {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+/* ---- CSPRICE dark palette ---------------------------------------------
+   In the dark theme the page wears the site's own colours instead of the
+   spec's navy: the slate cards and hairlines of the rest of index.html, the
+   #4b69ff of the navbar Login button, and buttons that copy that button's
+   translucent gradient, inset ring and springy press. The light theme keeps
+   the plain tokens. */
+html[data-theme="dark"] .acct,
+html[data-legacy-dark] .acct {
+  --card: rgba(15, 23, 42, 0.55);
+  --border: rgba(148, 163, 184, 0.14);
+  --field: rgba(2, 6, 23, 0.5);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --accent: #4b69ff;
+  --accent-2: #60a5fa;
+  --tint: rgba(75, 105, 255, 0.16);
+}
+
+html[data-theme="dark"] .acct-hint,
+html[data-theme="dark"] .acct-member,
+html[data-theme="dark"] .acct-counter,
+html[data-theme="dark"] .acct-conn-text span,
+html[data-legacy-dark] .acct-hint,
+html[data-legacy-dark] .acct-member,
+html[data-legacy-dark] .acct-counter,
+html[data-legacy-dark] .acct-conn-text span {
+  color: #64748b;
+}
+
+html[data-theme="dark"] .acct-btn,
+html[data-legacy-dark] .acct-btn {
+  border-color: transparent;
+  transition:
+    transform 0.38s cubic-bezier(0.22, 1.55, 0.32, 1),
+    filter 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.16s ease;
+}
+
+html[data-theme="dark"] .acct-btn:active:not(:disabled),
+html[data-legacy-dark] .acct-btn:active:not(:disabled) {
+  transform: scale(0.96);
+  filter: brightness(1.12);
+  transition-duration: 0.08s;
+}
+
+html[data-theme="dark"] .acct-btn--primary,
+html[data-legacy-dark] .acct-btn--primary {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  box-shadow:
+    inset 0 0 0 1px rgba(75, 105, 255, 0.45),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
+}
+
+/* Hover keeps the resting look, like the navbar Login button: without these
+   the generic hover rules above (bright --accent-grad-hover, flat --tint)
+   flared through. */
+html[data-theme="dark"] .acct-btn--primary:hover:not(:disabled),
+html[data-legacy-dark] .acct-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  box-shadow:
+    inset 0 0 0 1px rgba(75, 105, 255, 0.45),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  filter: none;
+}
+
+html[data-theme="dark"] .acct-btn--secondary:hover:not(:disabled),
+html[data-legacy-dark] .acct-btn--secondary:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.16), rgba(148, 163, 184, 0.08));
+}
+
+html[data-theme="dark"] .acct-btn--primary:active:not(:disabled),
+html[data-legacy-dark] .acct-btn--primary:active:not(:disabled) {
+  box-shadow:
+    inset 0 0 0 1px rgba(129, 161, 255, 0.72),
+    0 0 14px rgba(75, 105, 255, 0.4);
+}
+
+html[data-theme="dark"] .acct-btn--secondary,
+html[data-legacy-dark] .acct-btn--secondary {
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.16), rgba(148, 163, 184, 0.08));
+  box-shadow:
+    inset 0 0 0 1px rgba(148, 163, 184, 0.3),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .acct-btn--steam,
+html[data-legacy-dark] .acct-btn--steam {
+  background: linear-gradient(180deg, rgba(36, 52, 74, 0.95), rgba(27, 40, 56, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(148, 163, 184, 0.3),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .acct-btn--discord,
+html[data-legacy-dark] .acct-btn--discord {
+  background: linear-gradient(180deg, rgba(88, 101, 242, 0.62), rgba(67, 78, 200, 0.62));
+  box-shadow:
+    inset 0 0 0 1px rgba(148, 158, 255, 0.45),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .acct-segment.is-active,
+html[data-legacy-dark] .acct-segment.is-active {
+  background: rgba(148, 163, 184, 0.16);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.24);
+}
+
+/* The translucent card would show the page through the open list. */
+html[data-theme="dark"] .home-ai-lang-menu,
+html[data-legacy-dark] .home-ai-lang-menu {
+  background: rgba(8, 12, 28, 0.98);
+}
+
+html[data-theme="dark"] .acct-notice,
+html[data-theme="dark"] .acct-verify,
+html[data-legacy-dark] .acct-notice,
+html[data-legacy-dark] .acct-verify {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+/* ---- responsive --------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .acct {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    padding: 24px 20px 40px;
+  }
+
+  /* The profile card runs full width on top: avatar left, details right. */
+  .acct-card--profile {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    column-gap: 24px;
+    align-items: start;
+    text-align: left;
+  }
+
+  .acct-avatar {
+    grid-row: 1 / 3;
+  }
+
+  .acct-profile-id {
+    align-items: flex-start;
+  }
+
+  .acct-username {
+    margin-top: 4px;
+  }
+
+  .acct-avatar-actions {
+    justify-content: flex-start;
+  }
+
+  .acct-card--ai,
+  .acct-card--security {
+    grid-column: 1 / -1;
+  }
+
+  .acct-card--connections {
+    grid-column: 1;
+  }
+
+  .acct-card--appearance {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 700px) {
+  .acct {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding: 16px 16px 40px;
+  }
+
+  .acct-card {
+    padding: 18px 16px;
+  }
+
+  .acct-card--profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .acct-profile-id {
+    align-items: center;
+  }
+
+  .acct-username {
+    margin-top: 14px;
+  }
+
+  .acct-card--ai,
+  .acct-card--connections,
+  .acct-card--appearance,
+  .acct-card--security {
+    grid-column: 1;
+  }
+
+  .acct-presets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .acct-btn {
+    width: 100%;
+  }
+
+  .acct-avatar-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .acct-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .acct-card-foot {
+    flex-wrap: wrap;
+  }
+
+  .acct-card-foot .acct-counter {
+    flex-basis: 100%;
+  }
+
+  .acct-card-foot .acct-spacer {
+    display: none;
+  }
+
+  .acct-card-foot .acct-btn {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .acct-conn-row {
+    flex-wrap: wrap;
+  }
+
+  .acct-conn-row .acct-btn,
+  .acct-conn-state {
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+
+  .acct-security-action {
+    flex-basis: 100%;
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .acct-email-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .acct-segmented {
+    display: flex;
+  }
+
+  .acct-segment {
+    flex: 1 1 0;
+  }
+
+  .home-ai-lang-picker {
+    width: 100%;
+  }
+
+  .acct-pending-actions .acct-btn {
+    flex: 1 1 100%;
+  }
+}
+
+.home-ai-charts-head {
+  margin: 8px 0 22px;
+  text-align: left;
+}
+
+.home-ai-charts-head h1 {
+  margin: 0 0 8px;
+  color: #f8fafc;
+  font-size: clamp(32px, 4vw, 42px);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.home-ai-charts-head p {
+  margin: 0;
+  color: var(--home-ai-muted);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.home-ai-charts-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 28px;
+}
+
+.home-ai-chart-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 20px 20px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.55);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-ai-chart-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #f8fafc;
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.home-ai-chart-card-top i {
+  color: #ffffff;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.home-ai-chart-card-top span {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.home-ai-chart-card .cs2-chat-forecast {
+  pointer-events: auto;
+  margin-top: 4px;
+}
+
+.home-ai-chart-card .cs2-chat-forecast:hover {
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+.home-ai-chart-card .cs2-chat-forecast-canvas-wrap {
+  height: min(58vh, 520px);
+  min-height: 360px;
+}
+
+.home-ai-watchlist-card {
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  padding: 14px 14px 14px 16px;
+}
+
+.home-ai-watchlist-card-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-ai-watchlist-thumb {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  color: rgba(248, 250, 252, 0.55);
+}
+
+.home-ai-watchlist-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.home-ai-watchlist-card .home-ai-chart-card-top {
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.home-ai-watchlist-price {
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 600;
+  color: #93c5fd;
+}
+
+.home-ai-watchlist-price.is-muted {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.home-ai-watchlist-remove {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  margin-left: 8px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(148, 163, 184, 0.7);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.home-ai-watchlist-remove:hover {
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.home-ai-empty p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--home-ai-muted);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+.home-ai-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  animation: homeAiFadeUp 0.28s ease both;
+  margin-bottom: 0;
+}
+
+.home-ai-row.is-user {
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+
+.home-ai-row.is-assistant {
+  width: 100%;
+}
+
+.home-ai-row.is-user + .home-ai-row.is-assistant {
+  margin-top: 10px;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot {
+  order: 0;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 10px 12px 9px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.72);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #cbd5e1;
+  letter-spacing: 0.02em;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-head {
+  margin: 0 0 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0;
+  color: #94a3b8;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-title {
+  color: #94a3b8;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-live {
+  color: #34d399;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-cell {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-label {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-value {
+  color: #e2e8f0;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-sep {
+  color: rgba(100, 116, 139, 0.55);
+  user-select: none;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-trend.is-up {
+  color: #34d399;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-trend.is-down {
+  color: #f87171;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-sentiment.is-bullish {
+  color: #34d399;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-sentiment.is-bearish {
+  color: #f87171;
+}
+
+.home-ai-row.is-assistant .cs2-chat-market-snapshot-sentiment.is-neutral {
+  color: #fbbf24;
+}
+
+.home-ai-row.is-assistant .home-ai-metrics-factors {
+  order: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 12px;
+  row-gap: 10px;
+  align-items: start;
+  width: 100%;
+  margin: -6px 0 10px;
+  padding: 0 2px;
+  min-width: 0;
+}
+
+.home-ai-row.is-assistant .home-ai-metrics-factors:empty {
+  display: none;
+  margin: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-metrics-strip {
+  grid-column: 1 / -1;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-metrics-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #94a3b8;
+}
+
+.home-ai-row.is-assistant .cs2-chat-metrics-strip .home-ai-metric-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-metrics-strip .home-ai-metric-chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 96px;
+  max-width: min(240px, 100%);
+  flex: 1 1 120px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 6, 23, 0.62);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.home-ai-row.is-assistant .cs2-chat-metrics-strip .home-ai-metric-chip-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #64748b;
+}
+
+.home-ai-row.is-assistant .cs2-chat-metrics-strip .home-ai-metric-chip-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.home-ai-row.is-assistant .cs2-chat-metrics-strip .home-ai-metric-chip-detail {
+  margin-top: 1px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #94a3b8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-ai-row.is-assistant .cs2-chat-sentiment {
+  grid-column: 1 / -1;
+  justify-self: stretch;
+  align-self: start;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors {
+  grid-column: 1 / -1;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors-groups {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors-group {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors-group-label {
+  margin: 0 0 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors-group.is-positive .cs2-chat-key-factors-group-label {
+  color: #6ee7b7;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors-group.is-negative .cs2-chat-key-factors-group-label {
+  color: #fca5a5;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-row {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-pill {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 5px;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 4px 9px;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.78);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  line-height: 1.25;
+  color: #cbd5e1;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-pill.is-positive {
+  border-color: rgba(52, 211, 153, 0.28);
+  background: rgba(52, 211, 153, 0.10);
+  color: #6ee7b7;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-pill.is-negative {
+  border-color: rgba(248, 113, 113, 0.28);
+  background: rgba(248, 113, 113, 0.10);
+  color: #fecaca;
+}
+
+.home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-sign {
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .home-ai-row.is-assistant .home-ai-metrics-factors {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-ai-row.is-assistant .cs2-chat-sentiment {
+    grid-column: 1 / -1;
+  }
+
+  .home-ai-row.is-assistant .cs2-chat-key-factors-groups {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .home-ai-row.is-assistant .cs2-chat-market-snapshot-sep {
+    display: none;
+  }
+
+  .home-ai-row.is-assistant .cs2-chat-market-snapshot-cell {
+    flex: 1 1 calc(50% - 8px);
+  }
+}
+
+/* Financial-terminal prose blocks inside assistant markdown */
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0.2em 0 0.35em;
+  padding: 8px 11px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  background: rgba(8, 13, 24, 0.92);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-bullish {
+  border-color: rgba(52, 211, 153, 0.28);
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-bearish {
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-neutral {
+  border-color: rgba(234, 179, 8, 0.28);
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border-radius: 0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #cbd5e1;
+  background: transparent;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-bullish .home-ai-verdict-badge {
+  background: transparent;
+  color: #6ee7b7;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-bearish .home-ai-verdict-badge {
+  background: transparent;
+  color: #fca5a5;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-neutral .home-ai-verdict-badge {
+  background: transparent;
+  color: #d4b562;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-detail {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: #e2e8f0;
+  font-weight: 600;
+  white-space: normal;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-metric-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0.15em 0 0.35em;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-metric-chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 96px;
+  max-width: min(240px, 100%);
+  flex: 1 1 120px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 6, 23, 0.62);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-metric-chip-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #64748b;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-metric-chip-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-metric-chip-detail {
+  margin-top: 1px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #94a3b8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-ai-bubble {
+  max-width: min(760px, 100%);
+  min-width: 0;
+}
+
+.home-ai-row.is-assistant .home-ai-bubble {
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-ai-row.is-assistant .home-ai-text {
+  order: 1;
+}
+
+.home-ai-row.is-assistant .cs2-chat-item-cards {
+  order: 2;
+}
+
+.home-ai-row.is-assistant .cs2-chat-assistant-charts,
+.home-ai-row.is-assistant .cs2-chat-forecast,
+.home-ai-row.is-assistant .cs2-chat-market-chart {
+  order: 3;
+}
+
+.home-ai-row.is-assistant .home-ai-actions {
+  order: 4;
+}
+
+.home-ai-row.is-assistant .home-ai-bubble:has(.cs2-chat-forecast),
+.home-ai-row.is-assistant .home-ai-bubble:has(.cs2-chat-assistant-charts) {
+  max-width: 100%;
+  width: 100%;
+}
+
+.home-ai .cs2-chat-forecast {
+  margin-top: 12px;
+  width: 100%;
+}
+
+/* In-thread only: modest gap text  -  cards  -  chart. Do not touch charts panel or composer. */
+.home-ai-row.is-assistant .cs2-chat-item-cards {
+  margin: 0.7em 0;
+}
+
+.home-ai-row.is-assistant .home-ai-text:has(+ .cs2-chat-item-cards),
+.home-ai-row.is-assistant .home-ai-text:has(+ .cs2-chat-assistant-charts),
+.home-ai-row.is-assistant .home-ai-text:has(+ .cs2-chat-forecast) {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-assistant-charts {
+  margin-top: 0;
+}
+
+.home-ai-row.is-assistant .cs2-chat-forecast,
+.home-ai-row.is-assistant .cs2-chat-market-chart {
+  margin-top: 0.7em;
+  padding: 12px 12px 10px;
+}
+
+.home-ai-row.is-assistant .cs2-chat-forecast-head {
+  margin-top: 2px;
+}
+
+.home-ai .cs2-chat-forecast-canvas-wrap {
+  height: min(42vh, 380px);
+  min-height: 280px;
+  cursor: crosshair;
+}
+
+.home-ai .cs2-chat-market-chart .cs2-chat-forecast-canvas-wrap {
+  min-height: 180px;
+  height: auto;
+  max-height: none;
+  cursor: default;
+}
+
+.home-ai .cs2-chat-price-history-wrap {
+  height: min(42vh, 360px);
+  min-height: 260px;
+  cursor: crosshair;
+}
+
+.home-ai-row.is-user .home-ai-bubble {
+  background: rgba(8, 13, 24, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 18px 16px;
+}
+
+.home-ai-text {
+  color: var(--home-ai-text);
+  font-size: 17.5px;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.home-ai-row.is-assistant .home-ai-text {
+  font-size: 15.5px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.home-ai-text strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* ChatGPT-style section headings inside assistant markdown */
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3,
+.home-ai-row.is-assistant .home-ai-text h3.home-ai-md-h3 {
+  margin: 0.5em 0 0.15em;
+  font-size: 1.08em;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: #f8fafc;
+  white-space: normal;
+}
+
+/* AI market  -  same size/style as Item metrics / AI sentiment labels */
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3.home-ai-verdict-label,
+.home-ai-row.is-assistant .home-ai-text h3.home-ai-md-h3.home-ai-verdict-label {
+  margin: 0.5em 0 6px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #94a3b8;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-word {
+  font-weight: 750;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-word.is-bullish {
+  color: #34d399;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-word.is-bearish {
+  color: #f87171;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-verdict-word.is-neutral {
+  color: #fbbf24;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h4.home-ai-md-h4,
+.home-ai-row.is-assistant .home-ai-text h4.home-ai-md-h4 {
+  margin: 0.45em 0 0.12em;
+  font-size: 1em;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: #f1f5f9;
+  white-space: normal;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3:first-child,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h4.home-ai-md-h4:first-child,
+.home-ai-row.is-assistant .home-ai-text h3.home-ai-md-h3:first-child,
+.home-ai-row.is-assistant .home-ai-text h4.home-ai-md-h4:first-child {
+  margin-top: 0;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md {
+  white-space: pre-wrap;
+  line-height: 1.42;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md p {
+  margin: 0.4em 0;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md p:first-child {
+  margin-top: 0;
+}
+
+/* Consecutive paragraph-like points (e.g. risks / SCARCITY lines under a heading). */
+.home-ai-row.is-assistant .home-ai-text .home-ai-md p + p {
+  margin-top: 0.45em;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md > * {
+  margin-bottom: 0;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3 + p,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h4.home-ai-md-h4 + p {
+  margin-top: 0;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3 + ul.home-ai-md-list,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3 + ol.home-ai-md-list,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h4.home-ai-md-h4 + ul.home-ai-md-list,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h4.home-ai-md-h4 + ol.home-ai-md-list {
+  margin-top: 0.15em;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3 + .home-ai-why-line,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md h4.home-ai-md-h4 + .home-ai-why-line {
+  margin-top: 0.15em;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-why-line {
+  display: block;
+  margin: 0.28em 0;
+  padding: 0;
+  line-height: 1.5;
+  list-style: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-why-reason {
+  font-weight: 400;
+  opacity: 0.78;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-why-theme {
+  display: block;
+  margin: 0.32em 0 0.06em;
+  font-size: 0.95em;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0.72;
+}
+
+/* ChatGPT-style discs  -  assistant markdown lists only, not starters or composer.
+   Section gap vs adjacent prose is this margin only (~0.65em); JS omits extra
+   pre-wrap newlines around the <ul> so they do not stack into a huge void.
+   All catalog <li> share one fixed disc size (nested lists flattened visually). */
+.home-ai-row.is-assistant .home-ai-text ul.home-ai-md-list,
+.home-ai-row.is-assistant .home-ai-text ol.home-ai-md-list {
+  list-style: none;
+  margin: 0.3em 0 0.35em;
+  padding: 0;
+  white-space: normal;
+}
+
+.home-ai-row.is-assistant .home-ai-text ul.home-ai-md-list ul,
+.home-ai-row.is-assistant .home-ai-text ol.home-ai-md-list ol,
+.home-ai-row.is-assistant .home-ai-text ul.home-ai-md-list ol,
+.home-ai-row.is-assistant .home-ai-text ol.home-ai-md-list ul {
+  list-style: none;
+  margin: 0.15em 0 0;
+  padding: 0;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md hr.home-ai-md-divider,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md hr.home-ai-md-hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0.75em 0 0.5em;
+  height: 0;
+  background: none;
+}
+
+.home-ai-row.is-assistant .home-ai-text .home-ai-md hr.home-ai-md-divider + h3.home-ai-md-h3,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md hr.home-ai-md-divider + h4.home-ai-md-h4,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md hr.home-ai-md-hr + h3.home-ai-md-h3,
+.home-ai-row.is-assistant .home-ai-text .home-ai-md hr.home-ai-md-hr + h4.home-ai-md-h4 {
+  margin-top: 0.15em;
+}
+
+.home-ai-row.is-assistant .home-ai-text ul.home-ai-md-list li,
+.home-ai-row.is-assistant .home-ai-text ol.home-ai-md-list li {
+  position: relative;
+  margin: 0.28em 0;
+  /* Gutter for the disc  -  text starts clear of the bullet. */
+  padding-left: 1.35em;
+  line-height: 1.5;
+  list-style: none;
+}
+
+.home-ai-row.is-assistant .home-ai-text ul.home-ai-md-list li::before,
+.home-ai-row.is-assistant .home-ai-text ol.home-ai-md-list li::before {
+  content: "";
+  position: absolute;
+  /* px left  -  keep gutter from bullets-2; do not use em (font-size on pseudo can collapse it). */
+  left: 2px;
+  /* First-line optical center (multi-line li keeps disc on line 1). lh inherits from li. */
+  top: calc((1lh - 8px) / 2);
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.home-ai-search-status {
+  margin-top: 8px;
+  color: rgba(148, 163, 184, 0.88);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-ai .cs2-chat-item-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  max-width: 920px;
+  margin: 0.65em 0 0.7em;
+  overflow: visible;
+}
+
+.home-ai .cs2-chat-item-card {
+  --card-accent: #60a5fa;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 168px;
+  width: 168px;
+  min-width: 168px;
+  max-width: 168px;
+  height: auto;
+  color: inherit;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: linear-gradient(180deg, rgba(12, 19, 34, 0.96), rgba(6, 11, 22, 0.98));
+  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.28);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-ai .cs2-chat-item-card.is-chart-selected {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.22), 0 10px 28px rgba(2, 6, 23, 0.28);
+}
+
+.home-ai .cs2-chat-chart-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.15em 0 0.35em;
+  max-width: 100%;
+  overflow-x: visible;
+}
+
+.home-ai .cs2-chat-item-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(96, 165, 250, 0.38);
+  box-shadow: 0 16px 36px rgba(2, 6, 23, 0.42);
+}
+
+.home-ai .cs2-chat-item-card:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.55);
+  outline-offset: 2px;
+}
+
+.home-ai .cs2-chat-item-card-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 86px;
+  padding: 10px 10px 8px;
+  background:
+    radial-gradient(90% 70% at 50% 12%, color-mix(in srgb, var(--card-accent) 22%, transparent), transparent 64%),
+    linear-gradient(180deg, rgba(13, 21, 38, 0.96), rgba(8, 13, 26, 0.98));
+}
+
+.home-ai .cs2-chat-item-card-media img {
+  width: auto;
+  max-width: 100%;
+  max-height: 68px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+}
+
+.home-ai .cs2-chat-item-card-media span {
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.home-ai .cs2-chat-item-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px 10px 8px;
+  border-top: 1px solid rgba(110, 146, 198, 0.1);
+}
+
+.home-ai .cs2-chat-item-card-body strong {
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  min-height: calc(1.35em * 2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-ai .cs2-chat-item-card-body span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 16px;
+}
+
+.home-ai .cs2-chat-item-card-body em {
+  display: none;
+}
+
+.home-ai .cs2-chat-item-card-body b {
+  color: #93c5fd;
+  font-size: 13px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.home-ai .cs2-chat-item-card-main {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+  min-width: 0;
+  min-height: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-ai .cs2-chat-item-card-buy {
+  --buy-logo: none;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: auto 10px 10px;
+  min-height: 34px;
+  height: 34px;
+  max-height: 36px;
+  padding: 0 8px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.65);
+  background: #2563eb;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+  white-space: nowrap;
+  cursor: pointer;
+  z-index: 2;
+  pointer-events: auto;
+  box-shadow:
+    0 0 0 1px rgba(37, 99, 235, 0.28) inset,
+    0 8px 18px rgba(37, 99, 235, 0.28);
+}
+
+.home-ai .cs2-chat-item-card-buy::before {
+  content: none;
+  display: none;
+}
+
+.home-ai .cs2-chat-item-card-buy span {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.home-ai .cs2-chat-item-card-buy img,
+.home-ai .cs2-chat-item-card-buy i {
+  display: none;
+}
+
+.home-ai .cs2-chat-item-card-buy img {
+  display: block;
+  width: auto;
+  height: 18px;
+  max-width: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.home-ai .cs2-chat-item-card-buy:hover {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.home-ai .cs2-chat-item-card-buy.is-static {
+  cursor: default;
+  color: #fff;
+}
+
+.home-ai-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 6px;
+  padding-top: 0;
+}
+
+.home-ai-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.home-ai-action-btn:hover {
+  color: #e2e8f0;
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.home-ai-action-btn.is-done,
+.home-ai-action-btn.is-active.is-up {
+  color: #4ade80;
+}
+
+.home-ai-action-btn.is-active.is-down {
+  color: #f87171;
+}
+
+.home-ai-action-btn:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.55);
+  outline-offset: 1px;
+}
+
+.home-ai-typing {
+  display: inline-flex;
+  gap: 5px;
+  padding: 6px 0;
+}
+
+.home-ai-typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: homeAiDot 1.1s ease-in-out infinite;
+}
+
+.home-ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+.home-ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+
+.home-ai-composer-wrap {
+  /* Match .home-ai-stage side padding + .home-ai-thread max-width so the prompt
+     lines up with answer/chart content. */
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 10px 22px max(16px, env(safe-area-inset-bottom));
+  max-width: calc(920px + 44px);
+  width: 100%;
+  margin: 0 auto;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+/* Float over chat so messages stay visible around/under the pill */
+.home-ai-main:not(.is-welcome) .home-ai-composer-wrap {
+  position: absolute;
+  left: var(--home-ai-rail);
+  right: var(--home-ai-rail);
+  bottom: 0;
+  max-width: none;
+  width: auto;
+  margin: 0;
+  padding: 6px 22px max(16px, env(safe-area-inset-bottom));
+  background: transparent;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.home-ai-main:not(.is-welcome) .home-ai-composer-wrap > * {
+  pointer-events: auto;
+  width: min(100%, 920px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-ai-main:not(.is-welcome) .home-ai-composer-wrap .home-ai-starters-block {
+  width: min(100%, 920px);
+}
+
+.home-ai-main:not(.is-welcome).has-suggest-chips .home-ai-stage {
+  padding-bottom: 168px;
+}
+
+/* Shared row above the composer: follow-up chips on the left, the language
+   nudge pinned to the right edge of the same line. */
+.home-ai-bottom-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-self: stretch;
+  gap: 8px;
+  width: min(100%, 920px);
+  margin: 0 auto 8px;
+  padding: 0 12px;
+}
+
+/* Follow-up chips stay on one line beside the language nudge: no wrapping,
+   long labels get an ellipsis instead of pushing the nudge to a new row. */
+.home-ai-bottom-row .home-ai-suggest-chips {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.home-ai-bottom-row .home-ai-suggest-chip {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 190px;
+}
+
+.home-ai-bottom-row .home-ai-suggest-chip > span {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Once the language nudge is dismissed (or never shown) the chips have the row
+   to themselves, so each one may grow until its question fits. Still left
+   aligned, still a single row: the group never wraps and each label keeps
+   nowrap + ellipsis, so a chip can never become two lines. */
+.home-ai-bottom-row:not(.has-lang-nudge) .home-ai-suggest-chips {
+  flex: 1 1 auto;
+  max-width: 100%;
+  justify-content: flex-start;
+}
+
+.home-ai-bottom-row:not(.has-lang-nudge) .home-ai-suggest-chip {
+  flex: 0 1 auto;
+  max-width: 460px;
+}
+
+.home-ai-suggest-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-end;
+  align-self: stretch;
+  gap: 8px;
+  width: min(100%, 920px);
+  margin: 0 auto 8px;
+  padding: 0 12px;
+  text-align: left;
+}
+
+/* Inside the row the chips give up their own width/gutter to the wrapper. */
+.home-ai-bottom-row .home-ai-suggest-chips {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.home-ai-suggest-chip {
+  --chip-i: 0;
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: min(100%, 220px);
+  margin: 0;
+  padding: 8px 13px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  background: rgba(8, 13, 24, 0.92);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 550;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 8px 18px rgba(2, 6, 23, 0.28);
+  animation: homeAiSuggestIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--chip-i) * 75ms);
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.home-ai-suggest-chip span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-ai-suggest-chip:hover:not(:disabled) {
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(148, 163, 184, 0.32);
+  color: #f8fafc;
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 10px 22px rgba(2, 6, 23, 0.34);
+}
+
+.home-ai-suggest-chip:focus-visible {
+  outline: none;
+  border-color: rgba(148, 163, 184, 0.4);
+  color: #f8fafc;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 0 3px rgba(148, 163, 184, 0.18);
+}
+
+.home-ai-suggest-chip:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@keyframes homeAiSuggestIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-suggest-chip {
+    animation: none;
+  }
+}
+
+/* "Continue in <your language>?" nudge. Sits at the right end of the bottom
+   row, beside the follow-up chips — sized to its content, not the full width. */
+.home-ai-langswitch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 0 0 auto;
+  margin-left: auto;
+  max-width: 100%;
+  padding: 7px 8px 7px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  background: rgba(8, 13, 24, 0.94);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 24px rgba(2, 6, 23, 0.32);
+  animation: homeAiSuggestIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.home-ai-langswitch-flag {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.25);
+}
+
+.home-ai-langswitch-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.home-ai-langswitch-text strong {
+  color: #f1f5f9;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.home-ai-langswitch-text small {
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-ai-langswitch button {
+  appearance: none;
+  flex: 0 0 auto;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.home-ai-langswitch-accept {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  border: 1px solid rgba(75, 105, 255, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(75, 105, 255, 0.22) inset,
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
+  letter-spacing: 0.01em;
+  transition: background 0.14s ease, border-color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.home-ai-langswitch-accept:hover {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.46), rgba(75, 105, 255, 0.26));
+  border-color: rgba(75, 105, 255, 0.55);
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(75, 105, 255, 0.3) inset,
+    0 14px 28px rgba(0, 0, 0, 0.32);
+}
+
+.home-ai-langswitch-dismiss {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: transparent;
+  color: #94a3b8;
+}
+
+.home-ai-langswitch-dismiss:hover {
+  border-color: rgba(148, 163, 184, 0.34);
+  color: #e2e8f0;
+}
+
+.home-ai-langswitch button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.22);
+}
+
+/* Too narrow to share a line: chips keep the top row, the nudge drops below
+   and spans the full width. */
+@media (max-width: 720px) {
+  .home-ai-bottom-row .home-ai-suggest-chips {
+    flex: 1 1 100%;
+  }
+
+  .home-ai-langswitch {
+    flex: 1 1 100%;
+    margin-left: 0;
+    border-radius: 14px;
+    padding: 8px 10px 8px 12px;
+  }
+
+  .home-ai-langswitch-text {
+    flex: 1 1 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-langswitch {
+    animation: none;
+  }
+}
+
+/* Soft glow only under the pill itself */
+.home-ai-composer-wrap::after {
+  content: none;
+}
+
+/* Animated light line behind the prompt bar on the landing view: a thin
+   blue→cyan→white streak that runs horizontally through the middle of the
+   pill (behind its glass) and keeps sweeping. The pill itself is z-index 1
+   inside the wrap, so the line shows outside it and glows softly through. */
+.home-ai-main.is-welcome .home-ai-composer-wrap {
+  position: relative;
+}
+
+.home-ai-main.is-welcome .home-ai-composer-wrap::before {
+  content: none; /* line removed on request; rule kept inert */
+  position: absolute;
+  left: 50%;
+  top: 42px; /* wrap padding-top (10px) + half the 64px pill */
+  z-index: 0;
+  width: 124%;
+  height: 2px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(79, 172, 254, 0) 12%,
+    rgba(79, 172, 254, 0.85) 38%,
+    rgba(0, 212, 255, 1) 50%,
+    rgba(255, 255, 255, 0.9) 58%,
+    rgba(79, 172, 254, 0) 88%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  background-position: 120% 50%;
+  box-shadow: 0 0 18px rgba(79, 172, 254, 0.55), 0 0 42px rgba(0, 212, 255, 0.25);
+  opacity: 0.9;
+  animation: homeAiPromptLine 5.5s ease-in-out infinite;
+}
+
+@keyframes homeAiPromptLine {
+  0% {
+    background-position: 120% 50%;
+    opacity: 0.35;
+  }
+  45% {
+    opacity: 0.95;
+  }
+  100% {
+    background-position: -120% 50%;
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-main.is-welcome .home-ai-composer-wrap::before {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+
+.home-ai-starters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.home-ai-starters-block {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 14px;
+  padding-left: 0;
+  text-align: left;
+}
+
+.home-ai-starters-lead {
+  margin: 0;
+  max-width: 520px;
+  color: var(--home-ai-muted);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.home-ai-starter {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  background: var(--home-ai-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #dbeafe;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 8px 22px rgba(2, 6, 23, 0.22);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.home-ai-starter > i,
+.home-ai-starter-icon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  width: 22px;
+  height: 22px;
+  color: #cbd5e1;
+  font-size: 18px;
+  opacity: 0.92;
+}
+
+.home-ai-starter-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.home-ai-starter-copy strong {
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.home-ai-starter-copy small {
+  color: var(--home-ai-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.home-ai-starter:hover {
+  background: rgba(16, 24, 38, 0.84);
+  border-color: rgba(125, 211, 252, 0.12);
+  transform: translateY(-1px);
+}
+
+.home-ai-composer {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 64px;
+  padding: 10px 12px;
+  border-radius: 22px;
+  background: var(--home-ai-glass);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 14px 36px rgba(2, 6, 23, 0.34),
+    0 0 0 1px rgba(37, 99, 235, 0.06);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.home-ai-composer:focus-within {
+  border-color: rgba(96, 165, 250, 0.45);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 16px 40px rgba(2, 6, 23, 0.38),
+    0 0 0 3px rgba(37, 99, 235, 0.22),
+    0 0 28px rgba(56, 189, 248, 0.16);
+}
+
+.home-ai-composer.is-listening {
+  min-height: 64px;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4), 0 16px 48px rgba(2, 6, 23, 0.35);
+  animation: homeAiListenPulse 1.8s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Dictation: while the mic is live the bar is only the wave - the wave itself
+   is what you click to stop. home-page.jsx stops rendering the plus, the
+   record button and the send button, so the four-column template has to
+   collapse to the single track the wave now occupies.
+
+   Collapsing the three controls' widths (what the old phone-only rule did)
+   could never work here: the composer is a grid, so the `auto` tracks are
+   sized by the template, not by the items sitting in them.
+   --------------------------------------------------------------------------- */
+/* The recording row fills the composer's own four columns - discard, meter,
+   stop, send - so the template is left exactly as it is. */
+.home-ai-composer.is-listening .home-ai-wave {
+  width: 100%;
+  margin: 0 2px;
+}
+
+/* Discard and stop are the same neutral disc; only the glyph differs. The
+   send button keeps .home-ai-send's blue so the recording row ends the same
+   way the idle composer does. */
+.home-ai-dict-cancel,
+.home-ai-dict-stop {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.16);
+  color: #f8fafc;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.home-ai-dict-cancel:hover,
+.home-ai-dict-stop:hover,
+.home-ai-dict-cancel:focus-visible,
+.home-ai-dict-stop:focus-visible {
+  background: rgba(148, 163, 184, 0.28);
+  outline: none;
+}
+
+.home-ai-dict-cancel i {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* A rounded square, the shape every recorder uses for stop. */
+.home-ai-dict-square {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  background: #f8fafc;
+}
+
+.home-ai-dict-send {
+  width: 36px;
+  height: 36px;
+}
+
+.home-ai-composer.is-transcribing {
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.35), 0 16px 48px rgba(2, 6, 23, 0.35);
+}
+
+.home-ai-composer input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f8fafc;
+  font-size: 16px;
+  min-height: 44px;
+}
+
+/* The composer shows focus itself (.home-ai-composer:focus-within glow), so
+   the site-wide keyboard ring from theme.css (html[data-theme-ready]
+   :focus-visible) must not draw a second rectangle around the text field
+   inside it. Same weight + one element beats that rule in both themes. */
+html .home-ai-composer input:focus-visible,
+html .home-ai-composer textarea:focus-visible {
+  outline: none;
+}
+
+.home-ai-composer input::placeholder {
+  color: rgba(148, 163, 184, 0.72);
+  transition: opacity 0.25s ease;
+}
+
+.home-ai-wave {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+  width: 100%;
+  height: 44px;
+  min-width: 0;
+  margin: 0 6px;
+  padding: 0 4px;
+  overflow: hidden;
+  /* It is a button (tap the wave to stop), but it must look like the meter. */
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.home-ai-wave span {
+  display: block;
+  flex: 1 1 0;
+  /* Narrow bars packed close: at 120 of them a 4px cap left wide gaps and the
+     meter read as dots rather than a waveform. */
+  max-width: 2.5px;
+  min-width: 1.5px;
+  height: 36px;
+  border-radius: 999px;
+  /* Neutral light bars rather than the old cyan gradient and glow - the meter
+     is a level readout, not another accent in the bar. */
+  background: rgba(226, 232, 240, 0.82);
+  transform-origin: center;
+  will-change: transform;
+  /* The levels are pushed ~30 times a second, not every frame; this carries
+     the bar between two pushes so the motion still looks continuous. */
+  transition: transform 0.05s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-wave span {
+    transition: none;
+  }
+}
+
+.home-ai-mic,
+.home-ai-send,
+.home-ai-plus {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.home-ai-plus {
+  background: transparent;
+  color: var(--home-ai-muted);
+  font-size: 16px;
+  transition: transform 0.22s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.home-ai-plus:hover,
+.home-ai-plus.is-open {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.home-ai-plus.is-open {
+  transform: rotate(45deg);
+}
+
+.home-ai-plus:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.home-ai-attach {
+  position: relative;
+}
+
+.home-ai-attach-menu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 12px);
+  z-index: 30;
+  width: min(320px, calc(100vw - 48px));
+  padding: 8px;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: linear-gradient(180deg, rgba(17, 27, 45, 0.98), rgba(8, 13, 24, 0.98));
+  box-shadow: 0 18px 48px rgba(2, 6, 23, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform-origin: bottom left;
+  animation: homeAiAttachIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.home-ai-attach-menu button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 12px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: #e5eefc;
+  text-align: left;
+  cursor: pointer;
+  animation: homeAiAttachItemIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.home-ai-attach-menu button:nth-child(1) { animation-delay: 0.04s; }
+.home-ai-attach-menu button:nth-child(2) { animation-delay: 0.08s; }
+
+.home-ai-attach-menu button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.home-ai-attach-menu button i {
+  width: 22px;
+  margin-top: 0;
+  color: #ffffff;
+  font-size: 16px;
+  text-align: center;
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+.home-ai-attach-menu span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.home-ai-attach-menu strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.home-ai-attach-menu small {
+  color: var(--home-ai-muted);
+  font-size: 12px;
+}
+
+.home-ai-attach-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+
+.home-ai-attach-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  padding: 8px 12px 8px 8px;
+  border-radius: 16px;
+  background: rgba(6, 11, 22, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  color: #e5eefc;
+}
+
+.home-ai-attach-chip img,
+.home-ai-attach-chip video {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #020617;
+}
+
+.home-ai-attach-chip span {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.home-ai-attach-remove {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.home-ai-attach-remove:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fecaca;
+}
+
+.home-ai-attach-fallback {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--home-ai-accent);
+}
+
+.home-ai-attach-fallback.wide {
+  width: auto;
+  min-height: 52px;
+  padding: 10px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-ai-msg-media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+
+.home-ai-msg-media-item img,
+.home-ai-msg-media-item video {
+  display: block;
+  max-width: min(360px, 100%);
+  max-height: 280px;
+  border-radius: 14px;
+  background: #020617;
+}
+
+.home-ai-mic {
+  background: transparent;
+  color: var(--home-ai-muted);
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.home-ai-mic.is-active,
+.home-ai-mic:hover {
+  color: var(--home-ai-accent);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.home-ai-mic.is-active {
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+}
+
+.home-ai-mic.is-press {
+  animation: homeAiMicPress 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-ai-mic.is-busy {
+  color: #a5b4fc;
+  cursor: wait;
+}
+
+.home-ai-send {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.98), rgba(37, 99, 235, 0.94));
+  color: #ffffff;
+  box-shadow:
+    0 8px 18px rgba(37, 99, 235, 0.34),
+    0 0 18px rgba(56, 189, 248, 0.16);
+}
+
+.home-ai-send:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow:
+    0 10px 22px rgba(37, 99, 235, 0.4),
+    0 0 24px rgba(56, 189, 248, 0.22);
+}
+
+.home-ai-send:disabled {
+  opacity: 0.35;
+  cursor: default;
+  box-shadow: none;
+}
+
+.home-ai-error {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #fecaca;
+  font-size: 13px;
+}
+
+.home-ai-error.soft {
+  background: rgba(56, 189, 248, 0.1);
+  color: #bae6fd;
+}
+
+.home-ai-error code {
+  font-size: 12px;
+}
+
+.home-ai-error-retry {
+  margin-left: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #7dd3fc;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@keyframes homeAiFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes homeAiMicPress {
+  0% { transform: scale(1); }
+  35% { transform: scale(0.82); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes homeAiAttachIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes homeAiAttachItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes homeAiListenPulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.28), 0 16px 48px rgba(2, 6, 23, 0.35); }
+  50% { box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.55), 0 16px 48px rgba(2, 6, 23, 0.38); }
+}
+
+@keyframes homeAiDot {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+
+@media (max-width: 960px) {
+  .home-ai,
+  .home-ai.is-sidebar-collapsed {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: none;
+  }
+
+  .home-ai-main {
+    grid-column: 1;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .home-ai-sidebar {
+    position: fixed;
+    z-index: 60;
+    top: 50%;
+    left: 12px;
+    right: auto;
+    bottom: auto;
+    width: min(260px, 82vw) !important;
+    max-height: min(72vh, calc(100dvh - 120px)) !important;
+    padding: 12px;
+    transform: translate(-120%, -50%);
+    transition: transform 0.24s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    background: rgba(15, 20, 35, 0.82);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar {
+    width: min(260px, 82vw) !important;
+    padding: 12px;
+  }
+
+  .home-ai.is-sidebar-open .home-ai-sidebar {
+    transform: translate(0, -50%);
+  }
+
+  .home-ai-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    /* Starts below the header - the floating bar plus its padding, pinned in
+       navbar.css. */
+    top: 78px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 55;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: rgba(2, 6, 23, 0.55);
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+  }
+
+  .home-ai.is-sidebar-open .home-ai-sidebar-backdrop {
+    display: block;
+    animation: homeAiFadeUp 0.2s ease both;
+  }
+
+  .home-ai-mobile-sidebar {
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .home-ai-topbar {
+    display: flex;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .home-ai-sidebar-toggle {
+    display: none;
+  }
+
+  .home-ai-sidebar-top {
+    margin-bottom: 18px;
+  }
+
+  .home-ai-new,
+  .home-ai.is-sidebar-collapsed .home-ai-new {
+    justify-content: flex-start;
+    padding: 0 16px;
+  }
+
+  .home-ai-new span,
+  .home-ai-nav-item span,
+  .home-ai-section-label,
+  .home-ai-history-item span,
+  .home-ai-history-empty,
+  .home-ai.is-sidebar-collapsed .home-ai-new span,
+  .home-ai.is-sidebar-collapsed .home-ai-nav-item span,
+  .home-ai.is-sidebar-collapsed .home-ai-section-label,
+  .home-ai.is-sidebar-collapsed .home-ai-history-item span,
+  .home-ai.is-sidebar-collapsed .home-ai-history-empty {
+    display: inline;
+    opacity: 1;
+    max-width: none;
+    width: auto;
+    pointer-events: auto;
+  }
+
+  .home-ai-section-label,
+  .home-ai.is-sidebar-collapsed .home-ai-section-label {
+    display: block;
+  }
+
+  .home-ai.is-sidebar-collapsed .home-ai-nav-item {
+    justify-content: flex-start;
+    padding: 0 12px;
+  }
+
+  .home-ai-history-empty,
+  .home-ai.is-sidebar-collapsed .home-ai-history-empty {
+    display: block;
+  }
+
+  .home-ai-history-delete,
+  .home-ai.is-sidebar-collapsed .home-ai-history-delete {
+    display: grid;
+    opacity: 1;
+  }
+
+  .home-ai-composer-wrap,
+  .home-ai-stage {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .home-ai-main:not(.is-welcome) .home-ai-composer-wrap {
+    left: 0;
+    right: 0;
+  }
+
+  .home-ai-composer-wrap {
+    max-width: calc(920px + 28px);
+  }
+
+  .home-ai-topbar {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .home-ai-empty h1 {
+    font-size: clamp(22px, 5.4vw, 32px);
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  .home-ai .cs2-chat-item-cards {
+    gap: 10px;
+  }
+
+  .home-ai-empty-sub {
+    font-size: 16px;
+  }
+
+  .home-ai-starters {
+    grid-template-columns: 1fr;
+  }
+
+  .home-ai-preview-card {
+    min-width: 132px;
+    flex: 1 1 132px;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-ai-main:not(.is-welcome).has-suggest-chips .home-ai-stage {
+    padding-bottom: 188px;
+  }
+
+  .home-ai-suggest-chip {
+    max-width: min(100%, 200px);
+    font-size: 12px;
+    padding: 7px 11px 8px;
+  }
+
+  .home-ai .cs2-chat-item-cards {
+    gap: 10px;
+  }
+
+  .home-ai .cs2-chat-item-card {
+    flex-basis: 148px;
+    width: 148px;
+    min-width: 148px;
+    max-width: 148px;
+  }
+}
+
+/* =============================================================================
+   Home AI chat item cards  -  compact GPT shopping tiles (no wear)
+   LAST in this file so it wins over restored prompt/index originals.
+   Scope: .home-ai .cs2-chat-item-card* only. Do not restyle composer/welcome.
+   Layout: image  -  bold price  -  softer name  -  Buy on + logo
+   Row: flex-wrap  -   - 5 cards stay one row (~168px tiles in 920px); extras wrap under.
+   Button tokens from .navbar .nav-login-btn (muted, not electric blue)
+   ============================================================================= */
+
+.home-ai .cs2-chat-item-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: stretch;
+  width: 100%;
+  max-width: 920px;
+  margin: 0.65em 0 0.7em;
+  padding-top: 5px;
+  overflow: visible;
+}
+
+.home-ai .cs2-chat-item-card {
+  --card-accent: #60a5fa;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 168px;
+  width: 168px;
+  min-width: 168px;
+  max-width: 168px;
+  height: auto;
+  min-height: 0;
+  color: inherit;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(100, 120, 160, 0.22);
+  background: linear-gradient(
+    145deg,
+    rgba(18, 27, 48, 0.95),
+    rgba(7, 14, 29, 0.98)
+  );
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.home-ai .cs2-chat-item-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(100, 120, 160, 0.38);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.32),
+    0 0 18px color-mix(in srgb, var(--card-accent) 10%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.home-ai .cs2-chat-item-card:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.55);
+  outline-offset: 2px;
+}
+
+.home-ai .cs2-chat-item-card-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-ai .cs2-chat-item-card-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 112px;
+  min-height: 112px;
+  max-height: 112px;
+  padding: 8px 8px 4px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--card-accent) 20%, transparent), transparent 65%),
+    linear-gradient(180deg, rgba(13, 21, 38, 0.96), rgba(8, 13, 26, 0.98));
+}
+
+.home-ai .cs2-chat-item-card-qty {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #e2e8f0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.home-ai .cs2-chat-item-card-price small {
+  display: block;
+  margin-top: 2px;
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.home-ai .cs2-chat-item-card-media img {
+  width: 86%;
+  max-width: 86%;
+  max-height: 96px;
+  min-height: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.45));
+  transition: transform 0.25s ease;
+}
+
+.home-ai .cs2-chat-item-card:hover .cs2-chat-item-card-media img {
+  transform: none;
+}
+
+.home-ai .cs2-chat-item-card-media span {
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.home-ai .cs2-chat-item-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 8px 12px 6px;
+  border-top: 1px solid rgba(110, 146, 198, 0.1);
+}
+
+.home-ai .cs2-chat-item-card-body span,
+.home-ai .cs2-chat-item-card-price {
+  display: block;
+  min-height: 0;
+  margin: 0;
+}
+
+.home-ai .cs2-chat-item-card-body em {
+  display: none !important;
+}
+
+.home-ai .cs2-chat-item-card-body b,
+.home-ai .cs2-chat-item-card-price,
+.home-ai .cs2-chat-item-card-price b {
+  color: #f8fafc;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.home-ai .cs2-chat-item-card-body strong {
+  color: #c7ccda;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0;
+  min-height: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Login-muted dark navy buy button (.navbar .nav-login-btn tokens) */
+.home-ai .cs2-chat-item-card-buy {
+  --buy-logo: none;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-shrink: 0;
+  align-self: stretch;
+  box-sizing: border-box;
+  margin: 6px 10px 10px;
+  min-height: 36px;
+  height: 36px;
+  max-height: 36px;
+  padding: 0 10px;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  border-radius: 8px;
+  border: 1px solid rgba(75, 105, 255, 0.45);
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  box-shadow:
+    0 0 0 1px rgba(75, 105, 255, 0.22) inset,
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  white-space: nowrap;
+  cursor: pointer;
+  z-index: 2;
+  pointer-events: auto;
+  transition: background 0.14s ease, transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.home-ai .cs2-chat-item-card-buy::before,
+.home-ai .cs2-chat-item-card-buy[style*="--buy-logo"]::before {
+  content: none;
+  display: none;
+}
+
+.home-ai .cs2-chat-item-card-buy span {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  text-overflow: clip;
+  color: #fff;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.home-ai .cs2-chat-item-card-buy-market {
+  font-weight: 700;
+}
+
+.home-ai .cs2-chat-item-card-buy i {
+  display: none;
+}
+
+.home-ai .cs2-chat-item-card-buy img {
+  display: block;
+  position: relative;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  max-width: 18px;
+  max-height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: none;
+  pointer-events: none;
+}
+
+.home-ai .cs2-chat-item-card-buy:hover,
+.home-ai .cs2-chat-item-card-buy:focus-visible {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.46), rgba(75, 105, 255, 0.26));
+  border-color: rgba(75, 105, 255, 0.55);
+  color: #fff;
+  filter: none;
+  transform: translateY(-1px);
+}
+
+.home-ai .cs2-chat-item-card-buy.is-static {
+  cursor: default;
+  color: #fff;
+}
+
+@media (max-width: 980px) {
+  .home-ai .cs2-chat-item-cards {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-ai .cs2-chat-item-card {
+    flex-basis: 148px;
+    width: 148px;
+    min-width: 148px;
+    max-width: 148px;
+  }
+}
+
+/* Ask AI selection chip  -  shared with mini widget (index.css). */
+#ask-ai-select-chip-root {
+  position: relative;
+  z-index: 14000;
+}
+
+@keyframes ask-ai-select-chip-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 14px)) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 20px)) scale(1);
+  }
+}
+
+@keyframes ask-ai-select-chip-in-below {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 20px) scale(1);
+  }
+}
+
+.ask-ai-select-chip {
+  position: fixed;
+  z-index: 14000;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 11px 0 6px;
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font: 600 12.5px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 20px));
+  transform-origin: 50% 100%;
+  animation: ask-ai-select-chip-in 180ms ease-out;
+}
+
+.ask-ai-select-chip.is-below {
+  transform: translate(-50%, 20px);
+  transform-origin: 50% 0;
+  animation-name: ask-ai-select-chip-in-below;
+}
+
+.ask-ai-select-chip:hover,
+.ask-ai-select-chip:focus-visible {
+  background: #1c1c1c;
+  outline: none;
+}
+
+.ask-ai-select-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+}
+
+/* ---------------------------------------------------------------------------
+   Phone layout. The welcome block was sized by its nowrap headline, which
+   pushed it to ~2900px and off-screen; everything below keeps it inside the
+   viewport and lets the headline wrap.
+   --------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .home-ai-stage {
+    padding: 8px 12px 16px;
+  }
+
+  .home-ai-empty,
+  .home-ai-main.is-welcome .home-ai-empty {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .home-ai-main.is-welcome .home-ai-empty h1,
+  .home-ai-welcome-headline {
+    white-space: normal;
+    font-size: clamp(24px, 7vw, 30px);
+    line-height: 1.15;
+    transform: none;
+    max-width: 100%;
+  }
+
+  .home-ai-ticker {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .home-ai-composer-wrap,
+  .home-ai-composer {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .home-ai-suggest-chips {
+    flex-wrap: wrap;
+  }
+
+  .home-ai-thread {
+    width: 100%;
+  }
+}
+
+/* ===========================================================================
+   Phone layout (ChatGPT-style). Desktop keeps the two-column app shell, so
+   everything below is scoped to the same breakpoint the navbar burger uses.
+   =========================================================================== */
+
+/* Site links only exist inside the drawer on phones — the navbar shows them
+   everywhere else. */
+.home-ai-browse {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  /* One menu button for the whole site: the navbar burger opens this drawer,
+     so the in-page toggle (and the sidebar's own collapse button) goes away. */
+  .home-ai-topbar,
+  .home-ai-mobile-sidebar,
+  .home-ai-sidebar-toggle {
+    display: none !important;
+  }
+
+  /* Full-screen drawer, the way Gemini does it: it takes the whole page under
+     the 64px navbar (which keeps the close button), and the page slides out to
+     the right behind it instead of just being dimmed. */
+  /* The collapsed/expanded width rules at ≤960px are more specific, so the
+     phone override has to name those states too. */
+  /* The page rides above #cs2-nav-root while the drawer is open, so the drawer
+     can cover the bar the way ChatGPT's does. */
+  body.is-ai-drawer-open #root {
+    position: relative;
+    z-index: 6000;
+  }
+
+  .home-ai-sidebar,
+  .home-ai.is-sidebar-collapsed .home-ai-sidebar,
+  .home-ai.is-sidebar-open .home-ai-sidebar {
+    /* Full height, over the navbar: the drawer's own header replaces it. */
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    z-index: 6100 !important;
+    /* Three quarters of the screen: the page stays visible at the right edge
+       and doubles as the tap-away target. */
+    width: 75% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: var(--app-height, 100dvh) !important;
+    max-height: none !important;
+    padding: 20px 14px calc(16px + env(safe-area-inset-bottom)) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: #0d1220 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.34s cubic-bezier(0.2, 0, 0, 1) !important;
+    /* The rail is overflow:visible so its hover tooltips can escape; a drawer
+       this tall has to scroll instead, or the last links are unreachable. */
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .home-ai.is-sidebar-open .home-ai-sidebar {
+    transform: translateX(0) !important;
+  }
+
+  /* The page stays put while the drawer slides over it — only the backdrop
+     dims it. */
+  .home-ai.is-sidebar-open .home-ai-main {
+    transform: none;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-ai-sidebar,
+    .home-ai-main {
+      transition: none !important;
+    }
+  }
+
+  /* The quarter of the page still showing dims and closes the drawer on tap —
+     including the strip of navbar next to the drawer. */
+  .home-ai-sidebar-backdrop {
+    top: 0 !important;
+    z-index: 6050 !important;
+    background: rgba(2, 6, 23, 0.55);
+  }
+
+  .home-ai.is-sidebar-open .home-ai-sidebar-backdrop {
+    display: block !important;
+  }
+
+  /* The drawer keeps the dividers' spacing but not their visible lines. */
+  .home-ai-sidebar-divider {
+    background: none;
+  }
+
+  /* ---------------------------------------------------------------------
+     Phone drawer, ChatGPT's shape in this site's colours:
+       wordmark + round search · icon rows · divider · recent chats as plain
+       text · site links · pinned bottom bar (New chat pill + avatar).
+     --------------------------------------------------------------------- */
+  .home-ai-drawer-head {
+    order: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 2px 2px 14px;
+  }
+
+  .home-ai-drawer-brand {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .home-ai-drawer-brand img {
+    height: 26px;
+    width: auto;
+    display: block;
+  }
+
+  /* Search lives in the header button above, not in the list. */
+  .home-ai-nav-search {
+    display: none !important;
+  }
+
+  .home-ai-drawer-round {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 50%;
+    background: transparent;
+    color: #e2e8f0;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  /* Search moved into the header button, New chat into the bottom bar, so the
+     old top block and the account row have nothing left to show. */
+  .home-ai-sidebar-top,
+  .home-ai-sidebar-footer {
+    display: none !important;
+  }
+
+  .home-ai-nav {
+    order: 1;
+  }
+
+  .home-ai-sidebar-scroll {
+    order: 2;
+    /* No inner scroller on a phone — the drawer itself scrolls. */
+    flex: 0 0 auto;
+    overflow: visible;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+  }
+
+  /* An empty history says nothing worth a row — the section just collapses. */
+  .home-ai-sidebar-scroll .home-ai-history-empty {
+    display: none;
+  }
+
+  .home-ai-sidebar-scroll:not(:has(.home-ai-history-item)) {
+    margin-top: 6px;
+    padding-top: 0;
+  }
+
+  .home-ai-browse {
+    order: 3;
+  }
+
+  /* Recent chats read as plain titles: no leading icon, no delete button. */
+  .home-ai-sidebar-scroll .home-ai-history-item .home-ai-history-open i,
+  .home-ai-sidebar-scroll .home-ai-history-delete {
+    display: none;
+  }
+
+  .home-ai-sidebar-scroll .home-ai-history-open {
+    padding: 11px 10px;
+    font-size: 14.5px;
+    color: rgba(226, 232, 240, 0.86);
+  }
+
+  .home-ai-sidebar-scroll .home-ai-section-label {
+    margin: 0 10px 4px;
+  }
+
+  .home-ai-drawer-bottom {
+    order: 5;
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    /* Sits on the bottom edge of the drawer when the list is short, and stays
+       stuck to it once the list is long enough to scroll. */
+    margin-top: auto;
+    padding-top: 14px;
+    padding: 12px 2px calc(4px + env(safe-area-inset-bottom, 0px));
+    background: #0d1220;
+  }
+
+  /* Same chip as the navbar's Login button: 8px corners, the blue gradient and
+     its inset hairline. */
+  .home-ai-drawer-new {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid rgba(75, 105, 255, 0.45);
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+    box-shadow:
+      0 0 0 1px rgba(75, 105, 255, 0.22) inset,
+      0 10px 24px rgba(0, 0, 0, 0.28);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .home-ai-drawer-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.1);
+    color: #e2e8f0;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .home-ai-drawer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The dividers were invisible spacers; the margins above replace them. */
+  .home-ai-sidebar-divider {
+    display: none;
+  }
+
+  .home-ai-browse {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 12px;
+  }
+
+  /* Folded sections: the heading is the toggle, its chevron points down when
+     closed and up when open. */
+  .home-ai-browse-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .home-ai-browse-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-height: 40px;
+    margin: 2px 0;
+    padding: 0 10px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: rgba(248, 250, 252, 0.92);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .home-ai-browse-toggle i {
+    color: rgba(148, 163, 184, 0.75);
+    font-size: 11px;
+    transition: transform 0.18s ease;
+  }
+
+  .home-ai-browse-group.is-open .home-ai-browse-toggle i {
+    transform: rotate(180deg);
+  }
+
+  /* 0fr → 1fr animates all the way to the content's own height, which a plain
+     max-height guess cannot do. */
+  .home-ai-browse-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.26s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .home-ai-browse-group.is-open .home-ai-browse-panel {
+    grid-template-rows: 1fr;
+  }
+
+  .home-ai-browse-panel-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0.26s;
+  }
+
+  .home-ai-browse-group.is-open .home-ai-browse-panel-inner {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-ai-browse-panel,
+    .home-ai-browse-panel-inner {
+      transition: none;
+    }
+  }
+
+  .home-ai-browse .home-ai-section-label {
+    margin: 4px 10px 6px;
+  }
+
+  .home-ai-browse-link {
+    text-decoration: none;
+  }
+
+  /* Weapon silhouettes are wide and short (a rifle is roughly 4:1), so in the
+     22px slot the glyph rows use they render as a thin sliver. Every icon in
+     this list gets a wider slot instead, which lets the artwork scale up to the
+     visual weight of a Font Awesome glyph while the labels stay aligned. */
+  /* :first-child matches the specificity of the 22px rule these glyphs inherit
+     from .home-ai-sidebar-btn, so the labels line up with the artwork rows. */
+  .home-ai-browse-link > i:first-child {
+    flex: 0 0 30px;
+    width: 30px;
+  }
+
+  .home-ai-browse-link .nav-category-icon,
+  .home-ai-browse-link .nav-cases-icon {
+    flex: 0 0 30px;
+    width: 30px;
+    min-width: 30px;
+    height: 20px;
+    margin: 0;
+    object-fit: contain;
+    object-position: center;
+    opacity: 0.92;
+  }
+
+  .home-ai-browse-link .nav-category-icon {
+    filter: brightness(0) invert(1);
+  }
+
+  /* Prompt bar sits flush on the bottom edge. The safe-area inset is capped
+     because Android reports the navigation bar's ~48px here even though the
+     page never paints under it — that inset was the gap under the bar. */
+  .home-ai-composer-wrap,
+  .home-ai-main.is-welcome .home-ai-composer-wrap {
+    padding-bottom: min(env(safe-area-inset-bottom, 0px), 8px) !important;
+  }
+
+  /* Rotating price strip sits under the headline. */
+  .home-ai-ticker {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 2px;
+  }
+
+  /* One line per pick truncates to "…" on a phone. Let the reason wrap. */
+  .home-ai-row.is-assistant .home-ai-text .home-ai-why-line {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  /* No headline glow / right-edge shading (::before); the grid texture (::after)
+     stays, tinted blue with a soft bloom behind the hero. */
+  .home-ai::before {
+    display: none !important;
+  }
+
+  /* The price strip belongs to the desktop hero only. */
+  .home-ai-ticker {
+    display: none !important;
+  }
+
+  html,
+  body.page-home {
+    background: #0d1526 !important;
+  }
+
+  /* Kept from the new bar: it sits on the page colour, with no gradient of its
+     own and no drop shadow. */
+  body.page-home .navbar {
+    background: transparent !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     AI header, Gemini-style: burger · model name … private chat · account.
+     The logo and the search icon step aside for them.
+     --------------------------------------------------------------------- */
+  body.page-home .navbar .logo {
+    display: none !important;
+  }
+
+  body.page-home .navbar .search-container {
+    display: none !important;
+  }
+
+  body.page-home .navbar .nav-profile-slot,
+  body.page-home .navbar .nav-profile-menu,
+  body.page-home .navbar .nav-login-btn,
+  body.page-home .navbar .login-btn {
+    display: inline-flex !important;
+    order: 3;
+  }
+
+  /* Burger on the left edge, the account and ghost icons on the right: with the
+     model name gone, the burger's auto margin is what separates them. */
+  body.page-home .navbar .nav-burger {
+    margin-right: auto;
+  }
+
+  body.page-home .navbar .nav-model-picker {
+    display: block;
+    position: relative;
+    order: 0;
+    margin-right: auto;
+    min-width: 0;
+  }
+
+  /* Account button: a plain profile glyph, no Steam mark and no blue chip. */
+  body.page-home .navbar .nav-login-btn {
+    width: 38px !important;
+    min-width: 38px !important;
+    padding: 0 !important;
+    justify-content: center;
+    border: none !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #e2e8f0;
+    font-size: 21px;
+  }
+
+  body.page-home .navbar .nav-login-icon-steam,
+  body.page-home .navbar .nav-login-label {
+    display: none !important;
+  }
+
+  body.page-home .navbar .nav-login-icon-account {
+    display: inline-flex !important;
+  }
+
+  body.page-home .navbar .nav-model-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    max-width: 58vw;
+    padding: 6px 4px;
+    border: none;
+    background: transparent;
+    color: #f8fafc;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+  }
+
+  body.page-home .navbar .nav-model-trigger span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.page-home .navbar .nav-model-trigger i {
+    color: rgba(226, 232, 240, 0.6);
+    font-size: 11px;
+  }
+
+  body.page-home .navbar .nav-model-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 5700;
+    min-width: 190px;
+    padding: 6px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 14px;
+    background: #0d1220;
+    box-shadow: 0 18px 40px rgba(2, 6, 23, 0.55);
+  }
+
+  body.page-home .navbar .nav-model-picker.open .nav-model-dropdown {
+    display: block;
+    animation: home-ai-model-in 0.16s ease both;
+  }
+
+  @keyframes home-ai-model-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  body.page-home .navbar .nav-model-option {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: rgba(226, 232, 240, 0.86);
+    font-family: inherit;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  body.page-home .navbar .nav-model-option.is-active {
+    background: rgba(41, 98, 255, 0.18);
+    color: #e0f2fe;
+  }
+
+  body.page-home .navbar .nav-private-chat {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    order: 2;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: #e2e8f0;
+    font-size: 17px;
+    cursor: pointer;
+  }
+
+  /* While a private chat is open the ghost is lit so the state is obvious. */
+  body.is-private-chat .navbar .nav-private-chat {
+    color: #4facfe;
+    background: rgba(79, 172, 254, 0.14);
+  }
+
+  /* The lit ghost is the only indicator — no banner above the prompt bar. */
+
+  /* Bigger landing headline now that the bar carries no logo. */
+  .home-ai-empty h1.home-ai-welcome-headline,
+  .home-ai-main.is-welcome .home-ai-empty h1 {
+    font-size: clamp(30px, 8.6vw, 40px) !important;
+    line-height: 1.12;
+  }
+
+  .home-ai-hero-logo {
+    display: block;
+    width: 66px;
+    height: 66px;
+    margin: 0 auto 22px;
+    filter: drop-shadow(0 8px 26px rgba(37, 99, 235, 0.45));
+    animation: home-ai-hero-logo-in 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+
+  @keyframes home-ai-hero-logo-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.96); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* The three bars build one after the other, shortest first. They all sit on
+     the same baseline (y + height = 56 for each), so scaling from the bottom
+     grows each one upward out of that line.
+
+     transform-box: fill-box makes transform-origin resolve against the rect's
+     own box rather than the SVG viewport - without it every bar would scale
+     about the canvas corner and slide instead of growing. */
+  .home-ai-hero-bar {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: home-ai-hero-bar-in 0.44s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .home-ai-hero-bar-1 { animation-delay: 0.1s; }
+  .home-ai-hero-bar-2 { animation-delay: 0.26s; }
+  .home-ai-hero-bar-3 { animation-delay: 0.42s; }
+
+  @keyframes home-ai-hero-bar-in {
+    from { opacity: 0; transform: scaleY(0); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-ai-hero-logo,
+    .home-ai-hero-bar {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Only the greeting fades while the composer has text — the logo stays. */
+
+  /* ---------------------------------------------------------------------
+     Prompt window: a taller, softer pill with roomier controls.
+     --------------------------------------------------------------------- */
+  /* Flat and dark, a shade under the page, instead of the lighter gradient that
+     stood out against the rest of the phone UI. */
+  .home-ai-composer {
+    min-height: 56px;
+    padding: 8px 10px 8px 6px;
+    border-radius: 16px;
+    border-color: rgba(148, 163, 184, 0.16);
+    background: #0a1120;
+    box-shadow: none;
+  }
+
+  .home-ai-composer:focus-within {
+    border-color: rgba(96, 165, 250, 0.4);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
+  }
+
+  .home-ai-composer input[type="text"] {
+    font-size: 15.5px;
+  }
+
+  /* Model list: same rounding and shadow language as the prompt pill. */
+  body.page-home .navbar .nav-model-dropdown {
+    border-radius: 18px;
+    padding: 8px;
+    background: linear-gradient(180deg, rgba(20, 29, 47, 0.98), rgba(12, 18, 32, 0.98));
+    backdrop-filter: blur(14px);
+  }
+
+  body.page-home .navbar .nav-model-option {
+    border-radius: 12px;
+    padding: 11px 13px;
+    font-size: 14.5px;
+  }
+
+  /* --app-height is the visual viewport height (set in home-page.jsx). Android
+     browsers can report 100dvh taller than what is on screen, which left the
+     composer hanging above the bottom edge.
+
+     --keyboard-inset is what the on-screen keyboard covers. Taking it as padding
+     on a border-box page shrinks the layout inside it, so the prompt bar (and
+     the thread above it) glide up with the keyboard instead of snapping. */
+  body.page-home {
+    height: var(--app-height, 100dvh) !important;
+    max-height: var(--app-height, 100dvh) !important;
+    box-sizing: border-box;
+    padding-bottom: var(--keyboard-inset, 0px);
+    transition: padding-bottom 0.26s cubic-bezier(0.2, 0, 0, 1);
+    /* index.css sets `html, body { min-height: 100vh }`, and on Android 100vh is
+       the tall viewport with the URL bar hidden — that min-height is what kept
+       the layout taller than the screen. */
+    min-height: 0 !important;
+  }
+
+  html {
+    min-height: 0 !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.page-home {
+      transition: none;
+    }
+  }
+
+  .home-ai-empty {
+    position: relative;
+  }
+
+  /* Typing clears the greeting out of the way; deleting everything brings it
+     back. Opacity and blur only — transform belongs to the float animation. */
+  .home-ai-welcome-headline {
+    transition: opacity 0.22s ease, filter 0.26s ease;
+  }
+
+  /* The headline types itself in, waits, then deletes itself. Two lines are
+     reserved up front so the block does not grow and shrink under the text. */
+  .home-ai-welcome-headline.is-typewriter {
+    min-height: 2.3em;
+  }
+
+  .home-ai-type-caret {
+    display: inline-block;
+    width: 4px;
+    min-width: 4px;
+    height: 0.92em;
+    margin-left: 4px;
+    vertical-align: -0.1em;
+    border-radius: 2px;
+    background: #4facfe;
+    box-shadow: 0 0 12px rgba(79, 172, 254, 0.65);
+    /* Never fully invisible: it dips instead of blinking out, so a phone that
+       skips or throttles the animation still shows the line. */
+    opacity: 1;
+    animation: home-ai-caret-blink 1.05s ease-in-out infinite;
+  }
+
+  @keyframes home-ai-caret-blink {
+    0%, 45% { opacity: 1; }
+    55%, 95% { opacity: 0.15; }
+    100% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-ai-type-caret {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* The greeting stays on screen while the composer is being typed in. */
+
+  /* Headline drifts gently so the landing view is not dead still. */
+  .home-ai-main.is-welcome .home-ai-empty h1,
+  .home-ai-welcome-headline {
+    animation: home-ai-title-float 6s ease-in-out infinite;
+  }
+
+  @keyframes home-ai-title-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-ai-main.is-welcome .home-ai-empty h1,
+    .home-ai-welcome-headline {
+      animation: none;
+    }
+  }
+
+  /* Greeting floats in the free space, composer sits at the bottom of the
+     screen with the prompts right above it. */
+  .home-ai-main.is-welcome {
+    justify-content: flex-end;
+  }
+
+  .home-ai-main.is-welcome .home-ai-stage {
+    flex: 1 1 auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Starter prompts sit above the composer as one swipeable row. */
+  .home-ai-main.is-welcome .home-ai-composer-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-ai-starters-block {
+    order: -1;
+    margin: 0 0 10px;
+  }
+
+  .home-ai-starters {
+    display: flex !important;
+    grid-template-columns: none !important;
+    flex-wrap: nowrap;
+    gap: 8px;
+    /* Runs off the right edge to show there is more to swipe, but starts flush
+       with the composer below it. */
+    margin: 0 -14px 0 0;
+    padding: 2px 0 6px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .home-ai-starters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-ai-starter {
+    flex: 0 0 auto;
+    width: 62vw;
+    max-width: 250px;
+    min-height: 0;
+    /* Two tight lines of text — the cards sit right above the composer, so
+       every extra pixel of height pushes the thread up. */
+    padding: 8px 13px;
+    border-radius: 14px;
+    scroll-snap-align: start;
+  }
+
+  .home-ai-starter-copy {
+    gap: 1px;
+  }
+
+  /* ChatGPT's cards are text only. */
+  .home-ai-starter > i,
+  .home-ai-starter-icon {
+    display: none;
+  }
+
+  /* One line each: the row stretches every card to the tallest one, so a single
+     wrapping subtitle used to make all four cards tall. */
+  .home-ai-starter-copy strong,
+  .home-ai-starter-copy small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .home-ai-starter-copy strong {
+    font-size: 13.5px;
+    line-height: 1.25;
+  }
+
+  .home-ai-starter-copy small {
+    font-size: 11.5px;
+    line-height: 1.25;
+  }
+
+  /* Follow-up chips: one swipeable row with readable labels instead of three
+     chips squeezed into "Whi…". */
+  .home-ai-bottom-row {
+    display: block;
+  }
+
+  /* Selector matches the desktop rule that caps the row at 65% of the composer
+     (it shares the row with the language nudge there). */
+  .home-ai-bottom-row:not(.has-lang-nudge) .home-ai-suggest-chips,
+  .home-ai-bottom-row .home-ai-suggest-chips {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .home-ai-suggest-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-ai-bottom-row:not(.has-lang-nudge) .home-ai-suggest-chip,
+  .home-ai-bottom-row .home-ai-suggest-chip {
+    flex: 0 0 auto;
+    max-width: 80vw !important;
+  }
+}
+
+
+
+/* ---------------------------------------------------------------------------
+   Phone: the profile panel drops its "Profile" heading.
+
+   The panel is reached from the avatar and is unmistakably the profile, so the
+   title only spent a row of height. Desktop keeps it.
+   --------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .home-ai-profile-head {
+    display: none;
+  }
+}
+
+/* ===========================================================================
+   Light theme for the home page (index.html is in THEME_LIGHT_PAGES).
+
+   The page was drawn dark with its own literals. Most of it reads the
+   --home-ai-* variables, so those are remapped to the theme tokens from
+   styles/css/theme.css first; the hard-coded surfaces follow. The phone start
+   screen has its own light rules in home-mobile.css. !important only where
+   the dark rule it replaces already carries one (the sidebar). The page
+   background itself is set by the inline <style> in index.html's head.
+   =========================================================================== */
+html[data-theme="light"] body.page-home,
+html[data-theme="light"] .home-ai {
+  --home-ai-chrome: var(--card);
+  --home-ai-bg: var(--bg);
+  --home-ai-panel: var(--card);
+  --home-ai-panel-2: var(--field);
+  --home-ai-line: var(--border);
+  --home-ai-text: var(--text);
+  --home-ai-muted: var(--muted);
+  --home-ai-accent: var(--accent);
+  --home-ai-glass: rgba(255, 255, 255, 0.86);
+}
+
+/* Wave-line hero: black lines on white (the site's near-black ink), faint
+   for the regular lines and stronger for every fifth (accent) line, and no
+   film grain (it reads as dirt on white). CSS stroke beats the SVG's
+   presentation attributes. */
+html[data-theme="light"] .home-ai-waves path {
+  stroke: #0b1230;
+  stroke-opacity: 0.14;
+}
+
+html[data-theme="light"] .home-ai-waves g[filter] path {
+  stroke: #0b1230;
+  stroke-opacity: 0.32;
+}
+
+html[data-theme="light"] .home-ai-waves g[filter] {
+  filter: none;
+}
+
+html[data-theme="light"] .home-ai-grain {
+  display: none;
+}
+
+/* The dark theme's edge vignette (a navy fade on .home-ai::before) is a dark
+   stain on white. */
+html[data-theme="light"] .home-ai::before {
+  background: none;
+}
+
+/* Headline, lead line and the market ticker under it. */
+html[data-theme="light"] .home-ai-empty h1,
+html[data-theme="light"] .home-ai-empty.compact h1,
+html[data-theme="light"] .home-ai-empty-lead,
+html[data-theme="light"] .home-ai-charts-head h1,
+html[data-theme="light"] .home-ai-brand strong,
+html[data-theme="light"] .home-ai-preview-card strong {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-empty-accent-wrap {
+  filter: none;
+}
+
+html[data-theme="light"] .home-ai-empty-accent {
+  color: var(--accent);
+  background-image: linear-gradient(90deg, #2563eb 0%, #0ea5e9 60%, #2563eb 100%);
+}
+
+html[data-theme="light"] .home-ai-empty-icon {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai-ticker-item,
+html[data-theme="light"] .home-ai-ticker-item strong,
+html[data-theme="light"] a.home-ai-ticker-item:hover strong {
+  color: var(--text);
+}
+
+/* Composer and the four starter cards. */
+html[data-theme="light"] .home-ai-composer {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: 0 1px 2px rgba(16, 24, 64, 0.04), 0 8px 24px rgba(16, 24, 64, 0.06);
+}
+
+html[data-theme="light"] .home-ai-composer input {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-composer input::placeholder {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai-plus:hover,
+html[data-theme="light"] .home-ai-plus.is-open {
+  color: var(--text);
+  background: var(--tint);
+}
+
+html[data-theme="light"] .home-ai-send {
+  background: var(--accent-grad, var(--accent));
+  box-shadow: var(--accent-depth, none);
+  color: var(--on-accent);
+}
+
+html[data-theme="light"] .home-ai-send:hover:not(:disabled) {
+  filter: none;
+  background: var(--accent-grad-hover, var(--accent));
+  box-shadow: var(--accent-depth-hover, none);
+}
+
+html[data-theme="light"] .home-ai-starter {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--muted);
+  box-shadow: 0 1px 2px rgba(16, 24, 64, 0.04);
+}
+
+html[data-theme="light"] .home-ai-starter:hover {
+  background: var(--card);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+html[data-theme="light"] .home-ai-starter-copy strong {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-starter > i,
+html[data-theme="light"] .home-ai-starter-icon {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai-attach-menu {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: 0 12px 32px rgba(16, 24, 64, 0.14);
+}
+
+html[data-theme="light"] .home-ai-attach-menu button,
+html[data-theme="light"] .home-ai-attach-menu button i {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-attach-chip {
+  background: var(--field);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-attach-remove {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai-dict-cancel,
+html[data-theme="light"] .home-ai-dict-stop {
+  color: var(--text);
+}
+
+/* Sidebar rail and the expanded chat list. */
+html[data-theme="light"] .home-ai-sidebar,
+html[data-theme="light"] .home-ai.is-sidebar-collapsed .home-ai-sidebar,
+html[data-theme="light"] .home-ai.is-sidebar-open .home-ai-sidebar {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 1px 3px rgba(16, 24, 64, 0.06);
+}
+
+html[data-theme="light"] .home-ai-sidebar-brand-label,
+html[data-theme="light"] .home-ai-sidebar-profile,
+html[data-theme="light"] .home-ai-section-label,
+html[data-theme="light"] .home-ai-browse-toggle {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-nav-item,
+html[data-theme="light"] .home-ai-sidebar-btn.home-ai-nav-item,
+html[data-theme="light"] .home-ai-sidebar-btn.home-ai-sidebar-toggle,
+html[data-theme="light"] .home-ai-nav-item i,
+html[data-theme="light"] .home-ai-sidebar-btn > i:first-child,
+html[data-theme="light"] .home-ai-sidebar-search-btn,
+html[data-theme="light"] .home-ai-mobile-sidebar,
+html[data-theme="light"] .home-ai-history-item,
+html[data-theme="light"] .home-ai-sidebar-scroll .home-ai-history-open {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai-nav-item:hover,
+html[data-theme="light"] .home-ai-nav-item:hover i,
+html[data-theme="light"] .home-ai-sidebar-btn:hover > i:first-child,
+html[data-theme="light"] .home-ai-sidebar-btn.home-ai-sidebar-toggle:hover,
+html[data-theme="light"] .home-ai-sidebar-btn.home-ai-nav-item:hover,
+html[data-theme="light"] .home-ai-sidebar-search-btn:hover,
+html[data-theme="light"] .home-ai-sidebar-search-btn.is-active,
+html[data-theme="light"] .home-ai-mobile-sidebar:hover {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-nav-item.is-active,
+html[data-theme="light"] .home-ai-nav-item.is-active i {
+  background: var(--tint);
+  color: var(--accent);
+  box-shadow: none;
+}
+
+html[data-theme="light"] .home-ai-history-item:hover,
+html[data-theme="light"] .home-ai-history-item.is-active {
+  background: var(--tint);
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-new {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+html[data-theme="light"] .home-ai-new i {
+  color: var(--accent);
+}
+
+/* Collapsed rail: the New chat button is the solid blue circle, so its "+"
+   stays white (the muted rail-icon colour above would hide it). */
+html[data-theme="light"] .home-ai.is-sidebar-collapsed .home-ai-new,
+html[data-theme="light"] .home-ai.is-sidebar-collapsed .home-ai-new i,
+html[data-theme="light"] .home-ai.is-sidebar-collapsed .home-ai-new svg {
+  color: #ffffff;
+}
+
+html[data-theme="light"] .home-ai-sidebar-search,
+html[data-theme="light"] .home-ai-prompt-search-box {
+  background: var(--field);
+  border-color: var(--border);
+}
+
+html[data-theme="light"] .home-ai-sidebar-search > i,
+html[data-theme="light"] .home-ai-sidebar-search-clear,
+html[data-theme="light"] .home-ai-prompt-search-input-row > i,
+html[data-theme="light"] .home-ai-prompt-search-input-row button,
+html[data-theme="light"] .home-ai-prompt-search-hit > i {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai-sidebar-search input,
+html[data-theme="light"] .home-ai-prompt-search-input-row input,
+html[data-theme="light"] .home-ai-prompt-search-hit {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-prompt-search-hit:hover {
+  background: var(--tint);
+}
+
+html[data-theme="light"] .home-ai-prompt-search-hit.is-item img,
+html[data-theme="light"] .home-ai-sidebar-profile-avatar,
+html[data-theme="light"] .home-ai-sidebar-profile-fallback {
+  background: var(--field);
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai.is-sidebar-collapsed .home-ai-sidebar-btn[data-tip]::after,
+html[data-theme="light"] .home-ai.is-sidebar-collapsed .home-ai-sidebar-profile[data-tip]::after {
+  background: var(--text);
+  color: var(--card);
+}
+
+html[data-theme="light"] .home-ai-sidebar-backdrop {
+  background: var(--drawer-backdrop, rgba(11, 18, 48, 0.35));
+}
+
+html[data-theme="light"] .home-ai-drawer-bottom {
+  background: var(--card);
+}
+
+html[data-theme="light"] .home-ai-drawer-round,
+html[data-theme="light"] .home-ai-drawer-avatar {
+  color: var(--text);
+}
+
+/* Conversation. */
+html[data-theme="light"] .home-ai-row.is-user .home-ai-bubble {
+  background: var(--tint);
+  border-color: transparent;
+}
+
+html[data-theme="light"] .home-ai-text strong,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-md h3.home-ai-md-h3,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text h3.home-ai-md-h3,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-md h4.home-ai-md-h4,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text h4.home-ai-md-h4,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-verdict-detail {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-market-snapshot,
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-metrics-strip .home-ai-metric-chip,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-metric-chip,
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-pill,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip {
+  background: var(--field);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-market-snapshot-value,
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-metrics-strip .home-ai-metric-chip-value,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-metric-chip-value,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-verdict-badge {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-key-factors-group.is-positive .cs2-chat-key-factors-group-label,
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-pill.is-positive,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-bullish .home-ai-verdict-badge,
+html[data-theme="light"] .home-ai-action-btn.is-done,
+html[data-theme="light"] .home-ai-action-btn.is-active.is-up {
+  color: var(--positive);
+}
+
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-key-factors-group.is-negative .cs2-chat-key-factors-group-label,
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-key-factors .home-ai-factor-pill.is-negative,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-bearish .home-ai-verdict-badge,
+html[data-theme="light"] .home-ai-error,
+html[data-theme="light"] .home-ai-attach-remove:hover,
+html[data-theme="light"] .home-ai-watchlist-remove:hover {
+  color: var(--negative);
+}
+
+html[data-theme="light"] .home-ai-row.is-assistant .cs2-chat-market-snapshot-sentiment.is-neutral,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-verdict-word.is-neutral,
+html[data-theme="light"] .home-ai-row.is-assistant .home-ai-text .home-ai-verdict-strip.is-neutral .home-ai-verdict-badge {
+  color: var(--warning, #b45309);
+}
+
+html[data-theme="light"] .home-ai-error.soft,
+html[data-theme="light"] .home-ai-error-retry {
+  color: var(--accent);
+}
+
+html[data-theme="light"] .home-ai-action-btn:hover {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-suggest-chip,
+html[data-theme="light"] .home-ai-langswitch {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-suggest-chip:hover:not(:disabled) {
+  background: var(--tint);
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-langswitch-text strong,
+html[data-theme="light"] .home-ai-langswitch-dismiss:hover {
+  color: var(--text);
+}
+
+/* Item cards under an answer. */
+html[data-theme="light"] .home-ai .cs2-chat-item-card {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: 0 1px 3px rgba(16, 24, 64, 0.06);
+}
+
+html[data-theme="light"] .home-ai .cs2-chat-item-card-media {
+  background:
+    radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--card-accent, var(--accent)) 16%, transparent), transparent 65%),
+    var(--field);
+}
+
+html[data-theme="light"] .home-ai .cs2-chat-item-card-body strong {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai .cs2-chat-item-card-body b,
+html[data-theme="light"] .home-ai .cs2-chat-item-card-price,
+html[data-theme="light"] .home-ai .cs2-chat-item-card-price b {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai .cs2-chat-item-card-qty {
+  background: var(--field);
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-msg-media-item img,
+html[data-theme="light"] .home-ai-msg-media-item video,
+html[data-theme="light"] .home-ai-attach-chip img,
+html[data-theme="light"] .home-ai-attach-chip video {
+  background: var(--field);
+}
+
+/* Charts and watchlist panels. */
+html[data-theme="light"] .home-ai-chart-card {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+html[data-theme="light"] .home-ai-chart-card-top,
+html[data-theme="light"] .home-ai-chart-card-top i {
+  color: var(--text);
+}
+
+html[data-theme="light"] .home-ai-watchlist-thumb {
+  background: var(--field);
+  color: var(--muted);
+}
+
+html[data-theme="light"] .home-ai-watchlist-price {
+  color: var(--accent);
+}
+
+/* Navbar bits only the home page adds (model picker, private chat). */
+html[data-theme="light"] body.page-home .navbar .nav-model-trigger,
+html[data-theme="light"] body.page-home .navbar .nav-private-chat {
+  color: var(--text);
+}
+
+html[data-theme="light"] body.page-home .navbar .nav-model-trigger i {
+  color: var(--muted);
+}
+
+html[data-theme="light"] body.page-home .navbar .nav-model-dropdown {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: 0 12px 32px rgba(16, 24, 64, 0.14);
+}
+
+html[data-theme="light"] body.page-home .navbar .nav-model-option {
+  color: var(--text);
+}
+
+html[data-theme="light"] body.page-home .navbar .nav-model-option.is-active {
+  color: var(--accent);
+}
+
+html[data-theme="light"] body.page-home .nav-category-preview {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+/* The chat-history empty state. rgba(148,163,184,.55) composites to about
+   rgb(196,204,216) on the white sidebar, which is 1.62:1 - the text says "No
+   chats yet" and in light mode it is essentially invisible. Measured on live
+   /tf2/ and /index.html, so this affected the AI home page all along; it only
+   surfaced when tf2.html was rebuilt onto this sheet and got scanned. */
+html[data-theme="light"] body.page-home .home-ai-history-empty {
+  color: var(--muted);
+}
+
+/* Same story for the browse chevron, but the base rule lives in a
+   max-width: 900px block, so this override is scoped to match rather than
+   changing the wider layout where the icon is styled differently. */
+@media (max-width: 900px) {
+  html[data-theme="light"] body.page-home .home-ai-browse-toggle i {
+    color: var(--muted);
+  }
+}
+
+/* ==========================================================================
+   Light mode: the user's approved fix spec (2026-09-27), home page part.
+   Every rule is scoped to html[data-theme="light"]; dark is untouched.
+   Measured before: rail icons 15px in --muted, bookmark filled, New chat
+   with a blue glow, disabled Send a faded blue gradient, placeholder in
+   --text, ticker in the dark greens/reds (#34d399 / #f87171).
+   ========================================================================== */
+
+/* 2. Left icon rail: 20px icons in the text colour, one visual weight. */
+html[data-theme="light"] body.page-home .home-ai-nav-item i,
+html[data-theme="light"] body.page-home .home-ai-sidebar-btn > i:first-child {
+  color: var(--text);
+  font-size: 20px;
+}
+
+/* The bookmark was the one filled glyph among outlines: Font Awesome 6 keeps
+   regular and solid in one family and picks by weight, so this is the
+   outline bookmark in light mode without changing the markup (dark keeps
+   its filled one). */
+html[data-theme="light"] body.page-home .home-ai-nav-item .fa-bookmark {
+  font-weight: 400;
+}
+
+html[data-theme="light"] body.page-home .home-ai-nav-item:hover,
+html[data-theme="light"] body.page-home .home-ai-sidebar-btn.home-ai-sidebar-toggle:hover,
+html[data-theme="light"] body.page-home .home-ai-sidebar-btn.home-ai-nav-item:hover {
+  background: #eef2f9;
+  color: var(--text);
+}
+
+html[data-theme="light"] body.page-home .home-ai-nav-item:hover i,
+html[data-theme="light"] body.page-home .home-ai-sidebar-btn:hover > i:first-child {
+  color: var(--text);
+}
+
+html[data-theme="light"] body.page-home .home-ai-nav-item.is-active {
+  background: var(--tint);
+  color: var(--accent);
+  box-shadow: none;
+}
+
+html[data-theme="light"] body.page-home .home-ai-nav-item.is-active i {
+  color: var(--accent);
+}
+
+/* New chat: the glow goes. Its "+" is a .home-ai-sidebar-btn icon too, so
+   the rail rule above would paint it in the text colour: accent on the
+   expanded tint button, white on the collapsed blue circle (an icon on a
+   coloured background stays white). */
+html[data-theme="light"] body.page-home .home-ai-new {
+  box-shadow: var(--card-shadow);
+}
+
+html[data-theme="light"] body.page-home .home-ai-new > i:first-child {
+  color: var(--accent);
+}
+
+html[data-theme="light"] body.page-home .home-ai.is-sidebar-collapsed .home-ai-new > i:first-child {
+  color: #ffffff;
+}
+
+html[data-theme="light"] body.page-home .home-ai-new:hover {
+  box-shadow: 0 1px 2px rgba(16, 24, 64, 0.12);
+}
+
+/* Profile button at the bottom of the rail: a 1px border circle, user icon
+   in the text colour. */
+html[data-theme="light"] body.page-home .home-ai-sidebar-profile-avatar,
+html[data-theme="light"] body.page-home .home-ai-sidebar-profile-fallback {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+html[data-theme="light"] body.page-home .home-ai-sidebar-profile-fallback {
+  color: var(--text);
+}
+
+/* 4. AI input bar. */
+html[data-theme="light"] body.page-home .home-ai-mic:hover {
+  color: var(--text);
+}
+
+html[data-theme="light"] body.page-home .home-ai-composer input::placeholder,
+html[data-theme="light"] body.page-home .home-ai-composer textarea::placeholder {
+  color: #7c87a6;
+}
+
+html[data-theme="light"] body.page-home .home-ai-composer:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--card-shadow), 0 0 0 3px var(--tint);
+}
+
+html[data-theme="light"] body.page-home .home-ai-send {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: var(--card-shadow);
+}
+
+html[data-theme="light"] body.page-home .home-ai-send:hover:not(:disabled) {
+  background: #1d4ed8;
+  filter: none;
+  box-shadow: 0 1px 2px rgba(16, 24, 64, 0.12);
+}
+
+/* Disabled (empty input): clearly inactive, not washed-out blue. */
+html[data-theme="light"] body.page-home .home-ai-send:disabled {
+  background: #e8edf6;
+  color: #9aa4bf;
+  opacity: 1;
+  box-shadow: none;
+}
+
+/* 5. Suggestion cards. */
+html[data-theme="light"] body.page-home .home-ai-starter:hover {
+  border-color: #cdd6e6;
+  background: #fbfcfe;
+}
+
+html[data-theme="light"] body.page-home .home-ai-starter:hover > i,
+html[data-theme="light"] body.page-home .home-ai-starter:hover .home-ai-starter-icon {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* 6. Price ticker: the theme's positive / negative, item names in text. */
+html[data-theme="light"] body.page-home .home-ai-ticker-item strong {
+  color: var(--text);
+}
+
+html[data-theme="light"] body.page-home .home-ai-ticker-item.is-up em {
+  color: var(--positive);
+}
+
+html[data-theme="light"] body.page-home .home-ai-ticker-item.is-down em {
+  color: var(--negative);
+}
+
+/* 9. Focus rings: 2px accent, 2px offset. */
+html[data-theme="light"] body.page-home .home-ai-sidebar-btn:focus-visible,
+html[data-theme="light"] body.page-home .home-ai-sidebar-profile:focus-visible,
+html[data-theme="light"] body.page-home .home-ai-starter:focus-visible,
+html[data-theme="light"] body.page-home .home-ai-send:focus-visible,
+html[data-theme="light"] body.page-home .home-ai-plus:focus-visible,
+html[data-theme="light"] body.page-home .home-ai-mic:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* TF2 (tf2.html, html[data-game="tf2"]) keeps the CS2 page's colouring -
+   the page wash and the headline fill are the same as on index.html (a
+   blanket "no gradients" pass made the page much darker and blanked the
+   headline's second line; the user asked for CS2's look back). Dell's item
+   cards use the CS2 card (its dark gradient - the flat var(--card) fill read
+   as bright navy, user 2026-09-29); only the render area stays flat, with no
+   square or glow behind the item. */
+html[data-game="tf2"] body.page-home .home-ai .cs2-chat-item-card-media {
+  background-image: none !important;
+  background-color: transparent;
+}
+
+/* Dark mode: Dell's cards take the Market Explorer card colours, a shade
+   deeper, so they sit in the chat instead of glowing navy (user,
+   2026-09-29: "make these cards darker to fit in the design"). */
+html[data-game="tf2"]:not([data-theme="light"]) body.page-home .home-ai .cs2-chat-item-card {
+  background: #0a111e !important;
+  border-color: rgba(148, 163, 184, 0.16) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* Profile loading state (spec 2026-10-02): avatar + spinner ring, heading,
+   indeterminate bar, status line. Centered in the content area, CSS-only
+   animation, stopped (but visible) under prefers-reduced-motion. */
+.profile-loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+  font-family: inherit;
+}
+
+.profile-loading-avatar-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-loading-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid #1B2740;
+  border-top-color: var(--accent, #2563eb);
+  animation: profile-loading-spin 1s linear infinite;
+}
+
+.profile-loading-icon {
+  font-size: 40px;
+  color: #C9D2E3;
+  line-height: 1;
+}
+
+.profile-loading-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.profile-loading-heading {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #F2F5FA;
+}
+
+.profile-loading-bar {
+  position: relative;
+  width: 240px;
+  height: 4px;
+  border-radius: 2px;
+  background: #1B2740;
+  overflow: hidden;
+}
+
+.profile-loading-bar-fill {
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent, #2563eb);
+  animation: profile-loading-slide 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.profile-loading-status {
+  margin: 0;
+  font-size: 14px;
+  color: #8A97AF;
+}
+
+@keyframes profile-loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes profile-loading-slide {
+  from { left: -40%; }
+  to { left: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-loading-ring,
+  .profile-loading-bar-fill {
+    animation: none;
+  }
+}
+
+/* ─── Profile: Inventory section (spec 2026-10-02) ──────────────────────
+   Full width under the account cards. Tokens first, the spec's hex values
+   as fallbacks so the light theme keeps its own surfaces. */
+.acct-card--inventory {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 12px;
+  border-color: var(--border, #1C2439);
+  background: var(--card, #0F1527);
+  --inv-text: var(--text, #F3F5FA);
+  --inv-secondary: var(--muted, #8B96B5);
+  --inv-muted: #6B7699;
+  --inv-surface: var(--bg, #0B1121);
+  --inv-line: var(--border, #1C2439);
+  --inv-image: #121A2E;
+  --inv-badge: #1E2A47;
+  --inv-up: var(--positive, #3DD68C);
+  --inv-down: var(--negative, #F26C6C);
+  --inv-accent: var(--accent, #2563eb);
+}
+html:not([data-theme="light"]) .acct-card--inventory {
+  --inv-text: #F3F5FA;
+  --inv-secondary: #8B96B5;
+  --inv-surface: #0B1121;
+  --inv-line: #1C2439;
+  --inv-up: #3DD68C;
+  --inv-down: #F26C6C;
+  background: #0F1527;
+  border-color: #1C2439;
+}
+html[data-theme="light"] .acct-card--inventory {
+  --inv-image: #e9eef8;
+  --inv-badge: #dfe6f3;
+  --inv-muted: #6b7699;
+}
+
+.acct-card--inventory .acct-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--inv-secondary);
+}
+
+.acct-inv-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.acct-inv-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--inv-secondary);
+}
+.acct-inv-head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.acct-inv-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #0F2A22;
+  border: 1px solid #1E5A42;
+  color: #3DD68C;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.acct-inv-pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3DD68C;
+}
+.acct-inv-refresh .fa-spin { animation-duration: 0.9s; }
+
+/* Stats strip */
+.acct-inv-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.acct-inv-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--inv-surface);
+  border: 1px solid var(--inv-line);
+}
+.acct-inv-tile-label {
+  font-size: 12px;
+  color: var(--inv-secondary);
+}
+.acct-inv-tile-value {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--inv-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.acct-inv-tile-value--name {
+  font-size: 16px;
+  font-weight: 600;
+}
+.acct-inv-tile-sub {
+  font-size: 12px;
+  color: var(--inv-secondary);
+}
+.acct-inv-change {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--inv-secondary);
+  white-space: nowrap;
+}
+.acct-inv-change.is-up { color: var(--inv-up); }
+.acct-inv-change.is-down { color: var(--inv-down); }
+.acct-inv-change.is-flat { color: #8B96B5; }
+
+/* Toolbar */
+.acct-inv-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.acct-inv-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 280px;
+  max-width: 100%;
+  height: 36px;
+}
+.acct-inv-search i {
+  position: absolute;
+  left: 12px;
+  font-size: 12px;
+  color: var(--inv-secondary);
+  pointer-events: none;
+}
+.acct-inv-search input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px 0 34px;
+  border-radius: 10px;
+  border: 1px solid var(--inv-line);
+  background: var(--inv-surface);
+  color: var(--inv-text);
+  font: inherit;
+  font-size: 13px;
+}
+.acct-inv-search input::placeholder { color: var(--inv-muted); }
+.acct-inv-search input:focus-visible,
+.acct-inv-sort select:focus-visible,
+.acct-inv-filter:focus-visible,
+.acct-inv-card:focus-visible {
+  outline: 2px solid var(--inv-accent);
+  outline-offset: 2px;
+}
+.acct-inv-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.acct-inv-filter {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #2A3350;
+  background: #171E34;
+  color: #C9D2E3;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+html[data-theme="light"] .acct-inv-filter {
+  background: var(--card, #fff);
+  border-color: var(--border);
+  color: var(--text);
+}
+.acct-inv-filter:hover { border-color: var(--inv-accent); }
+.acct-inv-filter.is-active {
+  border-color: var(--inv-accent);
+  background: #121C45;
+  color: #fff;
+}
+html[data-theme="light"] .acct-inv-filter.is-active {
+  background: var(--inv-accent);
+  color: #fff;
+}
+.acct-inv-sort {
+  position: relative;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.acct-inv-sort select {
+  height: 36px;
+  padding: 0 32px 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--inv-line);
+  background: var(--inv-surface);
+  color: var(--inv-text);
+  font: inherit;
+  font-size: 13px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.acct-inv-sort i {
+  position: absolute;
+  right: 12px;
+  font-size: 11px;
+  color: var(--inv-secondary);
+  pointer-events: none;
+}
+
+/* Item grid */
+.acct-inv-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+.acct-inv-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: 10px;
+  border: 1px solid var(--inv-line);
+  background: var(--inv-surface);
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.acct-inv-card:hover {
+  border-color: var(--inv-accent);
+  transform: translateY(-1px);
+}
+.acct-inv-card-bar {
+  display: block;
+  height: 3px;
+  width: 100%;
+}
+.acct-inv-card-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+  margin: 8px 8px 0;
+  border-radius: 8px;
+  background: var(--inv-image);
+  overflow: hidden;
+}
+.acct-inv-card-media img {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  object-fit: contain;
+}
+.acct-inv-card-noimg {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--inv-secondary);
+}
+.acct-inv-badge {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--inv-badge);
+  color: var(--inv-text);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.acct-inv-badge--qty {
+  left: auto;
+  right: 6px;
+}
+.acct-inv-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 10px 12px;
+  min-width: 0;
+}
+.acct-inv-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--inv-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.acct-inv-card-sub {
+  font-size: 12px;
+  color: var(--inv-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.acct-inv-card-price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+}
+.acct-inv-card-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--inv-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.acct-inv-none {
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: var(--inv-secondary);
+  font-size: 13px;
+}
+.acct-inv-foot {
+  display: flex;
+  justify-content: center;
+}
+
+/* Empty / error states */
+.acct-inv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 20px;
+  text-align: center;
+  border-radius: 10px;
+  background: var(--inv-surface);
+  border: 1px solid var(--inv-line);
+}
+.acct-inv-empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--inv-badge);
+  color: var(--inv-secondary);
+  font-size: 20px;
+}
+.acct-inv-empty h3 {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--inv-text);
+}
+.acct-inv-empty p {
+  margin: 0 0 6px;
+  max-width: 420px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--inv-secondary);
+}
+
+/* Skeleton */
+.acct-inv-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.acct-inv-sk {
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--inv-surface) 0%, var(--inv-badge) 50%, var(--inv-surface) 100%);
+  background-size: 200% 100%;
+  animation: acctInvShimmer 1.4s linear infinite;
+}
+.acct-inv-sk--head { height: 36px; width: 320px; max-width: 100%; }
+.acct-inv-sk--tile { height: 78px; }
+.acct-inv-sk--toolbar { height: 36px; }
+.acct-inv-sk--card { height: 196px; }
+@keyframes acctInvShimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .acct-inv-sk { animation: none; }
+}
+
+.acct-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1200px) {
+  .acct-inv-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .acct-inv-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .acct-inv-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .acct-inv-sort { margin-left: 0; }
+}
+@media (max-width: 600px) {
+  .acct-inv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .acct-inv-stats { grid-template-columns: 1fr; }
+  .acct-inv-search { width: 100%; }
+}

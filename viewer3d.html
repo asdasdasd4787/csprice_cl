@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CS2 Skin Crafter – 3D Sticker &amp; Charm Preview | CSPRICE</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://csprice.eu/skin-crafter/">
+
+  <!-- The crafter moved from /viewer3d/?skin=AK-47+%7C+Ice+Coaled&wear=... to
+       /skin-crafter/ak-47-ice-coaled/field-tested/. Old links keep working:
+       the skin and wear are translated into the new path, and anything else
+       they carried (charm, sticker) travels on as a query. -->
+  <script>
+  (function () {
+    var base = location.pathname.replace(/viewer3d(\.html)?\/?$/i, "");
+    var params = new URLSearchParams(location.search);
+    var slug = function (value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .replace(/-+/g, "-");
+    };
+    var wearNames = {
+      fn: "factory-new", mw: "minimal-wear", ft: "field-tested",
+      ww: "well-worn", bs: "battle-scarred"
+    };
+    var rawSkin = (params.get("skin") || params.get("hash") || params.get("name") || "").trim();
+    // "AK-47 | Ice Coaled (Field-Tested)" carries its wear in the name.
+    var inName = rawSkin.match(/\s*\((Factory New|Minimal Wear|Field-Tested|Well-Worn|Battle-Scarred)\)\s*$/i);
+    if (inName) rawSkin = rawSkin.slice(0, inName.index);
+    var rawWear = (params.get("wear") || (inName ? inName[1] : "")).trim();
+    var wearSlug = wearNames[rawWear.toLowerCase()] || slug(rawWear);
+
+    var target = base + "skin-crafter/";
+    var skinSlug = slug(rawSkin);
+    if (skinSlug) {
+      target += skinSlug + "/" + (wearSlug ? wearSlug + "/" : "");
+    }
+    var keep = new URLSearchParams();
+    ["charm", "sticker"].forEach(function (key) {
+      var value = params.get(key);
+      if (value) keep.set(key, value);
+    });
+    // No skin named: the landing page still needs the wear to honour it.
+    if (!skinSlug && rawWear) keep.set("wear", rawWear);
+    var query = keep.toString();
+    location.replace(target + (query ? "?" + query : "") + location.hash);
+  })();
+  </script>
+  <meta http-equiv="refresh" content="0; url=skin-crafter/">
+<!-- theme:begin -->
+<meta name="theme-color" content="#f3f6fc">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap">
+<link rel="stylesheet" href="styles/css/theme.css?v=20260930-1755-light-wordmark">
+<link rel="stylesheet" href="styles/css/mobile-shell.css?v=20261004-font-inherit">
+<script src="react/mobile-shell.js?v=20261004-font-inherit" defer></script>
+<script>(function(){var d=document.documentElement;var l=false;var t="system";try{t=localStorage.getItem("csprice-theme")||"system";}catch(e){}
+var m=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)");var r=t==="system"?((m&&m.matches)?"dark":"light"):t;
+if(l){d.setAttribute("data-legacy-dark","1");r="dark";}
+d.setAttribute("data-theme",r);d.setAttribute("data-theme-ready","1");d.style.colorScheme=r;
+var c=document.querySelector('meta[name="theme-color"]');if(c){c.setAttribute("content",r==="dark"?"#0a0f24":"#f3f6fc");}
+window.__cspriceTheme={choice:t,resolved:r,legacy:l};
+if(m&&m.addEventListener){m.addEventListener("change",function(){if((window.__cspriceTheme||{}).choice!=="system")return;window.dispatchEvent(new CustomEvent("csprice:system-theme-change"));});}})();</script>
+<script>(function(){var P="20261004-151956";try{var h=location.hostname;if(h==="localhost"||h==="127.0.0.1"||h==="::1"||h.indexOf("192.168.")===0)return;}catch(e){return;}
+if(!window.fetch)return;var touched=false;
+try{var t=function(){touched=true;};addEventListener("keydown",t,{once:true,capture:true});addEventListener("pointerdown",t,{once:true,capture:true});}catch(e){}
+function store(){try{if(window.localStorage){localStorage.setItem("csprice-b-probe","1");localStorage.removeItem("csprice-b-probe");return localStorage;}}catch(e){}try{return window.sessionStorage||null;}catch(e){return null;}}
+fetch("assets/data/build.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(j){
+if(!j||!j.stamp||!(j.stamp>P)||touched)return;var s=store();if(!s)return;var k="csprice-b-"+P+"-"+j.stamp;
+try{if(s.getItem(k))return;for(var i=s.length-1;i>=0;i--){var o=s.key(i);if(o&&o.indexOf("csprice-b-")===0)s.removeItem(o);}s.setItem(k,"1");}catch(e){return;}
+fetch(location.href,{cache:"reload"}).then(function(){if(!touched)location.reload();}).catch(function(){});
+}).catch(function(){});})();</script>
+<!-- theme:end -->
+</head>
+<body>
+  <p><a href="skin-crafter/">Continue to the Skin Crafter</a></p>
+</body>
+</html>

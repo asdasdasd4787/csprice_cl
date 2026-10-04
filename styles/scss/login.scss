@@ -1,0 +1,1916 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+html, body {
+      width: 100%;
+      min-height: 100%;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    body {
+      background: linear-gradient(
+        180deg,
+        #0b1220 0%,
+        #0f172a 50%,
+        #020617 100%
+      );
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    body.steam-auth-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    body.steam-dashboard-page {
+      display: block;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    /* LOGIN CARD */
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border-radius: 18px;
+      padding: 40px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+      text-align: center;
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .login-logo img {
+      height: 52px;
+      margin-bottom: 25px;
+    }
+
+    .login-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .login-sub {
+      font-size: 14px;
+      opacity: 0.8;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    /* STEAM BUTTON */
+    .steam-login {
+      background: linear-gradient(
+        135deg,
+        #1b2838,
+        #171a21
+      );
+      border-radius: 12px;
+      padding: 16px;
+      width: 100%;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #f8fafc;
+      text-decoration: none;
+    }
+
+    .steam-login i {
+      font-size: 20px;
+      color: #66c0f4;
+    }
+
+.steam-login:hover,
+.steam-login:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+      background: linear-gradient(
+        135deg,
+        #22374f,
+        #1b2838
+      );
+      color: #f8fafc;
+      text-decoration: none;
+    }
+
+    .steam-login:visited {
+      color: #f8fafc;
+      text-decoration: none;
+    }
+
+    .auth-status,
+    .auth-inline-error {
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .auth-status.success {
+      background: rgba(34, 197, 94, 0.14);
+      color: #bbf7d0;
+      border-color: rgba(34, 197, 94, 0.28);
+    }
+
+    .auth-status.error,
+    .auth-inline-error {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fecaca;
+      border-color: rgba(239, 68, 68, 0.28);
+    }
+
+    .auth-status.neutral {
+      background: rgba(96, 165, 250, 0.12);
+      color: #bfdbfe;
+      border-color: rgba(96, 165, 250, 0.2);
+    }
+
+    .auth-inline-error {
+      margin-top: 18px;
+      margin-bottom: 0;
+    }
+
+    .auth-inline-error.wide {
+      margin: 0 0 18px;
+    }
+
+    /* FEATURES */
+    .login-features {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .login-features span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .login-features i {
+      color: #22c55e;
+      font-size: 12px;
+    }
+
+    /* FOOTER */
+    .login-footer {
+      margin-top: 30px;
+      font-size: 12px;
+      opacity: 0.6;
+      line-height: 1.5;
+    }
+
+    .login-footer a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .steam-dashboard {
+      width: min(1180px, calc(100vw - 48px));
+      margin: 0 auto;
+      background: linear-gradient(135deg, rgba(30,41,59,0.96), rgba(15,23,42,0.96));
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 40px 90px rgba(0,0,0,0.58);
+      border: 1px solid rgba(255,255,255,0.06);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .steam-dashboard-hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 22px;
+      align-items: flex-start;
+    }
+
+    .steam-dashboard-user {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .steam-dashboard-avatar,
+    .inventory-card-media,
+    .inventory-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .steam-dashboard-avatar {
+      width: 92px;
+      height: 92px;
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .steam-dashboard-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .steam-dashboard-kicker,
+    .panel-kicker {
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 11px;
+      color: #7dd3fc;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .steam-dashboard-copy h1 {
+      font-size: 34px;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+
+    .steam-dashboard-copy p {
+      color: rgba(226,232,240,0.74);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+      max-width: 560px;
+      white-space: pre-line;
+    }
+
+    .steam-dashboard-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      color: rgba(191,219,254,0.78);
+    }
+
+    .steam-dashboard-meta span {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.65);
+      border: 1px solid rgba(148,163,184,0.16);
+    }
+
+    .steam-dashboard-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .dashboard-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(96,165,250,0.22);
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .dashboard-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.36);
+      filter: brightness(1.03);
+    }
+
+    .dashboard-btn.secondary {
+      background: rgba(15,23,42,0.68);
+      border-color: rgba(148,163,184,0.2);
+    }
+
+    .dashboard-btn.danger {
+      background: rgba(127,29,29,0.72);
+      border-color: rgba(248,113,113,0.26);
+    }
+
+    .steam-dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .steam-stat-card,
+    .steam-dashboard-panel,
+    .inventory-card {
+      background: rgba(15,23,42,0.75);
+      border: 1px solid rgba(148,163,184,0.12);
+    }
+
+    .steam-stat-card {
+      border-radius: 18px;
+      padding: 16px 18px;
+    }
+
+    .steam-stat-card span {
+      display: block;
+      color: rgba(191,219,254,0.68);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .steam-stat-card strong {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .steam-dashboard-panel {
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .steam-dashboard-overview {
+      display: block;
+      margin-bottom: 22px;
+    }
+
+    .steam-total-card,
+    .overview-panel {
+      border-radius: 22px;
+      padding: 22px;
+      background: rgba(15,23,42,0.75);
+      border: 1px solid rgba(148,163,184,0.12);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+    }
+
+    .steam-total-card-summary {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      justify-content: center;
+    }
+
+    .steam-total-card-summary strong {
+      display: block;
+      font-size: 52px;
+      line-height: 0.95;
+      margin-bottom: 10px;
+      color: #f8fafc;
+    }
+
+    .steam-total-card-summary p,
+    .value-chart-footnote,
+    .steam-dashboard-hint {
+      color: rgba(226,232,240,0.74);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .overview-panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .overview-panel-head h3 {
+      font-size: 34px;
+      line-height: 1;
+      color: #f8fafc;
+    }
+
+    .overview-panel-summary {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .overview-panel-primary {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .overview-inline-stat {
+      min-width: 184px;
+      padding: 10px 14px 11px;
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.1);
+      background:
+        linear-gradient(180deg, rgba(16, 25, 45, 0.78), rgba(8, 14, 29, 0.6));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.015),
+        0 10px 22px rgba(2,6,23,0.12);
+    }
+
+    .overview-inline-stat span {
+      display: block;
+      margin-bottom: 6px;
+      color: rgba(191,219,254,0.72);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .overview-inline-stat strong {
+      display: block;
+      color: #f8fafc;
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 800;
+    }
+
+    .overview-panel-chart {
+      display: flex;
+      flex-direction: column;
+      min-height: 356px;
+    }
+
+    .hero-link {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.16);
+      background: rgba(15,23,42,0.56);
+      color: #dbeafe;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+    }
+
+    .hero-link:hover,
+    .hero-link:focus-visible {
+      transform: translateY(-1px);
+      background: rgba(30,41,59,0.88);
+      border-color: rgba(96,165,250,0.26);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.22);
+      text-decoration: none;
+      outline: none;
+    }
+
+    .hero-link.danger {
+      color: #fecaca;
+      border-color: rgba(248,113,113,0.22);
+      background: rgba(69, 10, 10, 0.36);
+    }
+
+    .hero-link.danger:hover,
+    .hero-link.danger:focus-visible {
+      background: rgba(127,29,29,0.48);
+      border-color: rgba(248,113,113,0.34);
+      color: #fff1f2;
+    }
+
+    .chart-range-switch {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 14px;
+      background: rgba(2,6,23,0.42);
+      border: 1px solid rgba(148,163,184,0.12);
+    }
+
+    .chart-range-btn {
+      appearance: none;
+      border: 0;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 10px;
+      background: transparent;
+      color: rgba(191,219,254,0.74);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+
+    .chart-range-btn:hover,
+    .chart-range-btn:focus-visible {
+      color: #ffffff;
+      background: rgba(30,41,59,0.78);
+      outline: none;
+    }
+
+    .chart-range-btn.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 10px 22px rgba(37,99,235,0.34);
+    }
+
+    .value-chart-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .value-chart-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 11px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.12);
+      border: 1px solid rgba(148,163,184,0.16);
+      color: rgba(226,232,240,0.82);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .03em;
+    }
+
+    .value-chart-badge.positive {
+      background: rgba(34,197,94,0.12);
+      border-color: rgba(34,197,94,0.22);
+      color: #86efac;
+    }
+
+    .value-chart-badge.negative {
+      background: rgba(248,113,113,0.12);
+      border-color: rgba(248,113,113,0.22);
+      color: #fca5a5;
+    }
+
+    .value-chart-badge.neutral {
+      background: rgba(96,165,250,0.12);
+      border-color: rgba(96,165,250,0.22);
+      color: #bfdbfe;
+    }
+
+    .value-chart-wrap {
+      flex: 1;
+      min-height: 238px;
+      padding: 0;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(9, 15, 28, 0.62), rgba(15, 23, 42, 0.3));
+      border: 1px solid rgba(148,163,184,0.1);
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .value-chart {
+      width: 100%;
+      height: 100%;
+      flex: 1 1 auto;
+      display: block;
+    }
+
+    .value-chart-grid {
+      stroke: rgba(148,163,184,0.14);
+      stroke-dasharray: 4 10;
+    }
+
+    .value-chart-axis {
+      fill: rgba(191,219,254,0.76);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .value-chart-axis-right {
+      text-anchor: end;
+    }
+
+    .value-chart-axis-bottom {
+      text-anchor: middle;
+    }
+
+    .value-chart-line {
+      fill: none;
+      stroke: #60a5fa;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1500;
+      stroke-dashoffset: 1500;
+      animation: valueChartLineReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .value-chart-area {
+      fill: url(#value-chart-fill);
+      opacity: 0;
+      animation: valueChartAreaReveal .8s ease .08s forwards;
+    }
+
+    .value-chart-dot {
+      fill: rgba(147,197,253,0.88);
+      stroke: rgba(15,23,42,0.96);
+      stroke-width: 2;
+      opacity: 0;
+      animation: valueChartDotReveal .38s ease .55s forwards;
+    }
+
+    .value-chart-dot.active {
+      fill: #ffffff;
+      stroke: #60a5fa;
+      stroke-width: 3;
+      animation: valueChartDotReveal .38s ease .55s forwards, valueChartDotPulse 1.8s ease-in-out 1s infinite;
+    }
+
+    @keyframes valueChartLineReveal {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes valueChartAreaReveal {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes valueChartDotReveal {
+      from {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes valueChartDotPulse {
+      0%, 100% {
+        filter: drop-shadow(0 0 0 rgba(96,165,250,0));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 8px rgba(96,165,250,0.42));
+      }
+    }
+
+    .value-chart-empty {
+      min-height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: rgba(226,232,240,0.72);
+      font-size: 14px;
+      padding: 24px;
+    }
+
+    .value-chart-footnote {
+      margin-top: 12px;
+    }
+
+    .valuation-number-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .valuation-number-card {
+      min-height: 102px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(2,6,23,0.36);
+      border: 1px solid rgba(148,163,184,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .valuation-number-card span {
+      display: block;
+      color: rgba(191,219,254,0.72);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 10px;
+    }
+
+    .valuation-number-card strong {
+      font-size: 28px;
+      line-height: 1.1;
+      color: #f8fafc;
+    }
+
+    .valuation-number-card.muted {
+      background: rgba(30,41,59,0.54);
+    }
+
+    .steam-dashboard-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .steam-dashboard-panel-head h2 {
+      font-size: 24px;
+    }
+
+    .panel-badge {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(96,165,250,0.12);
+      border: 1px solid rgba(96,165,250,0.2);
+      color: #bfdbfe;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .panel-badge.muted {
+      background: rgba(148,163,184,0.12);
+      border-color: rgba(148,163,184,0.16);
+      color: rgba(191,219,254,0.78);
+    }
+
+    .inventory-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(2,6,23,0.34);
+      border: 1px solid rgba(148,163,184,0.1);
+    }
+
+    .inventory-toolbar-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .inventory-toolbar-copy strong {
+      font-size: 18px;
+      color: #f8fafc;
+    }
+
+    .inventory-toolbar-copy span {
+      font-size: 12px;
+      color: rgba(191,219,254,0.72);
+    }
+
+    .inventory-load-more {
+      min-width: 220px;
+    }
+
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .inventory-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .inventory-topbar-left,
+    .inventory-topbar-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .inventory-topbar-left {
+      flex: 1 1 540px;
+    }
+
+    .inventory-topbar-right {
+      flex: 0 1 auto;
+    }
+
+    .inventory-search {
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      flex: 1 1 340px;
+      border-radius: 16px;
+      background: rgba(2,6,23,0.34);
+      border: 1px solid rgba(148,163,184,0.12);
+      overflow: hidden;
+    }
+
+    .inventory-search-icon {
+      width: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(125,211,252,0.82);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .inventory-search-copy {
+      flex: 1;
+    }
+
+    .inventory-search input {
+      width: 100%;
+      min-height: 48px;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: #f8fafc;
+      padding: 0 14px 0 0;
+    }
+
+    .inventory-search input::placeholder {
+      color: rgba(191,219,254,0.5);
+    }
+
+    .inventory-filter-btn,
+    .inventory-icon-btn,
+    .inventory-clear-btn {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.16);
+      background: rgba(15,23,42,0.58);
+      color: #dbeafe;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+
+    .inventory-filter-btn:hover,
+    .inventory-filter-btn:focus-visible,
+    .inventory-icon-btn:hover,
+    .inventory-icon-btn:focus-visible,
+    .inventory-clear-btn:hover,
+    .inventory-clear-btn:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(96,165,250,0.24);
+      background: rgba(30,41,59,0.84);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      outline: none;
+    }
+
+    .inventory-filter-btn.active {
+      background: rgba(37,99,235,0.16);
+      border-color: rgba(96,165,250,0.26);
+      color: #eff6ff;
+    }
+
+    .inventory-filter-count {
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: #2563eb;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .inventory-icon-btn {
+      width: 48px;
+      padding: 0;
+      font-size: 14px;
+    }
+
+    .inventory-updated-copy {
+      color: rgba(191,219,254,0.74);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .toolbar-select {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 220px;
+    }
+
+    .toolbar-select.small {
+      min-width: 180px;
+    }
+
+    .toolbar-select span {
+      color: rgba(191,219,254,0.74);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .toolbar-select select {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.12);
+      background: rgba(2,6,23,0.34);
+      color: #f8fafc;
+      padding: 0 14px;
+      outline: none;
+    }
+
+    .inventory-updated-strip,
+    .inventory-status-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(2,6,23,0.28);
+      border: 1px solid rgba(148,163,184,0.08);
+      margin-bottom: 14px;
+    }
+
+    .inventory-updated-strip span,
+    .inventory-status-strip strong,
+    .inventory-status-strip span,
+    .inventory-updated-strip small {
+      color: rgba(226,232,240,0.82);
+      font-size: 13px;
+    }
+
+    .inventory-updated-strip small,
+    .inventory-status-strip span {
+      color: rgba(191,219,254,0.66);
+    }
+
+    .inventory-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .inventory-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.52);
+      border: 1px solid rgba(148,163,184,0.14);
+      color: rgba(226,232,240,0.82);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .inventory-toggle input {
+      accent-color: #2563eb;
+    }
+
+    .inventory-toggle.active {
+      background: rgba(37,99,235,0.16);
+      border-color: rgba(96,165,250,0.24);
+      color: #eff6ff;
+    }
+
+    .steam-dashboard-hint {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(15,23,42,0.46);
+      border: 1px solid rgba(148,163,184,0.08);
+    }
+
+    .inventory-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 365px;
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(20, 32, 51, 0.88);
+      border: 1px solid rgba(51, 65, 85, 0.65);
+      overflow: hidden;
+      box-shadow: 0 20px 32px rgba(2, 6, 23, 0.22);
+      transition: transform .22s ease, background .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+
+    .inventory-card:hover {
+      transform: translateY(-2px);
+      background: rgba(24, 38, 60, 0.96);
+      border-color: rgba(96, 165, 250, 0.24);
+      box-shadow: 0 24px 40px rgba(2, 6, 23, 0.28);
+    }
+
+    .inventory-card .inventory-stack-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      min-width: 38px;
+      padding: 6px 8px;
+      border: 1px solid rgba(147, 197, 253, 0.4);
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.88);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
+      color: #eff6ff;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .inventory-card-media {
+      width: 100%;
+      height: 132px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0 14px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, rgba(96,165,250,0.16), rgba(15,23,42,0.74));
+      overflow: hidden;
+      position: relative;
+    }
+
+    .inventory-card-media img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.45));
+      transition: transform .22s ease, filter .22s ease;
+    }
+
+    .inventory-card:hover .inventory-card-media img {
+      transform: translateY(-2px);
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,0.48));
+    }
+
+    .inventory-card-price-block {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .inventory-card-price-unit {
+      font-size: 18px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .inventory-card-price-total {
+      font-size: 11px;
+      color: rgba(148, 163, 184, 0.72);
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: 6px;
+      padding: 2px 7px;
+    }
+
+    .inventory-card-price-block.muted .inventory-card-price-unit {
+      color: rgba(148, 163, 184, 0.45);
+      font-size: 14px;
+    }
+
+    .inventory-card-type-row {
+      display: none;
+    }
+
+    .inventory-card-copy {
+      margin-bottom: 10px;
+    }
+
+    .inventory-card-name {
+      min-height: 40px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .inventory-card-sub {
+      min-height: 32px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: rgba(226,232,240,0.64);
+    }
+
+    .inventory-card-meta,
+    .inventory-card-values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .inventory-card-actions {
+      margin: 0;
+      margin-top: auto;
+      padding-top: 14px;
+    }
+
+    .inventory-market-btn {
+      appearance: none;
+      width: 100%;
+      min-height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(96, 165, 250, 0.22);
+      background: linear-gradient(180deg, rgba(37, 99, 235, 0.94), rgba(29, 78, 216, 0.92));
+      color: #eff6ff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter .2s ease, background .2s ease, border-color .2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 14px;
+    }
+
+    .inventory-market-btn:hover,
+    .inventory-market-btn:focus-visible {
+      filter: brightness(1.05);
+      outline: none;
+    }
+
+    .inventory-market-btn-sell {
+      background: linear-gradient(180deg, rgba(37, 99, 235, 0.94), rgba(29, 78, 216, 0.92));
+    }
+
+    .inventory-market-btn-disabled {
+      appearance: none;
+      width: 100%;
+      min-height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.12);
+      background: rgba(30,41,59,0.42);
+      color: rgba(191,219,254,0.56);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: not-allowed;
+    }
+
+    .inventory-loading-state {
+      padding: 12px 0 6px;
+    }
+
+    .inventory-loading-shell {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(2,6,23,0.34);
+      border: 1px solid rgba(148,163,184,0.08);
+    }
+
+    .inventory-loading-orb {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #7dd3fc, #2563eb 55%, rgba(37,99,235,0.12) 100%);
+      box-shadow: 0 0 0 10px rgba(37,99,235,0.08), 0 18px 32px rgba(37,99,235,0.2);
+      animation: inventoryPulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes inventoryPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 0.88;
+      }
+    }
+
+    .inventory-loading-copy h3 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .inventory-loading-copy p {
+      color: rgba(191,219,254,0.7);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+
+    .auth-header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .auth-header p,
+    .auth-footer {
+      color: rgba(226,232,240,0.74);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .auth-btn {
+      margin-top: 22px;
+      display: inline-flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      border: 1px solid rgba(96,165,250,0.24);
+      box-shadow: 0 18px 36px rgba(29,78,216,0.25);
+    }
+
+    .auth-btn-link:hover,
+    .auth-btn-link:focus-visible {
+      color: #ffffff;
+      text-decoration: none;
+      filter: brightness(1.04);
+      outline: none;
+    }
+
+    .auth-footer {
+      margin-top: 18px;
+    }
+
+    .auth-footer a {
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .inventory-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.96));
+      box-shadow: 0 16px 38px rgba(2, 6, 23, 0.28);
+      transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease, background .24s ease;
+    }
+
+    .inventory-card:hover {
+      transform: translateY(-7px) scale(1.01);
+      border-color: rgba(96,165,250,0.22);
+      background: linear-gradient(180deg, rgba(35, 48, 72, 0.96), rgba(15, 23, 42, 0.98));
+      box-shadow: 0 24px 54px rgba(2, 6, 23, 0.42);
+    }
+
+    .inventory-card-media {
+      width: 100%;
+      height: 176px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.08), transparent 32%),
+        linear-gradient(180deg, rgba(30, 41, 59, 0.72), rgba(15, 23, 42, 0.34));
+      margin-bottom: 16px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .inventory-card-media-btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      padding: 0;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .inventory-card-media-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: inset 0 0 0 1px rgba(125,211,252,0.16);
+    }
+
+    .inventory-card-media img {
+      width: 84%;
+      height: 84%;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 24px rgba(0,0,0,0.5));
+      transition: transform .28s ease, filter .28s ease;
+    }
+
+    .inventory-card:hover .inventory-card-media img {
+      transform: translateY(-4px) scale(1.025);
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.58));
+    }
+
+    .inventory-stack-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 2;
+      min-width: 44px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(79, 141, 255, 0.96), rgba(37, 99, 235, 0.94));
+      border: 1px solid rgba(147,197,253,0.42);
+      color: #eff6ff;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.28);
+    }
+
+    .inventory-placeholder {
+      width: 100%;
+      height: 100%;
+      color: rgba(255,255,255,0.45);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .inventory-card-kicker {
+      margin-bottom: 12px;
+      color: rgba(148, 163, 184, 0.92);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+    }
+
+    .inventory-card-name {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.38;
+      margin-bottom: 10px;
+      min-height: 0;
+    }
+
+    .inventory-card-name-link {
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      transition: color .2s ease;
+    }
+
+    .inventory-card-name-link:hover {
+      color: #93c5fd !important;
+    }
+
+    .inventory-card-sub {
+      color: rgba(226, 232, 240, 0.72);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .inventory-card-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .inventory-card-meta,
+    .inventory-card-values,
+    .inventory-card-flags {
+      display: none;
+    }
+
+    .inventory-card-actions {
+      display: block;
+      margin-top: auto;
+      padding-top: 18px;
+    }
+
+    .inventory-card-actions .inventory-market-btn,
+    .inventory-card-actions .inventory-market-btn-disabled {
+      min-height: 46px;
+      border-radius: 14px;
+    }
+
+    .inventory-card-actions .inventory-market-btn {
+      border-color: rgba(96,165,250,0.26);
+      background: linear-gradient(180deg, rgba(29, 47, 84, 0.98), rgba(20, 34, 63, 0.98));
+      color: #eff6ff;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        0 14px 26px rgba(15,23,42,0.24);
+    }
+
+    .inventory-card-actions .inventory-market-btn:hover,
+    .inventory-card-actions .inventory-market-btn:focus-visible {
+      background: linear-gradient(180deg, rgba(38, 61, 109, 0.98), rgba(24, 41, 77, 0.98));
+      border-color: rgba(125,211,252,0.34);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.04),
+        0 18px 30px rgba(15,23,42,0.3);
+      filter: none;
+    }
+
+    .inventory-empty {
+      padding: 28px 12px 12px;
+      color: rgba(203,213,225,0.72);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    body.inventory-modal-open {
+      overflow: hidden;
+    }
+
+    .inventory-market-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .inventory-market-backdrop {
+      position: absolute;
+      inset: 0;
+      border: 0;
+      background: rgba(2, 6, 23, 0.78);
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+    }
+
+    .inventory-market-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, calc(100vw - 48px));
+      max-height: calc(100vh - 48px);
+      overflow: hidden;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(35, 42, 45, 0.98), rgba(30, 35, 38, 0.98));
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.55);
+    }
+
+    .inventory-market-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.85fr);
+      min-height: min(760px, calc(100vh - 48px));
+    }
+
+    .inventory-market-preview-panel {
+      padding: 26px 28px 24px;
+      background: rgba(41, 46, 46, 0.92);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .inventory-market-preview-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 340px;
+      border-radius: 20px;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.05), rgba(0,0,0,0.08));
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .inventory-market-preview-card img {
+      width: min(72%, 460px);
+      max-height: 260px;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 22px rgba(0,0,0,0.34));
+    }
+
+    .inventory-market-quantity {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .inventory-market-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .inventory-market-link {
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: 0;
+      color: #f8fafc;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .inventory-market-link span {
+      color: #fb923c;
+    }
+
+    .inventory-market-tools-dots {
+      color: rgba(255,255,255,0.92);
+      letter-spacing: 0.24em;
+      font-size: 20px;
+    }
+
+    .inventory-market-tabs {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .inventory-market-tab {
+      appearance: none;
+      background: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      color: rgba(255,255,255,0.92);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 0 0 8px;
+      cursor: pointer;
+    }
+
+    .inventory-market-tab.active {
+      color: #fb923c;
+      border-color: #fb923c;
+    }
+
+    .inventory-market-content {
+      min-height: 0;
+      flex: 1;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .inventory-market-chart {
+      width: 100%;
+      height: 320px;
+      display: block;
+    }
+
+    .inventory-market-grid-line {
+      stroke: rgba(255,255,255,0.08);
+      stroke-dasharray: 4 8;
+    }
+
+    .inventory-market-axis-label {
+      fill: rgba(226,232,240,0.7);
+      font-size: 12px;
+    }
+
+    .inventory-market-axis-label.x-axis {
+      text-anchor: middle;
+    }
+
+    .inventory-market-chart-line {
+      fill: none;
+      stroke: #4cc3ff;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .inventory-market-sales-list {
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .inventory-market-sales-head,
+    .inventory-market-sale-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 20px;
+      align-items: center;
+      padding: 14px 2px;
+    }
+
+    .inventory-market-sales-head {
+      color: rgba(203,213,225,0.62);
+      font-size: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .inventory-market-sale-row {
+      color: #f8fafc;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .inventory-market-sales-head span:last-child,
+    .inventory-market-sale-row span:last-child {
+      text-align: right;
+    }
+
+    .inventory-market-empty-state {
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: rgba(226,232,240,0.74);
+      font-size: 14px;
+      padding: 24px;
+      border: 1px dashed rgba(255,255,255,0.08);
+      border-radius: 18px;
+    }
+
+    .inventory-market-side-panel {
+      position: relative;
+      padding: 40px 40px 32px;
+      border-left: 1px solid rgba(255,255,255,0.08);
+      background: rgba(49, 54, 55, 0.96);
+    }
+
+    .inventory-market-kicker {
+      color: rgba(226,232,240,0.86);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .inventory-market-side-panel h3 {
+      font-size: 42px;
+      line-height: 1.02;
+      margin-bottom: 14px;
+      max-width: 280px;
+    }
+
+    .inventory-market-side-panel > p {
+      color: rgba(226,232,240,0.56);
+      font-size: 18px;
+      margin-bottom: 28px;
+    }
+
+    .inventory-market-price-block span {
+      display: block;
+      color: rgba(226,232,240,0.7);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .inventory-market-price-block strong {
+      display: block;
+      font-size: 64px;
+      line-height: 0.95;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .inventory-market-price-block p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(248,250,252,0.9);
+      max-width: 290px;
+    }
+
+    .inventory-market-status-chip {
+      margin-top: 34px;
+      min-height: 64px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.34);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+
+    .inventory-market-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+      appearance: none;
+      border: 0;
+      background: none;
+      color: rgba(255,255,255,0.88);
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    @media(max-width: 980px) {
+      .steam-dashboard {
+        width: calc(100vw - 28px);
+        padding: 20px;
+      }
+
+      .steam-dashboard-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .steam-dashboard-hero,
+      .steam-dashboard-panel-head,
+      .overview-panel-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .steam-dashboard-actions {
+        justify-content: flex-start;
+      }
+
+      .steam-dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .inventory-topbar,
+      .inventory-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .inventory-topbar-left,
+      .inventory-topbar-right {
+        width: 100%;
+      }
+
+      .toolbar-select,
+      .toolbar-select.small,
+      .inventory-search {
+        width: 100%;
+      }
+
+      .inventory-market-main {
+        grid-template-columns: 1fr;
+      }
+
+      .inventory-market-side-panel {
+        border-left: 0;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+    }
+
+    @media(max-width: 640px) {
+      .login-container {
+        max-width: calc(100vw - 28px);
+        padding: 28px 22px;
+      }
+
+      .steam-dashboard-user {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .steam-dashboard-copy h1 {
+        font-size: 28px;
+      }
+
+      .steam-dashboard-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .valuation-number-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .inventory-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .inventory-updated-strip,
+      .inventory-status-strip {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-link,
+      .inventory-filter-btn,
+      .inventory-clear-btn,
+      .toolbar-select,
+      .toolbar-select.small {
+        width: 100%;
+      }
+
+      .inventory-market-modal {
+        padding: 12px;
+      }
+
+      .inventory-market-shell {
+        width: calc(100vw - 24px);
+        max-height: calc(100vh - 24px);
+      }
+
+      .inventory-market-preview-panel,
+      .inventory-market-side-panel {
+        padding: 20px;
+      }
+
+      .inventory-market-preview-card {
+        min-height: 250px;
+      }
+
+      .inventory-market-side-panel h3 {
+        font-size: 30px;
+      }
+
+      .inventory-market-price-block strong {
+        font-size: 48px;
+      }
+
+      .inventory-market-sales-head,
+      .inventory-market-sale-row {
+        grid-template-columns: minmax(0, 1fr) 92px;
+        font-size: 12px;
+      }
+    }

@@ -1,0 +1,2161 @@
+/* TF2 item explorer (tf2.html, react/tf2-page.jsx).
+   Written on the theme tokens from theme.css, so the same rules serve light
+   and dark: there are no dark literals here to override. */
+
+.tf2-shell {
+  width: 100%;
+  max-width: none;
+  padding: 20px 32px 56px;
+  box-sizing: border-box;
+  color: var(--text);
+}
+
+.tf2-head {
+  margin: 4px 0 16px;
+}
+
+.tf2-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.tf2-sub {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.tf2-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.tf2-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tf2-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.tf2-search i {
+  position: absolute;
+  left: 14px;
+  font-size: 14px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.tf2-search input,
+.tf2-sort select {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--field, var(--card));
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.tf2-search input {
+  padding-left: 38px;
+}
+
+.tf2-search input::placeholder {
+  color: var(--muted);
+}
+
+.tf2-sort {
+  flex: 0 0 210px;
+}
+
+.tf2-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tf2-toggle input {
+  accent-color: var(--accent);
+}
+
+.tf2-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 6px;
+}
+
+.tf2-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tf2-chip:hover {
+  border-color: var(--accent);
+}
+
+.tf2-chip.is-active {
+  border-color: var(--accent);
+  background: var(--tint);
+  color: var(--accent);
+}
+
+.tf2-chip-count {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tf2-results {
+  margin: 10px 0 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.tf2-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+}
+
+.tf2-card {
+  --tf2-quality: var(--accent);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: var(--card-shadow, none);
+  overflow: hidden;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.tf2-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--tf2-quality) 55%, var(--border));
+}
+
+.tf2-card.is-skeleton {
+  height: 250px;
+  background: var(--field, var(--card));
+}
+
+.tf2-card-media {
+  display: grid;
+  place-items: center;
+  height: 132px;
+  border-bottom: 2px solid color-mix(in srgb, var(--tf2-quality) 70%, transparent);
+  background:
+    radial-gradient(70% 70% at 50% 45%, color-mix(in srgb, var(--tf2-quality) 16%, transparent), transparent 72%),
+    var(--field, var(--card));
+}
+
+.tf2-card-media img {
+  max-width: 78%;
+  max-height: 112px;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.tf2-card:hover .tf2-card-media img {
+  transform: scale(1.05);
+}
+
+.tf2-card-noimg {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.tf2-card-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px 12px;
+}
+
+.tf2-card-name {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--tf2-quality) 70%, var(--text));
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tf2-card-effect {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8650ac;
+}
+
+html[data-theme="dark"] .tf2-card-effect {
+  color: #c79bea;
+}
+
+.tf2-card-prices {
+  display: grid;
+  gap: 4px;
+  margin: 2px 0 0;
+}
+
+.tf2-card-prices > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.tf2-card-prices dt {
+  color: var(--muted);
+}
+
+.tf2-card-prices dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.tf2-card-listings {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.tf2-card-links {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.tf2-card-links a {
+  flex: 1 1 0;
+  padding: 6px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.tf2-card-links a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tf2-empty {
+  margin: 24px 0;
+  color: var(--muted);
+}
+
+.tf2-sentinel {
+  height: 1px;
+}
+
+/* ---------------------------------------------------------------------------
+   TF2 Market Explorer (tf2-market.html): Skinport-style category bar.
+   --------------------------------------------------------------------------- */
+.tf2-cats {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 18px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  flex-wrap: wrap;
+}
+
+.tf2-cat {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tf2-cat:hover {
+  background: var(--tint);
+}
+
+.tf2-cat.is-active {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+.tf2-cat-count {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tf2-cat--more.is-active,
+.tf2-cat--more[aria-expanded="true"] {
+  color: var(--accent);
+}
+
+.tf2-more {
+  position: relative;
+  margin-left: auto;
+}
+
+.tf2-more-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--card-shadow, 0 12px 30px rgba(0, 0, 0, 0.25));
+}
+
+.tf2-card-cat {
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tf2-card-best {
+  margin: 2px 0 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.tf2-card-best span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.tf2-card-markets {
+  display: grid;
+  gap: 2px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tf2-card-markets a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 12.5px;
+  text-decoration: none;
+}
+
+.tf2-card-markets a:hover {
+  background: var(--tint);
+}
+
+.tf2-card-markets strong {
+  color: var(--text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.tf2-card-markets .is-best a {
+  background: color-mix(in srgb, var(--positive) 12%, transparent);
+}
+
+.tf2-card-markets .is-best strong {
+  color: var(--positive);
+}
+
+/* ---------------------------------------------------------------------------
+   TF2 Deals (tf2-deals.html)
+   --------------------------------------------------------------------------- */
+.tf2d-panel {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: var(--card-shadow, none);
+}
+
+.tf2d-panel .tf2-chips {
+  margin: 0;
+}
+
+.tf2d-sort-label {
+  display: block;
+  margin: 0 0 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tf2d-meta {
+  text-align: right;
+}
+
+.tf2d-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  overflow-x: auto;
+}
+
+.tf2d-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.tf2d-table th {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: right;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tf2d-table th:first-child {
+  text-align: left;
+}
+
+.tf2d-table td {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tf2d-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.tf2d-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.tf2d-thumb {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background: var(--field, var(--tint));
+}
+
+.tf2d-thumb img {
+  max-width: 46px;
+  max-height: 46px;
+  object-fit: contain;
+}
+
+.tf2d-name {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.tf2d-name strong {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--tf2-quality, var(--text)) 55%, var(--text));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tf2d-name small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tf2d-price {
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tf2d-price a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tf2d-price a:hover {
+  text-decoration: underline;
+}
+
+.tf2d-price.is-best a {
+  color: var(--positive);
+}
+
+.tf2d-none {
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------------------
+   TF2 Drop Package (tf2-drops.html)
+   --------------------------------------------------------------------------- */
+.tf2p-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px 22px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: var(--card-shadow, none);
+}
+
+.tf2p-field {
+  display: grid;
+  gap: 8px;
+}
+
+.tf2p-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.tf2p-label strong {
+  color: var(--text);
+}
+
+.tf2p-hours {
+  flex: 1 1 240px;
+}
+
+.tf2p-hours input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.tf2p-seg {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--field, var(--tint));
+}
+
+.tf2p-seg button {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tf2p-seg button.is-active {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.tf2p-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--accent-grad, var(--accent));
+  color: var(--on-accent, #fff);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tf2p-open:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tf2p-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.tf2p-stats > div {
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.tf2p-stats span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.tf2p-stats strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.tf2p-stats small {
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tf2p-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.tf2p-card {
+  --tf2p-tone: var(--muted);
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--tf2p-tone);
+  border-radius: 14px;
+  background: var(--card);
+  animation: tf2p-in 0.4s ease both;
+}
+
+.tf2p-card.is-cosmetic { --tf2p-tone: #8650ac; }
+.tf2p-card.is-tool { --tf2p-tone: #cf6a32; }
+.tf2p-card.is-paint { --tf2p-tone: #4d7455; }
+.tf2p-card.is-crate { --tf2p-tone: var(--accent); }
+
+.tf2p-card-media {
+  display: grid;
+  place-items: center;
+  height: 96px;
+  border-radius: 10px;
+  background: radial-gradient(70% 70% at 50% 45%, color-mix(in srgb, var(--tf2p-tone) 18%, transparent), transparent 72%), var(--field, var(--tint));
+}
+
+.tf2p-card-media img {
+  max-width: 80%;
+  max-height: 84px;
+  object-fit: contain;
+}
+
+.tf2p-card-type {
+  margin: 4px 0 0;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf2p-tone);
+}
+
+.tf2p-card-name {
+  overflow: hidden;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tf2p-card-meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tf2p-card-meta strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes tf2p-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf2p-card { animation: none; }
+}
+
+.tf2p-rules {
+  margin: 28px 0 0;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.tf2p-rules h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  color: var(--text);
+}
+
+.tf2p-rules ul {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.tf2p-note {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.tf2p-note a {
+  color: var(--accent);
+}
+
+@media (max-width: 700px) {
+  .tf2-shell {
+    padding: 14px 14px 40px;
+  }
+
+  .tf2-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .tf2-sort {
+    flex: 1 1 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Market Explorer in the CS2 layout (roi.css classes) + the TF2 item page.
+   --------------------------------------------------------------------------- */
+.tf2-roi .tf2-cats {
+  margin-bottom: 14px;
+}
+
+.tf2-roi-head {
+  margin-bottom: 18px;
+}
+
+.tf2-roi .tf2-results {
+  margin: 0 0 14px;
+}
+
+.tf2-roi .roi-card.clean-card h3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tf2d-thumb {
+  text-decoration: none;
+}
+
+.tf2d-name-link {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--tf2-quality, var(--text)) 55%, var(--text));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.tf2d-name-link:hover {
+  text-decoration: underline;
+}
+
+.tf2i-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.tf2i-crumbs a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.tf2i-crumbs a:hover {
+  color: var(--accent);
+}
+
+.tf2i-crumbs span:last-child {
+  color: var(--text);
+}
+
+.tf2i-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.tf2i-media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  overflow: hidden;
+}
+
+.tf2i-media img {
+  position: relative;
+  z-index: 1;
+  width: 72%;
+  max-width: 420px;
+  object-fit: contain;
+  filter: drop-shadow(0 26px 34px rgba(0, 0, 0, 0.45));
+}
+
+.tf2i-panel {
+  display: grid;
+  gap: 12px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow: var(--card-shadow, none);
+}
+
+.tf2i-kicker {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tf2i-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.tf2i-effect {
+  margin: -4px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8650ac;
+}
+
+html[data-theme="dark"] .tf2i-effect {
+  color: #c79bea;
+}
+
+.tf2i-best {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.tf2i-best strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-right: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The price table, in the shape of the CS2 item page's wear table. */
+.tf2i-table {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--field, var(--card));
+}
+
+.tf2i-hdr,
+.tf2i-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 100px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+}
+
+.tf2i-hdr {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.tf2i-hdr .tf2i-col-price {
+  color: var(--accent);
+}
+
+.tf2i-row {
+  color: var(--text);
+  font-size: 14px;
+  text-decoration: none;
+  border-top: 1px solid var(--border);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.tf2i-row:first-of-type {
+  border-top: 0;
+}
+
+.tf2i-row:hover {
+  background: var(--tint);
+  transform: translateX(2px);
+}
+
+.tf2i-row.is-best {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.tf2i-row.is-empty {
+  color: var(--muted);
+}
+
+.tf2i-market {
+  font-weight: 700;
+}
+
+.tf2i-col-price,
+.tf2i-col-qty {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tf2i-row .tf2i-col-price {
+  font-weight: 800;
+}
+
+.tf2i-row.is-best .tf2i-col-price {
+  color: var(--positive);
+}
+
+.tf2i-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tf2i-btn {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.tf2i-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tf2i-btn--primary {
+  border-color: transparent;
+  background: var(--accent-grad, var(--accent));
+  color: var(--on-accent, #fff);
+}
+
+.tf2i-btn--primary:hover {
+  color: var(--on-accent, #fff);
+  filter: brightness(1.06);
+}
+
+.tf2i-section {
+  margin: 28px 0 0;
+}
+
+.tf2i-section h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.tf2i-count {
+  margin-left: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.tf2i-wears {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.tf2i-wear {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.tf2i-wear strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.tf2i-wear:hover {
+  border-color: var(--accent);
+}
+
+.tf2i-wear.is-current {
+  border-color: var(--accent);
+  background: var(--tint);
+  color: var(--accent);
+}
+
+.tf2i-grid {
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .tf2i-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .tf2i-media {
+    min-height: 280px;
+  }
+}
+
+/* TF2 renders carry no glow: the radial wash behind CS2 cards is off on
+   every TF2 card (explorer and item-page variants). */
+.tf2-roi .roi-card-glow,
+.tf2i-page .roi-card-glow {
+  display: none;
+}
+
+/* No panel behind the TF2 grid: the cards sit straight on the page. Scoped
+   to .tf2-roi so the CS2 explorer keeps its panel. */
+.tf2-roi .roi-section-card,
+html[data-theme="light"] .tf2-roi .roi-section-card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.tf2-roi .roi-section-card::before {
+  content: none;
+}
+
+/* TF2 item page on item_page.css: the CS2 layout, TF2 data. Only what the
+   CS2 sheet cannot know about (a TF2 render, a market table instead of a
+   wear table, extra sources) is set here. */
+.tf2i-page .tv-skin-viewer-wrap.type-tf2 .tv-skin-img {
+  width: 78%;
+  max-height: 260px;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+}
+
+
+.tf2i-page .tv-market-tabs {
+  margin: 10px 0 8px;
+  flex-wrap: wrap;
+}
+
+.tf2i-page .tv-qr-wear-btn {
+  text-decoration: none;
+}
+
+.tf2i-qty {
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.tf2i-page .tv-market-tab.source-mannco.active,
+.tf2i-page .tv-toolbar-group--sources .tv-tb-btn.source-mannco.active {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.tf2i-page .tv-market-tab.source-skinport.active {
+  color: #4de7c4;
+  border-color: rgba(77, 231, 196, 0.35);
+}
+
+.tf2i-page .tv-qr-market.source-mannco,
+.tf2i-page .tv-qr-market-price.source-mannco {
+  color: #fbbf24;
+}
+
+.tf2i-page .tv-qr-market.source-skinport,
+.tf2i-page .tv-qr-market-price.source-skinport {
+  color: #4de7c4;
+}
+
+.tf2i-page .tv-lw-canvas {
+  position: relative;
+  min-height: 320px;
+}
+
+.tf2i-page .tv-lw-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.tf2i-history .tv-quality-hdr,
+.tf2i-history .tv-quality-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1.2fr);
+}
+
+.tf2i-history .tv-qr-st {
+  text-align: right;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.tf2i-page .tf2i-grid {
+  margin-top: 14px;
+}
+
+/* Mann Up tour simulator (tf2-drops.html) on carepackage.css. */
+.tf2-mvm .tf2-head {
+  margin: 4px 0 18px;
+}
+
+.tf2-mvm-controls {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.tf2-mvm-tours {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.tf2-mvm-tour {
+  display: grid;
+  gap: 3px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tf2-mvm-tour strong {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.tf2-mvm-tour span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tf2-mvm-tour:hover {
+  border-color: var(--accent);
+}
+
+/* One ring only: the inset shadow doubled the border at a smaller radius
+   and read as a broken outline. The focus ring is the same single border. */
+.tf2-mvm-tour.is-active {
+  border-color: var(--accent);
+  background: var(--tint);
+  box-shadow: none;
+}
+
+.tf2-mvm-tour:focus {
+  outline: none;
+}
+
+.tf2-mvm-tour:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.tf2-mvm-runs {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--field, var(--tint));
+}
+
+.tf2-mvm-run {
+  height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tf2-mvm-run.is-active {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+/* No dark panel behind the calculator: the tour picker, the controls and
+   each tour's cards sit straight on the page (user, 2026-09-28). */
+.tf2-mvm .care-panel,
+.tf2-mvm .tf2-mvm-controls,
+.tf2-mvm .tf2-mvm-tourblock {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  /* The (now invisible) panel still had overflow:hidden with a 20px radius,
+     and with its padding gone the first tour card sat flush in that corner,
+     so the panel's rounding clipped the card's top-left border. */
+  overflow: visible !important;
+  border-radius: 0 !important;
+}
+
+/* The tour-count pills and the Run button as two equal columns: same width,
+   same height (the button used to be a narrower, taller box beside them). */
+.tf2-mvm .care-roll-actions {
+  display: grid;
+  /* The pills take the room; the Run button is a fixed, narrower column. */
+  grid-template-columns: minmax(0, 1fr) 190px;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.tf2-mvm .care-roll-actions .tf2-mvm-runs {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tf2-mvm .care-roll-actions .tf2-mvm-run {
+  flex: 1 1 0;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.tf2-mvm .care-roll-actions .care-button-primary {
+  width: 100%;
+  height: 100%;
+  min-height: 42px;
+  margin: 0;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .tf2-mvm .care-roll-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tf2-mvm-tourblock {
+  margin-top: 16px;
+}
+
+.tf2-mvm-grid {
+  /* The page sets repeat(<cards>, minmax(150px, 1fr)) inline so every card
+     of a tour sits on one line; on narrow screens the row scrolls sideways. */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  overflow-x: auto;
+  /* overflow-x: auto makes overflow-y compute to auto as well, so this is a
+     scroll box vertically too and a card's 4px hover lift would be sliced off
+     the top (upward overflow is not even scrollable). Give the row that much
+     room and pull the box back up by the same amount, so nothing below moves. */
+  padding-top: 6px;
+  margin-top: -6px;
+  padding-bottom: 6px;
+}
+
+.tf2-mvm-reward-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.tf2-mvm-reward-tag.is-rare {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.tf2-mvm-reward-tag.is-australium {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.tf2-mvm-reward-tag.is-legendary {
+  color: #f472b6;
+  border-color: rgba(244, 114, 182, 0.5);
+  background: rgba(244, 114, 182, 0.12);
+}
+
+.tf2-mvm .tf2p-stats {
+  margin: 0 0 16px;
+}
+
+.tf2-mvm .tf2p-rules {
+  margin-top: 20px;
+}
+
+/* "Clear filter" next to the results count once a navbar category is on. */
+.tf2-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 12px;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tf2-clear:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* TF2 Deals on the CS2 deals table (deals.css): four market columns instead
+   of five. Layout only, so both themes come from deals.css. */
+@media (min-width: 761px) {
+  .tf2-deals .deals-thead,
+  .tf2-deals .deals-row,
+  .tf2-deals .deals-skeleton-row {
+    grid-template-columns: 72px minmax(200px, 1.4fr) repeat(4, minmax(96px, 1fr));
+  }
+}
+
+/* deals.css centres each market name over its column on desktop. The CS2
+   page wraps every price in a .deals-cell that it centres too; the TF2 rows
+   put .deals-price / .deals-price-link straight into the grid, where the
+   base rule pins them to the column's right edge, so the market logo sat
+   over empty space left of the figure (user, 2026-10-04: "put the logo
+   above the price"). */
+@media (min-width: 901px) {
+  .tf2-deals .deals-row > .deals-price,
+  .tf2-deals .deals-row > .deals-price-link {
+    justify-self: center;
+    text-align: center;
+  }
+}
+
+/* Phone card (deals.css <= 767px): six columns, each price spanning two
+   (three per row). TF2 has four markets, so they span three each - two per
+   row, two rows, no orphan price. */
+@media (max-width: 767px) {
+  .tf2-deals .deals-row > .deals-price,
+  .tf2-deals .deals-row > .deals-price-link {
+    grid-column: span 3;
+  }
+}
+
+/* Explorer opened as a category (?cat=): the CS2 category toolbar
+   (collections.css) above the same grid, the explorer bar stays hidden. */
+.tf2-roi--category .collections-controls {
+  margin: 0 0 18px;
+}
+
+.tf2-roi--category .roi-filter-frame[hidden] {
+  display: none;
+}
+
+/* TF2 item page: the CS2 item page's lower sections with TF2 data. */
+.tf2i-page .tv-provider-canvas .tv-lw-canvas,
+.tf2i-page .tv-dist-hbar-wrap .tf2i-dist-canvas {
+  width: 100%;
+  min-height: 320px;
+}
+
+.tf2i-page .tv-market-dist-card {
+  height: auto !important;
+}
+
+/* The wrap sizes to its rows (item_page.css gives it the CS2 canvas height,
+   which left four thin bars floating in an empty box). */
+.tf2i-page .tv-dist-hbar-wrap {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 8px 0 4px;
+}
+
+/* Market distribution as the CS2 page draws it: badge + name, a thin
+   rounded bar per market scaled to the busiest one, the count at its end. */
+.tf2i-dist {
+  display: grid;
+  gap: 14px;
+}
+
+.tf2i-dist-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.tf2i-dist-name {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.tf2i-dist-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+.tf2i-dist-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 28px;
+  border-radius: 8px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  transition: width 0.4s ease;
+}
+
+.tf2i-dist-value {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.tf2i-dist-zero {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--muted);
+  padding-left: 6px;
+}
+
+@media (max-width: 640px) {
+  .tf2i-dist-row {
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+}
+
+/* The buy button: plain label, no underline, no external-link icon. */
+.tf2i-page .tv-skin-ctas .tv-cta,
+.tf2i-page .tv-skin-ctas .tv-cta:hover,
+.tf2i-page .tv-skin-ctas .tv-cta:focus {
+  text-decoration: none !important;
+}
+
+/* Mann Up: with a single tour on screen the page still reaches the bottom
+   of the first screen, so the footer sits at the bottom - and stays fully
+   visible without scrolling (viewport minus the navbar, the page margins and
+   the footer's own ~250px). */
+.tf2-mvm {
+  min-height: calc(100vh - 380px);
+  box-sizing: border-box;
+}
+
+.tf2i-mkt-logo {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.tf2i-section-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Unusual items: a purple effect gradient behind the render, on the
+   explorer cards and the item page, so an unusual reads as one at a glance. */
+.tf2-roi .roi-card.is-unusual .roi-card-media,
+.tf2i-page .tv-skin-viewer-wrap.is-unusual {
+  /* As soft as the CS2 card glow: one faint radial behind the render, the
+     card's own background around it. */
+  background-image: radial-gradient(ellipse 55% 50% at 50% 45%, rgba(168, 85, 247, 0.26), rgba(126, 34, 206, 0.1) 55%, transparent 75%) !important;
+}
+
+.tf2-roi .roi-card.is-unusual {
+  border-color: rgba(168, 85, 247, 0.22);
+}
+
+.tf2-roi .roi-card.is-unusual:hover {
+  border-color: rgba(192, 132, 252, 0.5);
+}
+
+/* Light mode: no plate and no glow behind the render (user, 2026-09-29);
+   the purple card border still marks an unusual. */
+html[data-theme="light"] .tf2-roi .roi-card.is-unusual .roi-card-media,
+html[data-theme="light"] .tf2i-page .tv-skin-viewer-wrap.is-unusual {
+  background-image: none !important;
+}
+
+/* TF2 item page, per the user: plain white title (no quality tint), no
+   market tab pills under the render, market-table prices as plain white
+   text without link styling. */
+.tf2i-page .tv-header-title {
+  color: var(--text) !important;
+}
+
+.tf2i-page .tv-market-tabs {
+  display: none;
+}
+
+.tf2i-page .tv-qr-market-price,
+.tf2i-page .tv-qr-market-price:not(.is-empty),
+.tf2i-page .tv-qr-market-price:hover,
+.tf2i-page a.tv-qr-market-price {
+  color: var(--text) !important;
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}
+
+.tf2i-page .tv-quality-hdr .tv-qr-market {
+  color: var(--muted) !important;
+}
+
+.tf2i-page .tv-prov-pill .marketplace-badge {
+  margin: 0 2px 0 0;
+}
+
+/* Mann Up tour picker: the operation's emblem left of the name (the badges
+   differ in width after trimming, so a fixed height and contain). */
+.tf2-mvm-tour {
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: center;
+  text-align: left;
+  min-height: 68px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tf2-mvm-tour img {
+  grid-row: 1 / span 2;
+  /* The badge is taller than the two text lines: the card grows to hold it
+     instead of the image spilling over the rounded border (top-left corner
+     was clipped). */
+  height: 42px;
+  width: auto;
+  max-width: 64px;
+  object-fit: contain;
+}
+
+.tf2-mvm-tour strong,
+.tf2-mvm-tour span,
+.tf2-mvm-tour small {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.tf2-mvm-tour small {
+  font-size: 11.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The page keeps one <h1> for search engines and screen readers only; the
+   drawn title went at the user's request (collections.css, which defines
+   this class elsewhere, is not loaded here). */
+.tf2-mvm .collections-head-sr-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tf2-mvm-title-badge {
+  height: 24px;
+  width: auto;
+  margin-right: 8px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.tf2-mvm-estimates {
+  margin: 18px 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* Squad Surplus Voucher row under the run controls: a switch, the voucher
+   count pills when on, and one muted line of what it does. */
+.tf2-mvm-surplus {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.tf2-mvm-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 36px;
+  padding: 0 14px 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tf2-mvm-toggle-knob {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--muted);
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+.tf2-mvm-toggle-knob::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.15s ease;
+}
+
+.tf2-mvm-toggle.is-active {
+  border-color: var(--accent);
+}
+
+.tf2-mvm-toggle.is-active .tf2-mvm-toggle-knob {
+  background: var(--accent);
+  opacity: 1;
+}
+
+.tf2-mvm-toggle.is-active .tf2-mvm-toggle-knob::after {
+  left: 16px;
+}
+
+.tf2-mvm-surplus-note {
+  flex: 1 1 100%;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Item page render: the CS2 viewer's idle float (tv-item-float, defined in
+   item_page.css) and its hover lift, which the float reads from
+   --hover-lift / --skin-img-scale - a plain transform would be overridden
+   by the running animation. */
+.tf2i-page .tv-skin-viewer-wrap .tv-skin-img {
+  animation: tv-item-float 4.6s ease-in-out infinite;
+  transition: filter 0.35s ease;
+  will-change: transform;
+}
+
+.tf2i-page .tv-skin-viewer-wrap:hover .tv-skin-img {
+  --hover-lift: -5px;
+  --skin-img-scale: 1.06;
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.5)) brightness(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf2i-page .tv-skin-viewer-wrap .tv-skin-img {
+    animation: none;
+  }
+}
+
+/* Mini chat (Ask Dell / Ask Mark) suggestion chips: shrink-to-fit and wrap
+   onto a second line instead of running off the panel with long item names
+   (index.css gives them width: max-content, which ignores the panel). */
+.cs2-chat-quick {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.cs2-chat-quick .cs2-chat-quick-btn {
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  border-radius: 18px;
+}
+
+/* Steam-look main chart legend (median price line + volume bars). */
+.tf2i-steam-legend {
+  display: flex;
+  gap: 18px;
+  padding: 6px 12px 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.tf2i-steam-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tf2i-legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+/* Fullscreen chart sections: the panel fills the screen and the chart
+   canvas grows with it (the ResizeObserver redraws it). */
+.tf2i-page .tv-chart-panel:fullscreen,
+.tf2i-page .tv-price-history-section:fullscreen {
+  background: var(--bg);
+  padding: 24px 28px;
+  box-sizing: border-box;
+  overflow: auto;
+  border-radius: 0;
+}
+
+.tf2i-page .tv-chart-panel:fullscreen .tv-lw-canvas,
+.tf2i-page .tv-price-history-section:fullscreen .tv-lw-canvas {
+  min-height: calc(100vh - 200px) !important;
+}
+
+.tf2i-page .tv-chart-panel:fullscreen .tv-lw-stage,
+.tf2i-page .tv-chart-panel:fullscreen .tv-lw-wrap {
+  height: auto;
+}
+
+/* Market distribution: the bars sit straight on the section, no inner box. */
+.tf2i-page .tv-dist-hbar-wrap {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 4px 0 !important;
+}
+
+/* Price history: the box is exactly as tall as the chart (the CS2 canvas box
+   is a fixed 440px, which left empty space under the date axis). */
+.tf2i-page .tv-provider-canvas {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+
+.tf2i-page .tv-price-history-section:fullscreen .tv-provider-canvas {
+  height: auto !important;
+}
+
+/* Charts fill their box: the chart is laid over the box instead of sizing it,
+   so the box height comes only from the layout (and fullscreen), the date
+   axis sits on the box's bottom edge, and leaving fullscreen shrinks it. */
+.tf2i-page .tv-lw-canvas > .tv-lightweight-charts,
+.tf2i-page .tv-lw-canvas > div:first-child {
+  position: absolute !important;
+  inset: 0;
+}
+
+.tf2i-page .tv-provider-canvas .tf2i-history-canvas {
+  min-height: 360px;
+}
+
+/* Mann Up calculator, dark theme: the Market Explorer's card colours (the
+   roi.css card, #0c1524 with its slate border) instead of the brighter navy
+   cards and blue accents ("way too blue", then "way too dark - make it the
+   same colouring as the cards", user 2026-09-29). Light theme keeps its own
+   tokens. */
+html:not([data-theme="light"]) .tf2-mvm,
+html[data-legacy-dark] .tf2-mvm {
+  --card: #0c1524;
+  --field: #0a1220;
+  --tint: rgba(148, 163, 184, 0.08);
+  --border: rgba(148, 163, 184, 0.18);
+}
+
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-grid > *,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-grid > * {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+}
+
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-tour:hover,
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-tour.is-active,
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-tour:focus-visible,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-tour:hover,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-tour.is-active,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-tour:focus-visible {
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-tour.is-active,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-tour.is-active {
+  background: #111c2e;
+}
+
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-run.is-active,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-run.is-active {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+
+/* Run again: the navbar Login button's look (navbar.css, desktop) - the
+   translucent CS2-blue gradient with its blue rim (user, 2026-09-29: "make
+   this button login style"). */
+html:not([data-theme="light"]) .tf2-mvm .care-button-primary,
+html[data-legacy-dark] .tf2-mvm .care-button-primary {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18)) !important;
+  border-color: transparent !important;
+  box-shadow: inset 0 0 0 1px rgba(75, 105, 255, 0.45), 0 10px 24px rgba(0, 0, 0, 0.28) !important;
+  color: #fff;
+  font-weight: 600;
+  transition: transform 0.38s cubic-bezier(0.22, 1.55, 0.32, 1), box-shadow 0.2s ease;
+}
+
+html:not([data-theme="light"]) .tf2-mvm .care-button-primary:hover,
+html[data-legacy-dark] .tf2-mvm .care-button-primary:hover {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.42), rgba(75, 105, 255, 0.24)) !important;
+}
+
+html:not([data-theme="light"]) .tf2-mvm .care-button-primary:active,
+html[data-legacy-dark] .tf2-mvm .care-button-primary:active {
+  transform: scale(0.96);
+}
+
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-toggle.is-active,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-toggle.is-active {
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+html:not([data-theme="light"]) .tf2-mvm .tf2-mvm-toggle.is-active .tf2-mvm-toggle-knob,
+html[data-legacy-dark] .tf2-mvm .tf2-mvm-toggle.is-active .tf2-mvm-toggle-knob {
+  background: #22c55e;
+}
+
+/* Market distribution hover, as on the CS2 item page: a pill right after the
+   bar's end - badge, marketplace, "1,283 (4.0%)" - and nothing else moves. */
+.tf2i-dist-row {
+  cursor: default;
+}
+
+.tf2i-dist-pill {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 11px 0 7px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.96);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 12.5px;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.tf2i-dist-pill strong {
+  font-weight: 700;
+}
+
+.tf2i-dist-pill > span:last-child {
+  color: rgba(226, 232, 240, 0.72);
+  font-weight: 600;
+}
+
+.tf2i-dist-pill .marketplace-badge {
+  transform: scale(0.85);
+}
+
+html[data-theme="light"]:not([data-legacy-dark]) .tf2i-dist-pill {
+  background: #fff;
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.14);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.14);
+}
+
+html[data-theme="light"]:not([data-legacy-dark]) .tf2i-dist-pill > span:last-child {
+  color: #64748b;
+}
+
+/* Mann Up calculator entrance: the tour picker, the controls, the stat cards
+   and the loot fade and rise in one after another (user, 2026-09-29:
+   "animate the mannup that when i open it it appears nicely"). The fill mode
+   is `backwards`, so once a card has landed its own hover transform works
+   again; a new run's cards rise in the same way. */
+@keyframes tf2MvmIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tf2-mvm .tf2-mvm-tour,
+.tf2-mvm .tf2-mvm-controls,
+.tf2-mvm .tf2-mvm-surplus,
+.tf2-mvm .tf2p-stats > div,
+.tf2-mvm .tf2-mvm-grid > * {
+  animation: tf2MvmIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* The loot cards are care-package cards, which start at opacity 0 and rely on
+   their own forwards-filled careCardReveal to show. tf2MvmIn replaces that
+   animation and only fills backwards, so the resting state has to be visible
+   here - without this the cards vanished once the animation ended. */
+.tf2-mvm .tf2-mvm-grid > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* ...and the same applies to the transform. The card's declared resting
+   style is `transform: translateY(18px)`; careCardReveal only holds it at 0
+   because it fills forwards. Under tf2MvmIn's backwards fill the declared
+   18px came back the instant the animation ended, so every loot card dropped
+   18px and its bottom was cut off by the grid's scroll box - measured live
+   2026-09-30: card bottom 1395 against a grid bottom of 1383 (user: "when i
+   load them they move sligtly down and the texture clips sligtly in the
+   bottm"). The hover lift has to be restated here because
+   `.care-market-card:hover` and `.tf2-mvm .tf2-mvm-grid > *` are both
+   (0,2,0) and tf2.css loads last, so the reset above would otherwise win. */
+.tf2-mvm .tf2-mvm-grid > *:hover {
+  transform: translateY(-4px);
+}
+
+.tf2-mvm .tf2-mvm-tour:nth-child(2) { animation-delay: 50ms; }
+.tf2-mvm .tf2-mvm-tour:nth-child(3) { animation-delay: 100ms; }
+.tf2-mvm .tf2-mvm-tour:nth-child(4) { animation-delay: 150ms; }
+.tf2-mvm .tf2-mvm-tour:nth-child(5) { animation-delay: 200ms; }
+.tf2-mvm .tf2-mvm-controls { animation-delay: 220ms; }
+.tf2-mvm .tf2-mvm-surplus { animation-delay: 260ms; }
+.tf2-mvm .tf2p-stats > div:nth-child(1) { animation-delay: 280ms; }
+.tf2-mvm .tf2p-stats > div:nth-child(2) { animation-delay: 320ms; }
+.tf2-mvm .tf2p-stats > div:nth-child(3) { animation-delay: 360ms; }
+.tf2-mvm .tf2p-stats > div:nth-child(4) { animation-delay: 400ms; }
+.tf2-mvm .tf2-mvm-grid > *:nth-child(1) { animation-delay: 360ms; }
+.tf2-mvm .tf2-mvm-grid > *:nth-child(2) { animation-delay: 400ms; }
+.tf2-mvm .tf2-mvm-grid > *:nth-child(3) { animation-delay: 440ms; }
+.tf2-mvm .tf2-mvm-grid > *:nth-child(4) { animation-delay: 480ms; }
+.tf2-mvm .tf2-mvm-grid > *:nth-child(5) { animation-delay: 520ms; }
+.tf2-mvm .tf2-mvm-grid > *:nth-child(6) { animation-delay: 560ms; }
+.tf2-mvm .tf2-mvm-grid > *:nth-child(n+7) { animation-delay: 600ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tf2-mvm .tf2-mvm-tour,
+  .tf2-mvm .tf2-mvm-controls,
+  .tf2-mvm .tf2-mvm-surplus,
+  .tf2-mvm .tf2p-stats > div,
+  .tf2-mvm .tf2-mvm-grid > * {
+    animation: none;
+  }
+}
+
+/* Light mode: Run again keeps its dark-site look - the Login style as it
+   renders on the navy page, made opaque so it reads the same on white
+   (user, 2026-09-30: "make the mann up button same as its dark version"). */
+html[data-theme="light"]:not([data-legacy-dark]) .tf2-mvm .care-button-primary {
+  background: linear-gradient(180deg, #21306c, #162248) !important;
+  background-image: linear-gradient(180deg, #21306c, #162248) !important;
+  border-color: transparent !important;
+  box-shadow: inset 0 0 0 1px #2a3b8b !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+html[data-theme="light"]:not([data-legacy-dark]) .tf2-mvm .care-button-primary:hover {
+  background: linear-gradient(180deg, #283a82, #1b2a58) !important;
+  background-image: linear-gradient(180deg, #283a82, #1b2a58) !important;
+}
+
+/* Market distribution: the marketplace names sit at the left edge of their
+   column, not right-aligned against the bars (user, 2026-09-30: "move the
+   marketplaces here more to the left"). */
+.tf2i-dist-row {
+  grid-template-columns: 140px minmax(0, 1fr);
+}
+
+.tf2i-dist-name {
+  justify-content: flex-start;
+}
+
+@media (max-width: 640px) {
+  .tf2i-dist-row {
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+}
+
+/* Price-history hover (the CS2 provider tooltip, styled by item_page.css) is
+   positioned inside the chart box. */
+.tf2i-history-canvas {
+  position: relative;
+}

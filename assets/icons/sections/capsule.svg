@@ -1,0 +1,6 @@
+<!-- Capsules: a sticker capsule canister. Taller than the case and domed at the
+     top so the two never read as the same box at tile size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <path fill="#ffffff" d="M24 5c-6.1 0-11 2.2-11 5v2.5c0 2.8 4.9 5 11 5s11-2.2 11-5V10c0-2.8-4.9-5-11-5Z"/>
+  <path fill="#ffffff" d="M13 17.8V38c0 2.8 4.9 5 11 5s11-2.2 11-5V17.8c-2.6 1.9-6.6 2.9-11 2.9s-8.4-1-11-2.9Zm11 6.9c1.9 0 3.5 1.6 3.5 3.5S25.9 31.7 24 31.7s-3.5-1.6-3.5-3.5 1.6-3.5 3.5-3.5Z"/>
+</svg>

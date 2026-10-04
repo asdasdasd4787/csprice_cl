@@ -1,0 +1,428 @@
+/* ============================================================================
+   Wide screens (2K, 1440p, 4K, ultrawide)
+   ----------------------------------------------------------------------------
+   The layout was tuned for 1920x1080: every page shell is capped at 1540px
+   (1500px on care package / armory / data), which is right at 1080p and leaves
+   ~500px of dead space per side on a 2560px monitor.
+
+   EVERY rule in this file sits inside `@media (min-width: 1921px)`, so nothing
+   here can reach a 1920px-wide screen or anything smaller. Full HD renders
+   exactly as before - do not add an unguarded rule to this file.
+
+   Most shells already read their width from --site-shell-max /
+   --site-shell-width (see "Site shell + footer alignment (canonical)" in
+   index.css), so raising those two variables moves the whole site at once. The
+   handful of places that hardcode 1500px are overridden explicitly below.
+
+   Card grids gain a column per tier instead of just growing: the point of the
+   extra width is more skins on screen, not bigger pictures of the same five.
+
+   Tiers:
+     >= 1921px  2560x1440 monitors, small ultrawides   shell 1840, +1 column
+     >= 2400px  wide 1440p, 3440x1440 ultrawide        shell 2160, +2 columns
+     >= 3000px  4K and wider                           shell 2480, +3 columns
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Navbar language fit. The ONE block in this file outside a media query, and
+   it is inert until react/shared-components.jsx sets --nav-fit on the row,
+   which it only does when the translated labels actually overflow. English
+   never overflows, so 1080p English is untouched - the promise at the top of
+   this file still holds.
+   ------------------------------------------------------------------------ */
+.nav-links[style*="--nav-fit"] {
+  gap: calc(15px * var(--nav-fit)) !important;
+  font-size: calc(15px * max(var(--nav-fit), 0.88)) !important;
+}
+
+.nav-links[style*="--nav-fit"] .nav-item {
+  gap: calc(6px * var(--nav-fit));
+  white-space: nowrap;
+}
+
+/* Since the page shells run edge to edge with the navbar (navbar.css, "Page
+   width = navbar width"), a 1080p screen has room for six cards per row at the
+   size five used to be. Every catalogue-style grid gets the sixth column from
+   1500px up; the 1921px tier below keeps its own counts. */
+@media (min-width: 1500px) {
+  .collections-shell .collections-grid,
+  .detail-items-section-primary .collections-grid,
+  .detail-items-section-primary .collections-grid.collections-grid-animated,
+  .roi-grid.clean-grid,
+  .roi-grid.loading,
+  .care-reward-grid,
+  .care-catalog .care-reward-grid,
+  .care-catalog .care-topdrops-grid,
+  .care-catalog .care-collection-grid,
+  .care-topdrops-grid.care-collection-grid,
+  .tv-contents-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1921px) {
+  :root {
+    --site-shell-max: 1840px;
+    --site-shell-gutter: 80px;
+  }
+
+  /* The home page is a chat column: it reads better narrow, so it grows far
+     less than the data pages and its composer keeps a line length that is
+     still comfortable to read. */
+  body.page-home {
+    --site-shell-max: 1600px;
+  }
+
+  body:has(.watchlist-shell) {
+    --site-shell-max: 1560px;
+  }
+
+  body:has(.stats-db-shell) {
+    --site-shell-max: 1440px;
+  }
+
+  body:has(.data-page),
+  body:has(.care-page),
+  body:has(.armory-page) {
+    --site-shell-max: 1800px;
+    --site-shell-gutter: 64px;
+  }
+
+  /* Care package keeps its own width variable and a hardcoded cap. The
+     variable has to be set on .care-page itself - carepackage.css declares it
+     there, and that beats anything set further up on <body>. */
+  body:has(.care-page),
+  .care-page {
+    --care-shell-width: min(1800px, calc(100% - 64px));
+  }
+
+  .care-shell {
+    max-width: 1800px;
+  }
+
+  /* The footer is pinned to 1500px by navbar.css (and again by carepackage.css
+     and armory.css), all with !important, so it would stay narrow under a
+     widened page. Point it back at the shell variable: one rule covers every
+     page because --site-shell-max is already per-page above, and the selector
+     outweighs all three of them. */
+  html body #cs2-footer-root .site-footer.site-footer,
+  html body .tv-page + .site-footer.site-footer,
+  html body:has(.care-page) #cs2-footer-root .site-footer.site-footer,
+  html body .armory-page + .site-footer.site-footer {
+    width: min(var(--site-shell-max), calc(100% - var(--site-shell-gutter))) !important;
+    max-width: var(--site-shell-max) !important;
+  }
+
+  /* One more card per row, so cards stay the size they are at 1080p. */
+  .collections-shell .collections-grid,
+  .detail-items-section-primary .collections-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .care-topdrops-grid.care-collection-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  /* The roll board always holds four cards, so it keeps four columns and lets
+     them stretch across the wider shell. Only the catalog grids, which have
+     many items, gain a column. */
+  .care-reward-grid,
+  .care-catalog .care-reward-grid,
+  .care-catalog .care-topdrops-grid,
+  .care-catalog .care-collection-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .tv-related-finishes-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  /* The crafter's 3D stage is the whole point of that page - give the extra
+     width to the model, not to the sticker panel beside it. */
+  .crafter-stage {
+    grid-template-columns: minmax(0, 1fr) 350px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Skin crafter: let the weapon fill the frame.
+
+   The viewer fits the model to whichever canvas dimension is smaller, and the
+   canvas is capped at 720px tall (clamp(360px, 60vh, 720px) in viewer3d.css) -
+   a figure tuned for a 1080p screen. Widening the page on a 1440p monitor
+   therefore did nothing for the weapon: it stayed the same size inside a much
+   wider box, floating in empty space.
+
+   Height is what matters here, not width, so these are gated on BOTH. A
+   2560x1080 ultrawide has no spare vertical room and keeps the 1080p canvas.
+   ------------------------------------------------------------------------ */
+@media (min-width: 1921px) and (min-height: 1150px) {
+  /* The stage is a grid row, so it grew to whatever the taller column needed -
+     and with 60 stickers in the side panel that was past the bottom of the
+     screen, leaving the craft cost cut off. Cap it to the viewport (minus the
+     navbar and the page margins) and let the sticker grid scroll inside. */
+  .crafter-stage {
+    min-height: clamp(480px, calc(100vh - 200px), 1280px);
+    max-height: calc(100vh - 140px);
+  }
+
+  /* An absolute cap, not a percentage: as a grid item the panel's 100% never
+     resolved against the row, so it kept growing past the stage and pushed the
+     craft cost off the bottom of the screen. */
+  .crafter-shell .crafter-panel.tv-skin-panel,
+  .crafter-panel {
+    min-height: 0;
+    max-height: calc(100vh - 160px);
+    overflow: hidden;
+  }
+
+  /* Every step between the panel and the sticker grid has to be allowed to
+     shrink, or the grid's own max-height resolves against an auto height and
+     the whole column grows instead. */
+  .crafter-sticker-library-shell,
+  .crafter-sticker-browser-wrap,
+  .crafter-mode-browser-stage,
+  .crafter-mode-browser-face {
+    min-height: 0;
+  }
+
+  /* Leaves room for the navbar, the skin picker strip under the canvas and
+     the page margins, so nothing is pushed below the fold. The subtraction is
+     deliberately generous: at 360px the craft cost at the bottom of the side
+     panel ended up right on the edge of the screen on a 1440p display. */
+  .crafter-view-column .crafter-canvas-panel {
+    min-height: clamp(360px, calc(100vh - 470px), 1080px);
+  }
+
+  /* Navbar. Everything in it is sized for 1080p, which leaves it looking thin
+     and cramped on a 1440p screen where there is room to spare. Scaled by
+     roughly 15%, and only here - 1080p keeps the sizes it was designed with.
+     The heights need !important: index.css and navbar.css both pin them that
+     way, so a plain rule here loses however late it loads.
+
+     The bar floats as a rounded card (see navbar.css); 14 + 66 + 10 is the
+     90px this tier's header comes to, scaled from the 78 downstairs. */
+  #cs2-nav-root {
+    padding: 14px 24px 10px;
+  }
+
+  .navbar {
+    height: 66px !important;
+    min-height: 66px !important;
+    max-height: 66px !important;
+    padding: 0 26px !important;
+    border-radius: 16px;
+  }
+
+  .navbar .logo img {
+    height: 44px !important;
+  }
+
+  .navbar .nav-primary-link {
+    font-size: 13px;
+  }
+
+  .nav-category-link {
+    font-size: 12.5px;
+  }
+
+  .nav-category-link i {
+    font-size: 13px;
+  }
+
+  .nav-categories {
+    gap: 28px;
+    padding: 0 40px;
+  }
+
+  .nav-right {
+    font-size: 16px !important;
+    gap: 16px;
+  }
+
+  .navbar .search-container {
+    font-size: 14px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    width: clamp(260px, 16vw, 360px) !important;
+    max-width: 360px !important;
+  }
+
+  /* The sticker/charm grid grows with the screen (resolveSpotlightCount in
+     react/viewer3d-page.jsx picks 25 / 60 / 90). Its overflow is hidden by
+     default, so extra rows spilled past the bottom of the panel and were cut
+     off mid-sticker. Bound it by the space the panel actually has - the wrap
+     above it is already a flex item with min-height:0 - and scroll the
+     remainder. A viewport-based guess does not work here: the panel is as tall
+     as the 3D canvas, not as tall as the window. */
+  .crafter-sticker-browser-wrap {
+    min-height: 0;
+  }
+
+  .crafter-sticker-browser {
+    max-height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Inventory: its own shell variable, capped at 1540px like the rest of the
+     site was. The item grid is already repeat(auto-fill, minmax(168px, 1fr)),
+     so widening the shell adds columns on its own. */
+  body.steam-dashboard-page {
+    --inv-shell: min(1840px, calc(100% - 80px));
+  }
+
+  body.steam-dashboard-page .steam-dashboard,
+  body.steam-dashboard-page .inv-page {
+    max-width: 1840px;
+  }
+}
+
+@media (min-width: 2400px) and (min-height: 1700px) {
+  .crafter-stage {
+    min-height: clamp(480px, calc(100vh - 200px), 1640px);
+  }
+
+  .crafter-view-column .crafter-canvas-panel {
+    min-height: clamp(360px, calc(100vh - 500px), 1440px);
+  }
+
+  /* The floating card again, one step larger: 16 + 72 + 12 = 100px of header. */
+  #cs2-nav-root {
+    padding: 16px 32px 12px;
+  }
+
+  .navbar {
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    padding: 0 30px !important;
+    border-radius: 18px;
+  }
+
+  .nav-categories {
+    gap: 32px;
+    padding: 0 56px;
+  }
+
+  .navbar .nav-primary-link {
+    font-size: 13.5px;
+  }
+
+  .nav-category-link {
+    font-size: 13px;
+  }
+
+  .nav-right {
+    font-size: 17px;
+  }
+
+  .navbar .search-container {
+    font-size: 15px !important;
+    width: clamp(300px, 16vw, 420px) !important;
+    max-width: 420px !important;
+  }
+
+  body.steam-dashboard-page {
+    --inv-shell: min(2160px, calc(100% - 80px));
+  }
+
+  body.steam-dashboard-page .steam-dashboard,
+  body.steam-dashboard-page .inv-page {
+    max-width: 2160px;
+  }
+}
+
+@media (min-width: 2400px) {
+  :root {
+    --site-shell-max: 2160px;
+  }
+
+  body.page-home {
+    --site-shell-max: 1700px;
+  }
+
+  body:has(.data-page),
+  body:has(.care-page),
+  body:has(.armory-page) {
+    --site-shell-max: 2120px;
+  }
+
+  body:has(.care-page),
+  .care-page {
+    --care-shell-width: min(2120px, calc(100% - 64px));
+  }
+
+  .care-shell {
+    max-width: 2120px;
+  }
+
+  .collections-shell .collections-grid,
+  .detail-items-section-primary .collections-grid,
+  .care-topdrops-grid.care-collection-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .care-reward-grid,
+  .care-catalog .care-reward-grid,
+  .care-catalog .care-topdrops-grid,
+  .care-catalog .care-collection-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .tv-related-finishes-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .crafter-stage {
+    grid-template-columns: minmax(0, 1fr) 380px;
+  }
+}
+
+@media (min-width: 3000px) {
+  :root {
+    --site-shell-max: 2480px;
+  }
+
+  body.page-home {
+    --site-shell-max: 1800px;
+  }
+
+  body:has(.data-page),
+  body:has(.care-page),
+  body:has(.armory-page) {
+    --site-shell-max: 2440px;
+  }
+
+  body:has(.care-page),
+  .care-page {
+    --care-shell-width: min(2440px, calc(100% - 64px));
+  }
+
+  .care-shell {
+    max-width: 2440px;
+  }
+
+  .collections-shell .collections-grid,
+  .detail-items-section-primary .collections-grid,
+  .care-topdrops-grid.care-collection-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .care-reward-grid,
+  .care-catalog .care-reward-grid,
+  .care-catalog .care-topdrops-grid,
+  .care-catalog .care-collection-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .tv-related-finishes-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .crafter-stage {
+    grid-template-columns: minmax(0, 1fr) 400px;
+  }
+}

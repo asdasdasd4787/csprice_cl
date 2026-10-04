@@ -1,0 +1,2618 @@
+﻿html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  background: #091222;
+}
+
+body {
+  min-height: 100vh;
+}
+
+/* No surface at all behind a card image: the picture sits straight on the card,
+   exactly like the Market Explorer cards, whose media area is transparent. The
+   tiles keep their sizes — only the lighter blue block is gone. */
+:root {
+  --care-media-surface: transparent;
+}
+
+.care-page {
+  --care-shell-width: min(1500px, calc(100% - 48px));
+  min-height: auto;
+  padding: 40px 0 8px;
+  overflow-x: clip;
+  background: #091222;
+  color: #edf4ff;
+}
+
+body:has(.care-page) {
+  --site-shell-max: 1500px;
+  --site-shell-gutter: 48px;
+  --site-shell-width: var(--care-shell-width, min(1500px, calc(100% - 48px)));
+}
+
+.care-page + .site-footer,
+body:has(.care-page) .site-footer,
+body:has(.care-page) #cs2-footer-root .site-footer {
+  box-sizing: border-box;
+  width: var(--care-shell-width, min(1500px, calc(100% - 48px))) !important;
+  max-width: 1500px !important;
+  margin: 16px auto 12px !important;
+  padding: 0 !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(101, 140, 198, 0.14) !important;
+  overflow: hidden !important;
+  background: #091222 !important;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.care-shell {
+  width: var(--care-shell-width);
+  max-width: 1500px;
+  margin: 0 auto;
+  overflow-x: clip;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+
+.care-page + .site-footer::before,
+body:has(.care-page) .site-footer::before {
+  display: none !important;
+}
+
+.care-page + .site-footer:hover,
+body:has(.care-page) .site-footer:hover {
+  transform: none !important;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.care-page + .site-footer .footer-container,
+body:has(.care-page) .site-footer .footer-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  padding: 12px 28px 8px !important;
+  box-sizing: border-box !important;
+}
+
+.care-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 20px;
+  background: rgba(8, 13, 24, 0.92);
+  box-shadow: none;
+}
+
+.care-panel::before {
+  display: none;
+}
+
+.care-hero {
+  margin-bottom: 22px;
+}
+
+.care-hero-copy {
+  padding: 30px 32px;
+}
+
+.care-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border: 1px solid rgba(87, 130, 204, 0.22);
+  border-radius: 999px;
+  background: rgba(14, 24, 42, 0.8);
+  color: #7fc9ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.care-title {
+  margin: 18px 0 14px;
+  font-size: clamp(34px, 4vw, 58px);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.care-title em {
+  font-style: normal;
+  color: #68d8ff;
+}
+
+.care-description {
+  max-width: 780px;
+  margin: 0;
+  color: #a4b9da;
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.care-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.care-button,
+.care-source-pill,
+.care-filter-pill,
+.care-detail-pill {
+  appearance: none;
+  border: 1px solid rgba(103, 132, 180, 0.2);
+  border-radius: 16px;
+  background: rgba(15, 24, 40, 0.92);
+  color: #eef5ff;
+  font: inherit;
+}
+
+.care-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+}
+
+.care-button:hover,
+.care-source-pill:hover,
+.care-filter-pill:hover,
+.care-detail-pill:hover {
+  transform: translateY(-1px);
+  border-color: rgba(113, 177, 255, 0.34);
+}
+
+.care-button-primary {
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  border-color: rgba(75, 105, 255, 0.45);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow:
+    0 0 0 1px rgba(75, 105, 255, 0.22) inset,
+    0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.care-button-primary:hover {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.46), rgba(75, 105, 255, 0.26));
+  border-color: rgba(75, 105, 255, 0.55);
+  color: #fff;
+}
+
+.care-button-secondary {
+  background: rgba(15, 24, 40, 0.92);
+}
+
+.care-hero-total {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  max-width: 320px;
+  margin-top: 24px;
+  padding: 20px 22px;
+  border-radius: 22px;
+  border: 1px solid rgba(109, 146, 202, 0.16);
+  background:
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(13, 24, 42, 0.88), rgba(9, 17, 30, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.care-stat-label {
+  color: #8bc7ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.care-total-value {
+  display: block;
+  font-size: clamp(40px, 4vw, 58px);
+  line-height: 0.95;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: #f8fbff;
+}
+
+.care-total-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #93a9c9;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.care-board,
+.care-catalog,
+.care-details {
+  padding: 22px;
+}
+
+.care-board {
+  margin-bottom: 22px;
+}
+
+.care-roll-board {
+  margin-bottom: 18px;
+  padding: 0 0 8px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.care-roll-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.care-roll-worth {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  text-align: right;
+  margin: 0;
+}
+
+.care-roll-worth-label {
+  color: #8bc7ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.care-roll-worth strong {
+  color: #f8fbff;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.care-roll-worth-note {
+  color: #9ab0cf;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.care-roll-grid {
+  align-items: stretch;
+}
+
+.care-roll-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+}
+
+.care-roll-summary {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  text-align: right;
+}
+
+.care-roll-summary strong {
+  color: #f8fbff;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.care-roll-summary span {
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.care-insights-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  margin-bottom: 10px;
+  align-items: start;
+}
+
+.care-drop-chart-panel {
+  margin-top: 0;
+  margin-bottom: 0;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.care-drop-chart-panel .care-section-title-row-inside {
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.care-chart-fullscreen-btn {
+  appearance: none;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid rgba(118, 150, 198, 0.18);
+  background: rgba(12, 20, 34, 0.78);
+  color: #94a3b8;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.care-chart-fullscreen-btn:hover,
+.care-chart-fullscreen-btn.active {
+  background: rgba(24, 36, 58, 0.96);
+  color: #e2e8f0;
+  border-color: rgba(96, 165, 250, 0.28);
+}
+
+html:has(.care-drop-chart-panel:fullscreen),
+html:has(.care-drop-chart-panel:-webkit-full-screen),
+html:has(.care-drop-chart-panel.is-native-fullscreen) {
+  overflow: hidden !important;
+}
+
+.care-drop-chart-panel:fullscreen,
+.care-drop-chart-panel:-webkit-full-screen,
+.care-drop-chart-panel.is-native-fullscreen:not(:fullscreen):not(:-webkit-full-screen) {
+  background: #091222;
+  border-radius: 0;
+  border: none;
+  padding: 20px 24px 22px;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  min-width: 100vw !important;
+  max-width: none !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2147483646;
+}
+
+.care-drop-chart-panel:fullscreen .care-section-title-row-inside,
+.care-drop-chart-panel:-webkit-full-screen .care-section-title-row-inside,
+.care-drop-chart-panel.is-native-fullscreen .care-section-title-row-inside,
+.care-drop-chart-panel:fullscreen .care-drop-chart-legend-list,
+.care-drop-chart-panel:-webkit-full-screen .care-drop-chart-legend-list,
+.care-drop-chart-panel.is-native-fullscreen .care-drop-chart-legend-list {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+}
+
+.care-drop-chart-panel:fullscreen .care-section-title-row-inside,
+.care-drop-chart-panel:-webkit-full-screen .care-section-title-row-inside,
+.care-drop-chart-panel.is-native-fullscreen .care-section-title-row-inside {
+  margin-bottom: 4px;
+}
+
+.care-drop-chart-panel:fullscreen .care-drop-chart-shell,
+.care-drop-chart-panel:-webkit-full-screen .care-drop-chart-shell,
+.care-drop-chart-panel.is-native-fullscreen .care-drop-chart-shell {
+  flex: 1 1 0;
+  min-height: 0;
+  margin-top: 0;
+}
+
+.care-drop-chart-panel:fullscreen .care-drop-chart-canvas-wrap,
+.care-drop-chart-panel:-webkit-full-screen .care-drop-chart-canvas-wrap,
+.care-drop-chart-panel.is-native-fullscreen .care-drop-chart-canvas-wrap {
+  height: 100% !important;
+  min-height: 0;
+}
+
+.care-drop-chart-panel:fullscreen .care-drop-chart-canvas-wrap canvas,
+.care-drop-chart-panel:-webkit-full-screen .care-drop-chart-canvas-wrap canvas,
+.care-drop-chart-panel.is-native-fullscreen .care-drop-chart-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.care-drop-chart-panel:fullscreen .care-drop-chart-legend-list,
+.care-drop-chart-panel:-webkit-full-screen .care-drop-chart-legend-list,
+.care-drop-chart-panel.is-native-fullscreen .care-drop-chart-legend-list {
+  margin-top: 12px;
+}
+
+.care-drop-chart-shell {
+  position: relative;
+  margin-top: 8px;
+}
+
+.care-drop-chart-canvas-wrap {
+  position: relative;
+  height: 360px;
+  width: 100%;
+}
+
+.care-drop-chart-tooltip {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  width: min(250px, calc(100% - 16px));
+  /* The item page's provider tooltip (.tv-prov-chart-tooltip in item_page.css),
+     value for value: solid slate card, hairline, 8px corners, ranked rows -
+     with a colour tile where that one shows the marketplace logo. */
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.96);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.care-drop-chart-tooltip.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.care-drop-chart-tooltip-title {
+  margin: 0 0 6px;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.care-drop-chart-tooltip-list {
+  display: block;
+}
+
+/* rank | colour tile | name | price, most expensive first. */
+.care-drop-chart-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  color: #cbd5e1;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.care-drop-chart-tooltip-rank {
+  width: 14px;
+  flex-shrink: 0;
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sits where the marketplace logo sits on the item page: a 14px dot in the
+   line's colour. */
+.care-drop-chart-tooltip-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.care-drop-chart-tooltip-name {
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.care-drop-chart-tooltip-price {
+  margin-left: auto;
+  color: #f8fafc;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.care-drop-chart-status {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  text-align: center;
+  color: rgba(186, 198, 220, 0.9);
+  font-size: 14px;
+  font-weight: 700;
+  background: rgba(8, 13, 24, 0.55);
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.care-drop-chart-error {
+  color: #fda4af;
+}
+
+.care-drop-chart-legend-list {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.care-drop-chart-chip {
+  display: grid;
+  grid-template-columns: 8px 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(118, 150, 198, 0.12);
+  background: rgba(8, 15, 27, 0.72);
+  min-height: 44px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+a.care-drop-chart-chip {
+  cursor: pointer;
+}
+
+a.care-drop-chart-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(96, 165, 250, 0.24);
+  background: rgba(12, 22, 38, 0.88);
+}
+
+.care-drop-chart-chip-empty {
+  border-style: dashed;
+  border-color: rgba(118, 150, 198, 0.16);
+  background: rgba(8, 15, 27, 0.38);
+  opacity: 0.72;
+}
+
+.care-drop-chart-chip-empty .care-drop-chart-swatch {
+  background: rgba(148, 163, 184, 0.28);
+  box-shadow: none;
+}
+
+.care-drop-chart-empty-thumb {
+  width: 22px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.care-drop-chart-chip-empty strong {
+  color: rgba(186, 198, 220, 0.72);
+  font-weight: 700;
+}
+
+.care-drop-chart-chip-empty span {
+  color: rgba(148, 163, 184, 0.58);
+}
+
+.care-drop-chart-chip img {
+  width: 22px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.care-drop-chart-chip strong,
+.care-drop-chart-chip span {
+  display: block;
+  min-width: 0;
+}
+
+.care-drop-chart-chip strong {
+  color: #f8fafc;
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.care-drop-chart-chip span {
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+.care-drop-chart-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.04);
+}
+
+@media (max-width: 1180px) {
+  .care-drop-chart-legend-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .care-drop-chart-canvas-wrap {
+    height: 320px;
+  }
+}
+
+@media (max-width: 760px) {
+  .care-drop-chart-legend-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .care-drop-chart-canvas-wrap {
+    height: 280px;
+  }
+}
+
+.care-history-panel,
+.care-mix-panel {
+  margin-top: 0;
+  margin-bottom: 0;
+  width: auto;
+}
+
+.care-history-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.care-history-grid .care-sim-card {
+  min-height: 100%;
+}
+
+.care-mix-list {
+  display: grid;
+  gap: 12px;
+}
+
+.care-mix-row {
+  display: grid;
+  grid-template-columns: minmax(112px, 0.82fr) minmax(0, 1.5fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(118, 150, 198, 0.12);
+  background: rgba(8, 15, 27, 0.72);
+}
+
+.care-mix-copy,
+.care-mix-metric {
+  display: grid;
+  gap: 5px;
+}
+
+.care-mix-copy strong,
+.care-mix-metric strong {
+  color: #f8fafc;
+  font-size: 15px;
+  line-height: 1.1;
+}
+
+.care-mix-copy span,
+.care-mix-metric span {
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.care-mix-metric {
+  justify-items: end;
+  text-align: right;
+}
+
+.care-mix-bar {
+  position: relative;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.care-mix-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation: careBarGrow 0.7s ease forwards;
+  background: linear-gradient(90deg, #3cc3ff 0%, #2c6eff 100%);
+}
+
+.care-mix-row.kind-collection .care-mix-bar span {
+  background: linear-gradient(90deg, #34d399 0%, #0ea5e9 100%);
+}
+
+.care-mix-row.kind-case .care-mix-bar span {
+  background: linear-gradient(90deg, #f59e0b 0%, #f97316 100%);
+}
+
+.care-mix-row.kind-terminal .care-mix-bar span {
+  background: linear-gradient(90deg, #93c5fd 0%, #60a5fa 100%);
+}
+
+.care-mix-row.kind-graffiti .care-mix-bar span {
+  background: linear-gradient(90deg, #22c55e 0%, #14b8a6 100%);
+}
+
+.care-mix-row.kind-tool .care-mix-bar span {
+  background: linear-gradient(90deg, #c084fc 0%, #818cf8 100%);
+}
+
+.care-catalog-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.care-section-head,
+.care-catalog-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.care-section-head {
+  margin-bottom: 18px;
+}
+
+.care-section-head-tight {
+  align-items: center;
+}
+
+.care-section-copy h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.7vw, 34px);
+  letter-spacing: -0.04em;
+}
+
+.care-section-block {
+  display: grid;
+  gap: 12px;
+}
+
+.care-section-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.care-section-title-row-inside {
+  margin-bottom: 18px;
+  padding-bottom: 2px;
+}
+
+.care-section-title {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.care-catalog-copy h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.care-board-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.care-board-total {
+  display: grid;
+  gap: 6px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(109, 146, 202, 0.14);
+  background: rgba(8, 15, 28, 0.74);
+  min-width: 220px;
+}
+
+.care-board-total strong {
+  color: #f8fbff;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.care-board-total span:last-child {
+  color: #93a9c9;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.care-source-switch {
+  display: inline-flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.care-source-pill {
+  min-height: 44px;
+  padding: 0 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.care-source-pill.active {
+  border-color: rgba(82, 201, 255, 0.36);
+  background: linear-gradient(180deg, rgba(18, 45, 76, 0.96) 0%, rgba(14, 25, 42, 0.98) 100%);
+  box-shadow: inset 0 0 0 1px rgba(82, 201, 255, 0.1);
+}
+
+.care-sim-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.care-reward-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+/* Same shell as a Market Explorer card: one hairline border, one flat fill,
+   no drop shadow. Only the radius stays this page's own. */
+.care-market-card,
+.care-topdrop-card {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  padding: 18px;
+  border-radius: 26px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: #0c1524;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: careCardReveal 0.5s ease forwards;
+  animation-delay: var(--card-delay, 0ms);
+  transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* The pale sheen across the top of each card is gone — the fill is flat. */
+.care-market-card::before,
+.care-topdrop-card::before {
+  content: none;
+}
+
+.care-market-card:hover,
+.care-topdrop-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(96, 165, 250, 0.24);
+  box-shadow: none;
+}
+
+.care-market-card:hover .care-card-media img,
+.care-market-card:hover .care-topdrop-image img,
+.care-topdrop-card:hover .care-topdrop-image img {
+  transform: scale(1.035);
+}
+
+.care-sim-card,
+.care-reward-card {
+  padding: 18px;
+}
+
+.care-sim-card {
+  cursor: pointer;
+  text-align: left;
+  padding: 18px;
+  border-radius: 26px;
+  min-width: 0;
+}
+
+.care-sim-chart-swatch {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 3px rgba(8, 14, 26, 0.62),
+    0 0 10px color-mix(in srgb, var(--care-accent, #60a5fa) 35%, transparent);
+  pointer-events: none;
+}
+
+.care-sim-chart-swatch.is-empty {
+  background: rgba(148, 163, 184, 0.28);
+  box-shadow: none;
+}
+
+.care-sim-card-empty {
+  border-style: dashed;
+  border-color: rgba(118, 150, 198, 0.16);
+  background: rgba(8, 15, 27, 0.38);
+  opacity: 0.72;
+  box-shadow: none;
+}
+
+.care-sim-card-empty:hover {
+  transform: none;
+  border-color: rgba(118, 150, 198, 0.16);
+  box-shadow: none;
+}
+
+a.care-sim-card,
+a.care-reward-card {
+  color: inherit;
+  text-decoration: none;
+}
+
+.care-reward-card {
+  cursor: default;
+}
+
+.care-reward-card.interactive {
+  width: 100%;
+  appearance: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.care-reward-card.kind-collection .care-card-media img {
+  width: 72%;
+  max-width: none;
+  max-height: none;
+  height: auto;
+  filter: drop-shadow(0 20px 34px rgba(0, 0, 0, 0.3));
+  transform: none;
+}
+
+.care-reward-card.kind-collection .care-card-media {
+  min-height: 188px;
+  padding: 12px;
+  background: var(--care-media-surface);
+}
+
+.care-sim-odds {
+  position: relative;
+  z-index: 1;
+  color: #f3f0ea;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.care-sim-pick {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  margin: 10px auto 0;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(103, 166, 255, 0.28);
+  background: rgba(10, 21, 37, 0.72);
+  color: #8fd6ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.care-sim-card.best {
+  border-color: rgba(96, 165, 250, 0.24);
+}
+
+.care-reward-card.active {
+  border-color: rgba(80, 205, 255, 0.34);
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 205, 255, 0.1),
+    0 16px 34px rgba(2, 6, 23, 0.28);
+}
+
+.care-card-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.care-kind-badge,
+.care-card-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(8, 16, 28, 0.82);
+  border: 1px solid rgba(108, 140, 184, 0.14);
+  color: #9ec8ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.care-card-media {
+  position: relative;
+  z-index: 1;
+  min-height: 168px;
+  border-radius: 22px;
+  padding: 18px;
+  background: var(--care-media-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Same treatment as the Market Explorer art: a soft drop shadow under the
+   picture, on a transparent tile. */
+.care-card-media img,
+.care-detail-visual img,
+.care-topdrop-image img {
+  max-width: 82%;
+  max-height: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.34));
+  transition: transform 0.28s ease;
+}
+
+.care-sim-card .care-card-media img,
+.care-reward-card .care-card-media img {
+  width: 82%;
+}
+
+.care-sim-card .care-card-media {
+  min-height: 168px;
+  margin-top: 0;
+  background: var(--care-media-surface);
+}
+
+.care-reward-card .care-card-media,
+.care-topdrop-image {
+  background: var(--care-media-surface);
+}
+
+.care-sim-card .care-card-media img {
+  max-width: 84%;
+  max-height: 132px;
+}
+
+.care-media-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  /* Sits inside the same tiles, so it has to be the same flat surface - a
+     gradient here would make a missing image look different from a present
+     one. */
+  background: var(--care-media-surface);
+}
+
+.care-media-fallback span {
+  color: #8ecbff;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.care-card-body {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+  text-align: left;
+}
+
+.care-card-labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.care-card-kicker,
+.care-card-source {
+  color: #93abc9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.care-card-source {
+  text-align: right;
+}
+
+.care-card-copy,
+.care-topdrop-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.care-card-copy h3,
+.care-topdrop-copy h3 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 17px;
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.care-card-copy p,
+.care-topdrop-copy p {
+  margin: 10px 0 0;
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 13px;
+  line-height: 1.48;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.care-card-value-stack {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.care-card-value,
+.care-card-price-line strong,
+.care-topdrop-footer strong {
+  color: #f8fafc;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.care-card-footnote,
+.care-card-note-inline,
+.care-topdrop-footer span {
+  color: rgba(148, 163, 184, 0.78);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.care-catalog {
+  padding-top: 22px;
+}
+
+.care-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.care-filter-pill {
+  min-height: 44px;
+  padding: 0 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.care-filter-pill.active {
+  border-color: rgba(71, 154, 255, 0.34);
+  background: linear-gradient(180deg, rgba(22, 59, 121, 0.84), rgba(14, 30, 56, 0.98));
+}
+
+.care-whatyouget-grid {
+  margin-top: 18px;
+}
+
+.care-catalog-toolbar {
+  margin-bottom: 6px;
+}
+
+.care-catalog-chooser {
+  margin-top: 4px;
+  margin-bottom: 18px;
+  grid-template-columns: minmax(280px, 1.4fr) repeat(2, minmax(148px, 0.44fr)) !important;
+}
+
+.care-catalog-chooser .care-menu-shell {
+  gap: 0;
+  align-content: end;
+}
+
+.care-catalog-chooser .roi-type-trigger span {
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.care-catalog-empty {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 18px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(118, 150, 198, 0.12);
+  background: rgba(8, 15, 27, 0.72);
+  color: rgba(186, 198, 220, 0.9);
+}
+
+.care-catalog-empty strong {
+  color: #f8fafc;
+  font-size: 15px;
+}
+
+.care-catalog-empty span {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.care-catalog .care-reward-grid,
+.care-catalog .care-topdrops-grid,
+.care-catalog .care-collection-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.care-catalog .care-reward-card,
+.care-catalog .care-topdrop-card {
+  padding: 18px 16px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(8, 13, 24, 0.92);
+  box-shadow: none;
+  min-height: 360px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 12px;
+}
+
+.care-catalog .care-reward-card:hover,
+.care-catalog .care-topdrop-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(148, 163, 184, 0.16);
+  box-shadow: none;
+}
+
+.care-catalog .care-card-media,
+.care-catalog .care-topdrop-image,
+.care-catalog .care-reward-card.kind-collection .care-card-media {
+  height: 180px;
+  min-height: 180px;
+  border-radius: 20px;
+  padding: 0;
+  background: var(--care-media-surface);
+}
+
+.care-catalog .care-skins-grid {
+  margin-top: 18px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.care-catalog .care-card-media img,
+.care-catalog .care-topdrop-image img,
+.care-catalog .care-reward-card .care-card-media img,
+.care-catalog .care-reward-card.kind-collection .care-card-media img {
+  width: 82%;
+  max-width: 82%;
+  max-height: 150px;
+  height: auto;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.34));
+}
+
+.care-catalog .care-reward-card.kind-collection .care-card-media img,
+.care-catalog .care-reward-card.kind-case .care-card-media img,
+.care-catalog .care-reward-card.kind-terminal .care-card-media img {
+  width: 74%;
+  max-width: 74%;
+  max-height: 132px;
+}
+
+.care-catalog .care-card-body {
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 16px;
+}
+
+.care-catalog .care-card-copy h3,
+.care-catalog .care-topdrop-copy h3 {
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+.care-catalog .care-card-copy p,
+.care-catalog .care-topdrop-copy p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.care-catalog .care-card-value-stack {
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.care-catalog .care-card-value {
+  font-size: 28px;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.care-catalog .care-card-footnote {
+  font-size: 12px;
+}
+
+.care-catalog .care-collection-grid {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(118, 150, 198, 0.12);
+}
+
+.care-updated-note {
+  color: #90a5c6;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.care-details {
+  margin-top: 18px;
+}
+
+.care-detail-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.care-detail-copy h2 {
+  margin: 14px 0 0;
+  color: #f8fafc;
+  font-size: clamp(30px, 3vw, 44px);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.care-detail-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.care-detail-pill {
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.care-detail-visual {
+  min-height: 210px;
+  border-radius: 24px;
+  background: var(--care-media-surface);
+  display: grid;
+  place-items: center;
+}
+
+.care-detail-visual img {
+  max-width: 86%;
+  max-height: 180px;
+}
+
+.care-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.48fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.care-rarity-panel,
+.care-topdrops-panel {
+  border-radius: 24px;
+  border: 1px solid rgba(118, 150, 198, 0.12);
+  background: rgba(8, 15, 27, 0.74);
+  padding: 18px;
+}
+
+.care-detail-headline {
+  margin-bottom: 14px;
+}
+
+.care-detail-headline h3 {
+  margin: 8px 0 0;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+}
+
+.care-detail-headline-compact {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.care-collection-summary {
+  min-width: 220px;
+}
+
+.care-rarity-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.care-rarity-row {
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(113, 144, 189, 0.14);
+  background: rgba(8, 15, 27, 0.75);
+}
+
+.care-rarity-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.care-rarity-top strong {
+  font-size: 14px;
+}
+
+.care-rarity-top span {
+  color: #92b0d2;
+  font-size: 12px;
+}
+
+.care-rarity-bar {
+  position: relative;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.care-rarity-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #39c0ff 0%, #2b75ff 100%);
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation: careBarGrow 0.65s ease forwards;
+}
+
+.care-topdrops-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 1180px) {
+  .care-insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .care-drop-chart-canvas-wrap {
+    height: 300px;
+  }
+}
+
+@media (max-width: 980px) {
+  .care-sim-grid,
+  .care-loading-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .care-history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .care-mix-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .care-mix-metric {
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+.care-collection-grid {
+  margin-top: 0;
+}
+
+.care-leaderboard {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.care-leaderboard-row {
+  display: grid;
+  grid-template-columns: 56px 92px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(118, 150, 198, 0.12);
+  background: rgba(8, 15, 27, 0.74);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.24s ease, border-color 0.24s ease, background 0.24s ease;
+}
+
+.care-leaderboard-rank {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  min-height: 56px;
+  border-radius: 18px;
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  background: linear-gradient(180deg, rgba(20, 42, 78, 0.92), rgba(12, 22, 38, 0.96));
+  color: #8ec8ff;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.care-leaderboard-row:hover {
+  transform: translateY(-2px);
+  border-color: rgba(96, 165, 250, 0.24);
+  background: rgba(10, 20, 36, 0.88);
+}
+
+.care-leaderboard-thumb {
+  min-height: 74px;
+  border-radius: 20px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--care-media-surface);
+}
+
+.care-leaderboard-thumb img {
+  width: 100%;
+  max-width: 100%;
+  max-height: 64px;
+  object-fit: contain;
+  transition: transform 0.24s ease;
+}
+
+.care-leaderboard-row:hover .care-leaderboard-thumb img {
+  transform: scale(1.04);
+}
+
+.care-leaderboard-copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.care-leaderboard-copy strong {
+  color: #f8fafc;
+  font-size: 18px;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+.care-leaderboard-copy span,
+.care-leaderboard-metric span {
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.care-leaderboard-metric {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  text-align: right;
+}
+
+.care-leaderboard-metric strong {
+  color: #f8fafc;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.care-topdrop-image {
+  min-height: 168px;
+  border-radius: 22px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.care-topdrop-copy {
+  margin-top: 0;
+}
+
+.care-loading,
+.care-error,
+.care-empty {
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(111, 142, 192, 0.14);
+  background: rgba(10, 18, 31, 0.94);
+  color: #d9e8ff;
+}
+
+.care-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.care-skeleton {
+  height: 220px;
+  border-radius: 24px;
+  background: linear-gradient(90deg, rgba(16, 28, 46, 0.86), rgba(26, 42, 67, 0.96), rgba(16, 28, 46, 0.86));
+  background-size: 200% 100%;
+  animation: carePulse 1.4s ease infinite;
+}
+
+@keyframes carePulse {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes careCardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes careBarGrow {
+  from {
+    transform: scaleX(0);
+    opacity: 0.5;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1380px) {
+  .care-reward-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .care-catalog .care-reward-grid,
+  .care-catalog .care-topdrops-grid,
+  .care-catalog .care-collection-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .care-catalog-chooser {
+    grid-template-columns: minmax(0, 1fr) repeat(2, minmax(140px, 0.5fr)) !important;
+  }
+
+  .care-topdrops-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .care-leaderboard-row {
+    grid-template-columns: 56px 84px minmax(0, 1fr);
+  }
+
+  .care-leaderboard-metric {
+    grid-column: 2 / span 2;
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 1240px) {
+  .care-detail-head,
+  .care-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .care-reward-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .care-catalog .care-reward-grid,
+  .care-catalog .care-topdrops-grid,
+  .care-catalog .care-collection-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .care-catalog-chooser {
+    grid-template-columns: 1fr !important;
+  }
+
+  .care-topdrops-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .care-collection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .care-shell,
+  .care-page + .site-footer,
+  body:has(.care-page) .site-footer,
+  body:has(.care-page) #cs2-footer-root .site-footer {
+    width: min(100vw - 24px, 1500px) !important;
+  }
+
+  .care-page {
+    --care-shell-width: min(100vw - 24px, 1500px);
+    padding-top: 28px;
+  }
+
+  .care-page + .site-footer .footer-container,
+  body:has(.care-page) .site-footer .footer-container {
+    width: 100% !important;
+    padding: 12px 16px 8px !important;
+  }
+
+  .care-hero-copy,
+  .care-board,
+  .care-catalog,
+  .care-details {
+    padding: 18px;
+  }
+
+  .care-roll-board {
+    padding: 0 0 4px;
+  }
+
+  .care-roll-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .care-roll-worth {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .care-hero-total {
+    max-width: none;
+  }
+
+  .care-sim-grid,
+  .care-loading-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .care-reward-grid,
+  .care-topdrops-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .care-board-summary {
+    justify-content: stretch;
+  }
+
+  .care-board-total {
+    width: 100%;
+  }
+
+  .care-catalog-tools {
+    justify-content: stretch;
+  }
+
+  .care-card-copy h3,
+  .care-card-price-line strong {
+    font-size: 18px;
+  }
+
+  .care-total-value {
+    font-size: 42px;
+  }
+
+  .care-leaderboard-row {
+    grid-template-columns: 52px 72px minmax(0, 1fr);
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .care-leaderboard-rank {
+    width: 52px;
+    min-height: 52px;
+    border-radius: 16px;
+    font-size: 17px;
+  }
+
+  .care-leaderboard-thumb {
+    min-height: 60px;
+    border-radius: 16px;
+    padding: 10px;
+  }
+
+  .care-leaderboard-thumb img {
+    max-height: 52px;
+  }
+
+  .care-leaderboard-copy strong {
+    font-size: 16px;
+  }
+
+  .care-leaderboard-metric strong {
+    font-size: 22px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Phone: one Active Drop card per row. Two or three across squeezes every card
+   until the skin name truncates ("M4A1-S | Party…").
+   --------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* The drop board's cards (the ones that change on every roll) sit two to a
+     row; the Active Drop catalog under the search bar shows one card at a time
+     so its art and price stay readable. */
+  .care-sim-grid.care-roll-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .care-catalog .care-reward-grid,
+  .care-catalog .care-topdrops-grid,
+  .care-catalog .care-collection-grid,
+  .care-catalog .care-skins-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* light-theme:begin (generated by gen_light.php - do not edit by hand) */
+/* Additive light layer: dark rules above are untouched. 78 rules. */
+:where(html[data-theme="light"]) ﻿html,
+:where(html[data-theme="light"]) body,
+:where(html[data-theme="light"]) #root {
+  background: var(--bg);
+}
+:where(html[data-theme="light"]) .care-page {
+  background: var(--card);
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-page + .site-footer,
+:where(html[data-theme="light"]) body:has(.care-page) .site-footer,
+:where(html[data-theme="light"]) body:has(.care-page) #cs2-footer-root .site-footer {
+  background: var(--card) !important;
+}
+:where(html[data-theme="light"]) .care-panel {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-eyebrow {
+  background: var(--card);
+  color: color-mix(in srgb, #7fc9ff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-title em {
+  color: color-mix(in srgb, #68d8ff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-description {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-button,
+:where(html[data-theme="light"]) .care-source-pill,
+:where(html[data-theme="light"]) .care-filter-pill,
+:where(html[data-theme="light"]) .care-detail-pill {
+  background: var(--card);
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-button-primary {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-button-primary:hover {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-button-secondary {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-hero-total {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-stat-label {
+  color: color-mix(in srgb, #8bc7ff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-total-value {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-total-meta {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-roll-worth-label {
+  color: color-mix(in srgb, #8bc7ff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-roll-worth strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-roll-worth-note {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-roll-summary strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-roll-summary span {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-chart-fullscreen-btn {
+  background: var(--card);
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-chart-fullscreen-btn:hover,
+:where(html[data-theme="light"]) .care-chart-fullscreen-btn.active {
+  background: var(--tint);
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-drop-chart-panel:fullscreen,
+:where(html[data-theme="light"]) .care-drop-chart-panel:-webkit-full-screen,
+:where(html[data-theme="light"]) .care-drop-chart-panel.is-native-fullscreen:not(:fullscreen):not(:-webkit-full-screen) {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-drop-chart-tooltip {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-drop-chart-tooltip-title {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-drop-chart-tooltip-row {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-drop-chart-tooltip-rank {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-drop-chart-tooltip-price {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-drop-chart-status {
+  color: var(--text);
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-drop-chart-error {
+  color: color-mix(in srgb, #fda4af 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-drop-chart-chip {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) a.care-drop-chart-chip:hover {
+  background: var(--tint);
+}
+:where(html[data-theme="light"]) .care-drop-chart-chip-empty {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-drop-chart-empty-thumb {
+  border: 1px solid var(--border);
+}
+:where(html[data-theme="light"]) .care-drop-chart-chip-empty strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-drop-chart-chip-empty span {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-drop-chart-chip strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-drop-chart-chip span {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-mix-row {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-mix-copy strong,
+:where(html[data-theme="light"]) .care-mix-metric strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-mix-copy span,
+:where(html[data-theme="light"]) .care-mix-metric span {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-mix-bar {
+  background: var(--tint);
+}
+:where(html[data-theme="light"]) .care-section-title {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-board-total {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-board-total strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-board-total span:last-child {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-source-pill.active {
+  background: var(--tint);
+}
+:where(html[data-theme="light"]) .care-market-card,
+:where(html[data-theme="light"]) .care-topdrop-card {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-sim-card-empty {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-sim-odds {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-sim-pick {
+  background: var(--card);
+  color: color-mix(in srgb, #8fd6ff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-kind-badge,
+:where(html[data-theme="light"]) .care-card-chip {
+  background: var(--card);
+  color: color-mix(in srgb, #9ec8ff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-media-fallback span {
+  color: color-mix(in srgb, #8ecbff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-card-kicker,
+:where(html[data-theme="light"]) .care-card-source {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-card-copy h3,
+:where(html[data-theme="light"]) .care-topdrop-copy h3 {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-card-copy p,
+:where(html[data-theme="light"]) .care-topdrop-copy p {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-card-value,
+:where(html[data-theme="light"]) .care-card-price-line strong,
+:where(html[data-theme="light"]) .care-topdrop-footer strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-card-footnote,
+:where(html[data-theme="light"]) .care-card-note-inline,
+:where(html[data-theme="light"]) .care-topdrop-footer span {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-filter-pill.active {
+  background: var(--tint);
+}
+:where(html[data-theme="light"]) .care-catalog-chooser .roi-type-trigger span {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-catalog-empty {
+  background: var(--card);
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-catalog-empty strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-catalog .care-reward-card,
+:where(html[data-theme="light"]) .care-catalog .care-topdrop-card {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-catalog .care-reward-card:hover,
+:where(html[data-theme="light"]) .care-catalog .care-topdrop-card:hover {
+  border-color: var(--border);
+}
+:where(html[data-theme="light"]) .care-updated-note {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-detail-copy h2 {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-rarity-panel,
+:where(html[data-theme="light"]) .care-topdrops-panel {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-rarity-row {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-rarity-top span {
+  color: color-mix(in srgb, #92b0d2 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-rarity-bar {
+  background: var(--tint);
+}
+:where(html[data-theme="light"]) .care-leaderboard-row {
+  background: var(--card);
+}
+:where(html[data-theme="light"]) .care-leaderboard-rank {
+  background: var(--card);
+  color: color-mix(in srgb, #8ec8ff 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .care-leaderboard-row:hover {
+  background: var(--tint);
+}
+:where(html[data-theme="light"]) .care-leaderboard-copy strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-leaderboard-copy span,
+:where(html[data-theme="light"]) .care-leaderboard-metric span {
+  color: var(--muted);
+}
+:where(html[data-theme="light"]) .care-leaderboard-metric strong {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-loading,
+:where(html[data-theme="light"]) .care-error,
+:where(html[data-theme="light"]) .care-empty {
+  background: var(--card);
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .care-skeleton {
+  background: var(--card);
+}
+/* light-theme:end */
+
+/* Light mode (user, 2026-09-30). The roll board is also a .care-panel, so the
+   light panel border drew a square around the four cards - it has none, as
+   on the dark page. And the buttons keep their dark-site look: the CS2 blue
+   primary and the navy secondary as they render on the dark page, made
+   opaque, with no drop shadow (that shows as a grey halo on white). Same
+   specificity as the light rules above, so these win on order. */
+:where(html[data-theme="light"]) .care-roll-board {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+:where(html[data-theme="light"]) .care-button-primary,
+:where(html[data-theme="light"]) .care-button-primary:hover {
+  background: linear-gradient(180deg, #21306c, #162248);
+  border-color: #2a3b8b;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px #2a3b8b;
+}
+:where(html[data-theme="light"]) .care-button-primary:hover {
+  background: linear-gradient(180deg, #283a82, #1b2a58);
+}
+:where(html[data-theme="light"]) .care-button-secondary,
+:where(html[data-theme="light"]) .care-button-secondary:hover {
+  background: #0f1828;
+  border-color: #243049;
+  color: #fff;
+  box-shadow: none;
+}
+
+
+/* ==========================================================================
+   Care Package, phone (owner, 2026-10-04)
+   --------------------------------------------------------------------------
+   carepackage-page.jsx renders a separate .mcare tree under 768px. Everything
+   here is scoped to .mcare so the desktop board above is untouched. The hex
+   values are the spec's fallbacks; where a token exists it is used instead.
+   ========================================================================== */
+@media (max-width: 767px) {
+  .care-page.mcare {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 16px 24px;
+  }
+
+  .mcare-head h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .mcare-head p {
+    margin: 6px 0 0;
+    color: #8B96B5;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .mcare-card,
+  .mcare-sec {
+    padding: 12px;
+    border: 1px solid #1C2439;
+    border-radius: 14px;
+    background: #0F1527;
+  }
+
+  .mcare-cardtop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .mcare-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8B96B5;
+  }
+
+  .mcare-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .mcare-when {
+    color: #8B96B5;
+    font-size: 12px;
+  }
+
+  /* ---- 2x2 package tiles ------------------------------------------------ */
+  .mcare-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    transition: opacity 150ms ease-out;
+  }
+
+  .mcare-tiles.is-fading {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mcare-tiles {
+      transition: none;
+    }
+  }
+
+  .mcare-tile {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    padding: 10px;
+    border: 1px solid #1C2439;
+    border-radius: 10px;
+    background: #0B1121;
+    color: var(--text, #F3F5FA);
+    text-decoration: none;
+  }
+
+  .mcare-tile.is-keep {
+    border-color: var(--accent, #3A4FC2);
+  }
+
+  .mcare-keep {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: var(--accent, #3A4FC2);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .mcare-tileshot {
+    display: grid;
+    place-items: center;
+    height: 72px;
+    border-radius: 8px;
+    background: #121A2E;
+  }
+
+  .mcare-tileshot img {
+    max-width: 88%;
+    max-height: 64px;
+    object-fit: contain;
+  }
+
+  .mcare-tiletype {
+    overflow: hidden;
+    color: #8B96B5;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mcare-tilename {
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mcare-tilefoot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .mcare-tileprice {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .mcare-tileodds {
+    color: #8B96B5;
+    font-size: 11px;
+  }
+
+  /* ---- summary and deal ------------------------------------------------- */
+  .mcare-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #1C2439;
+  }
+
+  .mcare-sumcopy {
+    display: grid;
+    gap: 2px;
+  }
+
+  .mcare-sumcopy strong {
+    color: #8B96B5;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .mcare-sumcopy small {
+    color: #6B7699;
+    font-size: 11px;
+  }
+
+  .mcare-sumtotal {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .mcare-deal {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 12px;
+    border: 1px solid #3A4FC2;
+    border-radius: 12px;
+    background: #202D7A;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* ---- active drop ------------------------------------------------------ */
+  .mcare-chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .mcare-chips::-webkit-scrollbar { display: none; }
+
+  .mcare-chip {
+    flex: none;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid #2A3350;
+    border-radius: 999px;
+    background: #0F1527;
+    color: #C9D2E3;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .mcare-chip.is-active {
+    border-color: var(--accent, #3A4FC2);
+    background: #16225A;
+    color: #FFFFFF;
+  }
+
+  .mcare-oddsrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    color: #8B96B5;
+    font-size: 13px;
+  }
+
+  .mcare-sort {
+    min-height: 36px;
+    padding: 0 8px;
+    border: 1px solid #2A3350;
+    border-radius: 10px;
+    background: #0F1527;
+    color: var(--text, #F3F5FA);
+    font-size: 13px;
+  }
+
+  .mcare-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mcare-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 64px;
+    padding: 8px 0;
+    color: var(--text, #F3F5FA);
+    text-decoration: none;
+  }
+
+  .mcare-rowshot {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: #121A2E;
+  }
+
+  .mcare-rowshot img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+  }
+
+  .mcare-rowbody {
+    display: grid;
+    flex: 1 1 auto;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .mcare-rowname {
+    overflow: hidden;
+    font-size: 15px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mcare-rowtype {
+    color: #8B96B5;
+    font-size: 12px;
+  }
+
+  .mcare-rowprice {
+    display: grid;
+    flex: none;
+    gap: 2px;
+    justify-items: end;
+  }
+
+  .mcare-rowval {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .mcare-rowodds {
+    color: #8B96B5;
+    font-size: 11px;
+  }
+
+  .mcare-empty {
+    margin: 12px 0;
+    color: #8B96B5;
+    font-size: 13px;
+  }
+
+  /* Same inherit fix as deals.css: buttons and selects fall back to the UA
+     font without it. */
+  .mcare-deal,
+  .mcare-chip,
+  .mcare-sort,
+  .mcare-more {
+    font-family: inherit;
+  }
+
+  .mcare-more {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 8px;
+    border: 1px solid #2A3350;
+    border-radius: 10px;
+    background: #0F1527;
+    color: var(--text, #F3F5FA);
+    font-size: 13px;
+    font-weight: 600;
+  }
+}

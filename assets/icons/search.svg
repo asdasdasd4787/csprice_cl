@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <!-- Source Viewerstyle search.vsvg_c: thick lens + short diagonal handle -->
+  <circle cx="10.25" cy="10.25" r="6.35" stroke="currentColor" stroke-width="2.75"/>
+  <path d="M15.1 15.1 L20.35 20.35" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"/>
+</svg>

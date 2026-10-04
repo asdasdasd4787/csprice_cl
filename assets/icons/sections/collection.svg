@@ -1,0 +1,11 @@
+<!-- Collections: the Cache collection star, as exact geometry instead of a
+     trace, so the arms stay symmetric at 20px. Outer r 21, inner r 9.5. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <path
+    fill="#ffffff"
+    stroke="#ffffff"
+    stroke-width="1.6"
+    stroke-linejoin="round"
+    d="M24 3 29.58 16.31 43.97 17.51 33.03 26.94 36.34 40.99 24 33.5 11.66 40.99 14.97 26.94 4.03 17.51 18.42 16.31Z"
+  />
+</svg>

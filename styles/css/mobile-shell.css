@@ -1,0 +1,707 @@
+/* ==========================================================================
+   Mobile shell: bottom tab bar + "More" sheet          viewport < 768px only
+   --------------------------------------------------------------------------
+   Loaded on EVERY page by scripts/inject_theme.php, because the tab bar has to
+   appear site-wide and shared-components.build.js is only on 40 of the 46 root
+   pages. Nothing in here applies at >= 768px, so the desktop layout and the
+   desktop sidebar are untouched by definition.
+
+   Colours come only from the tokens in theme.css, so dark mode needs no rules
+   of its own here.
+   ========================================================================== */
+
+:root {
+  /* Content has to clear the bar, and the AI composer has to sit on top of it,
+     so the height is a token rather than a number repeated in three places.
+     8px top + 22px icon + 4px gap + 13px label + 8px bottom = 55px. The JS
+     measures the real bar on mount and overwrites this, so it only matters
+     before that runs.
+
+     The bottom padding was 26px, which on a phone with no gesture inset left a
+     visible dead band under the labels and ate content height. It is now 8px:
+     the bar sits on the bottom edge and env(safe-area-inset-bottom) adds the
+     gesture area only on the devices that actually have one. */
+  --mshell-tabbar-h: calc(55px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 767px) {
+  /* ---- the bar ---------------------------------------------------------- */
+  .mshell-tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1200;            /* above the sheet, which is 1100 */
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--border);
+    background: var(--card);
+    /* The bar is opaque, so content scrolling under it must not show through. */
+    box-sizing: border-box;
+  }
+
+  .mshell-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 64px;
+    min-height: 40px;         /* spec: tap targets at least 40px */
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.1;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mshell-tab svg {
+    width: 22px;
+    height: 22px;
+    flex: none;
+  }
+
+  .mshell-tab[aria-current="page"],
+  .mshell-tab.is-active {
+    color: var(--accent);
+  }
+
+  .mshell-tab:focus-visible,
+  .mshell-sheet-tile:focus-visible,
+  .mshell-row:focus-visible,
+  .mshell-sheet-back:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  /* Give every page room for the bar. Pages that already pin their own footer
+     to the bottom get the same treatment through the body padding. */
+  body {
+    padding-bottom: var(--mshell-tabbar-h);
+  }
+
+  /* ---- the Search tab's page (owner, 2026-10-03) ------------------------- */
+  /* Page-specific mobile rules live in this one sheet because it loads
+     everywhere. They are keyed on state the page itself owns - a body class, or
+     :has() on the page's own markup - NOT on html[data-page]: that attribute is
+     written once at start-up and has been seen holding the previous page's
+     value after a navigation, which makes any rule hanging off it fire on the
+     wrong page. mobile-shell.js still sets it, but nothing styles from it.
+
+     The footer goes because it is 712px of links under a search field - on a
+     phone it buries the results rather than ending the page. The navbar's
+     magnifier goes because the page IS the search; two search affordances on
+     one screen is a question about which one is real. Both are mobile-only and
+     the desktop page keeps them. */
+  /* Driven by a body class the search screen sets while it is mounted, not by
+     html[data-page]: that attribute was seen carrying the previous page's value
+     after a navigation, which left the footer visible under the search field. */
+  body.msearch-active #cs2-footer-root {
+    display: none;
+  }
+
+  body.msearch-active .navbar button.search-container {
+    display: none;
+  }
+
+  /* ---- Market Explorer: no top bar (owner, 2026-10-03) ------------------- */
+  /* On a phone this page's navbar holds nothing but the centred wordmark - 64px
+     of logo above a list. The owner asked for that space to go to the items,
+     and navigation is already covered by the bottom tab bar and the More sheet,
+     so the whole bar goes rather than just the mark inside it: hiding only the
+     logo would leave the same 64px of empty bar behind. */
+  /* Keyed on the page's own DOM, not html[data-page]. That attribute is set
+     once by this script at start-up and was observed still reading "roi.html"
+     on /catalog-items/ after a real navigation - which hid the top bar on the
+     wrong page, and would have hidden it on every page reached from Market.
+     `:has(.roi-clean-shell)` is true only while the Market layout is actually
+     on screen, so it cannot go stale. The data-game guard keeps tf2price's
+     market page, which shares that shell class, unaffected. */
+  /* The top bar goes on EVERY phone page now (owner, 2026-10-03), not just
+     Market and Deals: it only ever held the logo and a search icon, and the tab
+     bar below carries both jobs. The home page keeps its header, because that
+     one holds the game switcher and the avatar rather than a logo. */
+  html:not([data-game="tf2"]) body:not(.page-home) #cs2-nav-root {
+    display: none;
+  }
+
+  /* The per-category search field on the listing pages goes with it - the
+     Search tab searches the whole catalogue from anywhere, so a second field
+     scoped to one page was the lesser of the two. Market Explorer keeps its
+     own: zero-listing items are hidden there and searching is the only way to
+     reach them. */
+  html:not([data-game="tf2"]) .collections-search-wrap {
+    display: none !important;
+  }
+
+  /* ...and the row that held it goes too. The results count and the sort
+     dropdown beside it were already hidden at this width, so with the search
+     gone the row was an empty 15px strip whose bottom border drew a stray line
+     above the first card. Verified empty on /knives/, /collections/ and
+     /cases/ before hiding it. */
+  html:not([data-game="tf2"]) .collections-controls {
+    display: none !important;
+  }
+
+  /* The bar replaces the hamburger below 768px. Above it, and up to the 900px
+     drawer breakpoint, the burger is left exactly as it was - narrowing that
+     range is the navbar session's call, not something to change from here. */
+  .navbar .nav-burger {
+    display: none !important;
+  }
+
+  /* While the on-screen keyboard is up the bar would sit in the middle of the
+     screen, so it is hidden and the body padding goes with it. */
+  body.mshell-keyboard .mshell-tabbar {
+    display: none;
+  }
+
+  body.mshell-keyboard {
+    padding-bottom: 0;
+  }
+
+  /* ---- scrim ------------------------------------------------------------ */
+  /* Stops short of the bar: the spec wants the bar readable and tappable while
+     the sheet is open, with "More" shown as the active tab. */
+  .mshell-scrim {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: var(--mshell-tabbar-h);
+    z-index: 1090;
+    background: var(--scrim);
+    opacity: 0;
+    transition: opacity 250ms ease-out;
+  }
+
+  .mshell-scrim.is-open {
+    opacity: 1;
+  }
+
+  /* ---- search overlay ---------------------------------------------------- *
+     Drops from the top rather than rising from the bottom, so it reads as a
+     field you are typing into rather than another sheet, and so the keyboard
+     does not fight it for the lower half of the screen. */
+  .mshell-search {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    /* Above the site navbar, which sits at 5500. The rule below hides that
+       header while this panel is open, so in the normal case nothing is
+       stacked - but if it ever fails to apply (a page whose header is not
+       .navbar, a visitor still holding an older copy of this sheet) the
+       header would paint straight over the field at the old 1100. Ordering
+       the layers correctly is the fix; hiding them is the polish. */
+    z-index: 5600;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--mshell-tabbar-h));
+    padding: 10px 12px 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0 0 20px 20px;
+    background: var(--card);
+    box-shadow: 0 16px 44px rgba(10, 16, 44, 0.38);
+    transform: translateY(-100%);
+    transition: transform 240ms ease-out;
+  }
+
+  .mshell-search.is-open {
+    transform: translateY(0);
+  }
+
+  /* Whatever the page puts in its own header - the AI home's ghost and avatar,
+     a logo, a search icon - would otherwise sit behind the field and the Cancel
+     button. Hidden rather than removed so nothing reflows. */
+  body.mshell-search-open #cs2-nav-root,
+  body.mshell-search-open .navbar {
+    visibility: hidden;
+  }
+
+  /* The scrim rides just under the panel, above the header for the same
+     reason. */
+  .mshell-sscrim {
+    z-index: 5590;
+  }
+
+  .mshell-sbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mshell-sfield {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--field, var(--bg));
+    color: var(--muted);
+  }
+
+  .mshell-sfield svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+  }
+
+  .mshell-sinput {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    font-size: 15px;
+  }
+
+  /* No focus ring on this field at all (owner, 2026-10-03).
+     theme.css draws a global `html[data-theme-ready] :focus-visible` outline at
+     specificity 0,2,1, so a plain `.mshell-sinput:focus` (0,2,0) lost to it and
+     the blue box stayed - hence the html[] prefix here, and :focus-visible as
+     well as :focus. The accent border is gone with it: the panel focuses this
+     input the moment it opens, so the highlight was permanent decoration rather
+     than an answer to "where am I". The caret and the open panel say that. */
+  html[data-theme-ready] .mshell-sinput:focus,
+  html[data-theme-ready] .mshell-sinput:focus-visible,
+  html[data-theme-ready] .mshell-sfield:focus-within {
+    outline: none;
+    box-shadow: none;
+  }
+
+  html[data-theme-ready] .mshell-sfield:focus-within {
+    border-color: var(--border);
+  }
+
+  .mshell-sinput::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  /* Buttons and the search input need the page font spelled out; see the note
+     in deals.css. */
+  .mshell-tab,
+  .mshell-scancel,
+  .mshell-srecent,
+  .mshell-sinput {
+    font-family: inherit;
+  }
+
+  .mshell-scancel {
+    flex: none;
+    min-height: 44px;
+    padding: 0 4px;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .mshell-sbody {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 10px;
+  }
+
+  .mshell-slabel {
+    margin: 14px 2px 6px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .mshell-snote {
+    margin: 14px 2px 18px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .mshell-slist {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mshell-sresult,
+  .mshell-srecent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 8px 2px;
+    /* No rules between results (owner, 2026-10-03). The rows are far enough
+       apart to read as separate without them, and a divider per row turned the
+       suggestion list into a ledger. */
+    border: 0;
+    background: none;
+    color: var(--text);
+    text-align: left;
+    text-decoration: none;
+  }
+
+  .mshell-srecent {
+    font-size: 15px;
+  }
+
+  .mshell-srecent svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    color: var(--muted);
+  }
+
+  .mshell-sresult-media {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--field, var(--bg));
+  }
+
+  .mshell-sresult-media img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+  }
+
+  .mshell-sresult-body {
+    display: grid;
+    flex: 1 1 auto;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .mshell-sresult-name {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mshell-sresult-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .mshell-sresult-price {
+    flex: none;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* ---- sheet ------------------------------------------------------------ */
+  .mshell-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--mshell-tabbar-h);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: calc(100vh - var(--mshell-tabbar-h) - 24px);
+    padding: 10px 18px 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-top: 1px solid var(--border);
+    border-radius: 27px 27px 0 0;
+    background: var(--card);
+    box-shadow: 0 -12px 40px rgba(16, 24, 64, 0.12);
+    transform: translateY(100%);
+    transition: transform 250ms ease-out;
+  }
+
+  .mshell-sheet.is-open {
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mshell-search,
+    .mshell-sheet,
+    .mshell-scrim {
+      transition: none;
+    }
+  }
+
+  .mshell-handle {
+    flex: none;
+    width: 40px;
+    height: 4px;
+    margin: 0 auto;
+    border-radius: 4px;
+    background: var(--border);
+  }
+
+  .mshell-sheet-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: var(--text);
+  }
+
+  /* Second level (Skins) reuses the title row with a back button in front. */
+  .mshell-sheet-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mshell-sheet-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-left: -8px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .mshell-sheet-back svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* ---- tiles ------------------------------------------------------------ */
+  .mshell-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .mshell-sheet-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 12px 4px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: var(--field);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* White marks, not accent (owner, 2026-10-02). var(--text) rather than a
+     literal #fff: it IS white in dark mode, which is what was asked for, and it
+     flips to near-black on the light card instead of vanishing into it. The
+     three rules below are kept in step deliberately - an accent glyph beside a
+     white one is the thing being fixed. */
+  .mshell-sheet-tile svg {
+    width: 22px;
+    height: 22px;
+    color: var(--text);
+  }
+
+  /* The tiles and category rows render Font Awesome <i> glyphs, matching the
+     desktop nav. Sized here because a glyph takes font-size, not width/height,
+     so the svg rules above do not reach it. */
+  .mshell-sheet-tile i {
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  /* Tiles that use the site's own artwork (ak47.svg, sticker-navi.png, the
+     drawn case/capsule/tools marks). The file is a MASK, not an image: the
+     span paints var(--text) and the artwork only decides which pixels show.
+     That is what keeps these the same colour as the Font Awesome glyph on the
+     Deals tile, and it works for the PNG too because a mask reads alpha.
+     22px to match the glyph's font-size above, so no tile shifts. */
+  /* `is-lg` marks the tiles the owner asked to read bigger - Skins and
+     Collections (2026-10-03). 32px rather than 22px; the tile is ~100px wide
+     and the label sits under it, so this is the most the box takes without the
+     two lines crowding. */
+  .mshell-sheet-tile .mshell-ico.is-lg,
+  .mshell-sheet-tile .mshell-art.is-lg {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Full-colour artwork. Not masked and not tinted: this is the one tile mark
+     that has to keep its own palette, so it gets object-fit instead of a
+     background-colour fill. */
+  .mshell-sheet-tile .mshell-art {
+    display: block;
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+  }
+
+  .mshell-sheet-tile .mshell-ico {
+    display: block;
+    width: 22px;
+    height: 22px;
+    background-color: var(--text);
+    -webkit-mask-image: var(--mshell-ico-src);
+    mask-image: var(--mshell-ico-src);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
+  /* Headings for the Other / Tools groups inside the Skins level. The spec's
+     section label is 11.5px/700/.07em, where theme.css's shared .u-label is
+     12px/600/.06em - so the values are restated here rather than changing a
+     class every desktop page also uses. */
+  .mshell-group-label {
+    margin: 2px 0 -6px 2px;
+    color: var(--muted);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  /* ---- settings list ---------------------------------------------------- */
+  .mshell-list {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+  }
+
+  .mshell-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 40px;
+    padding: 11px 14px;
+    border: 0;
+    border-top: 1px solid var(--border);
+    background: none;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .mshell-row:first-child {
+    border-top: 0;
+  }
+
+  .mshell-row > svg:first-child {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    color: var(--muted);
+  }
+
+  /* Fixed width so the labels line up whatever the glyph's natural advance. */
+  .mshell-row > i:first-child {
+    width: 18px;
+    flex: none;
+    font-size: 16px;
+    line-height: 1;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .mshell-row-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mshell-row > svg:last-child {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    color: var(--muted);
+  }
+
+  /* ---- dark-mode toggle ------------------------------------------------- */
+  .mshell-switch {
+    position: relative;
+    flex: none;
+    width: 40px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: #d5dcea;
+    cursor: pointer;
+    transition: background 160ms ease;
+  }
+
+  .mshell-switch::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    transition: transform 160ms ease;
+  }
+
+  .mshell-switch[aria-checked="true"] {
+    background: var(--accent);
+  }
+
+  .mshell-switch[aria-checked="true"]::after {
+    transform: translateX(16px);
+  }
+
+  .mshell-switch:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Nothing may scroll sideways; only the AI home's suggestion row does, and it
+     opts in explicitly in home-mobile.css. */
+  html,
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* The shell is mobile-only. Above the breakpoint every part of it is removed
+   rather than merely hidden, so it cannot affect desktop layout or focus order. */
+@media (min-width: 768px) {
+  .mshell-tabbar,
+  .mshell-sheet,
+  .mshell-scrim {
+    display: none !important;
+  }
+}

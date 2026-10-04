@@ -1,0 +1,10 @@
+<!-- Stickers: a die-cut sticker slapped on at an angle, with the peeled corner
+     as a separate piece. Drawn as geometry because no real sticker's outline
+     survives being shrunk to 20px - it traces as a blob. The peel and its gap
+     are oversized on purpose so both still read at icon size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <g fill="#ffffff" transform="rotate(-10 24 24)">
+    <path d="M13 6h22a7 7 0 0 1 7 7v7L22 40H13a7 7 0 0 1-7-7V13a7 7 0 0 1 7-7Z" />
+    <path d="M42 24.5V38a2 2 0 0 1-2 2H26.5Z" />
+  </g>
+</svg>

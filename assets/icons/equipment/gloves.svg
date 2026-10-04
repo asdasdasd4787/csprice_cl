@@ -1,0 +1,32 @@
+<!--
+  Nav icon for the Gloves category.
+
+  Replaces clothing_hands.svg, which is Valve's detailed hand drawing. The nav
+  paints these with `filter: brightness(0) invert(1)`, so every non-transparent
+  pixel becomes the same white - all of that drawing's internal line work
+  collapsed into an unreadable blob at 16-22px.
+
+  So this is built as a silhouette instead: the only thing that reads is the
+  OUTLINE and the transparent gaps inside it. Four fingers of uneven length,
+  a thumb off the side, and a cuff split from the palm - the gaps are what
+  make it a glove rather than a paddle, so none of them is narrower than 1.5
+  units (~1px once scaled down).
+-->
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#ffffff">
+    <!-- Fingers: index, middle, ring, pinky. Uneven tops read as a hand. -->
+    <rect x="9.7" y="6.4" width="2.9" height="10.2" rx="1.45" />
+    <rect x="14.2" y="4.6" width="2.9" height="12" rx="1.45" />
+    <rect x="18.7" y="5.9" width="2.9" height="10.7" rx="1.45" />
+    <rect x="23.2" y="8.8" width="2.5" height="7.8" rx="1.25" />
+
+    <!-- Palm -->
+    <rect x="8.6" y="14.4" width="17.6" height="9" rx="2.6" />
+
+    <!-- Thumb, angled off the left edge of the palm -->
+    <rect x="2.6" y="15.3" width="8.2" height="4" rx="2" transform="rotate(-30 6.7 17.3)" />
+
+    <!-- Cuff, split from the palm by a 1.8 unit gap -->
+    <rect x="8.2" y="25.2" width="18.4" height="4.2" rx="1.8" />
+  </g>
+</svg>

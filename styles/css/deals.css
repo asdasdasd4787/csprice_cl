@@ -1,0 +1,1710 @@
+﻿/* Deals page inherits the site gradient from index.css */
+
+/* ── Shell ─────────────────────────────────────────────────────────────────── */
+.deals-shell {
+  max-width: var(--site-shell-max, 1540px);
+  width: var(--site-shell-width, min(1540px, calc(100% - 64px)));
+  margin: 32px auto 80px;
+  display: grid;
+  gap: 22px;
+}
+
+/* ── Page header ───────────────────────────────────────────────────────────── */
+.deals-head {
+  display: grid;
+  gap: 12px;
+  position: relative;
+  padding: 8px 0 4px;
+}
+
+
+.deals-head > * {
+  position: relative;
+  z-index: 1;
+}
+
+.deals-head-animated {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: dealsReveal 0.55s ease forwards;
+}
+
+.deals-kicker {
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.deals-head h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+  color: #f8fafc;
+}
+
+.deals-head p {
+  margin: 0;
+  max-width: 640px;
+  color: rgba(226, 232, 240, 0.68);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.deals-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.deals-stat {
+  min-width: 120px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(110, 146, 198, 0.12);
+  background: linear-gradient(180deg, rgba(12, 20, 36, 0.92), rgba(6, 11, 22, 0.96));
+  display: grid;
+  gap: 4px;
+}
+
+.deals-stat-label {
+  color: rgba(148, 163, 184, 0.72);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.deals-stat strong {
+  color: #f8fafc;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.deals-stat-highlight strong {
+  color: #4ade80;
+}
+
+.deals-compare-chip {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.deals-compare-chip i {
+  color: rgba(125, 211, 252, 0.75);
+  font-size: 12px;
+}
+
+.deals-compare-chip .accent {
+  color: #86efac;
+}
+
+/* ── Filter frame ──────────────────────────────────────────────────────────── */
+.deals-filter-frame {
+  position: relative;
+  z-index: 40;
+  display: grid;
+  gap: 16px;
+  padding: 22px 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: linear-gradient(180deg, rgba(12, 20, 36, 0.92), rgba(6, 11, 22, 0.96));
+  box-shadow: none;
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: dealsReveal 0.5s ease 70ms forwards;
+}
+
+.deals-vs-badge {
+  align-self: end;
+  min-height: 50px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* â”€â”€ Price comparison chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ Type filter tabs (ROI-style) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-type-tabs-wrap {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(8, 13, 24, 0.92);
+  border-radius: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.28) transparent;
+}
+
+.deals-type-tab-roi {
+  border: 0;
+  border-left: 1px solid rgba(148, 163, 184, 0.14);
+  background: transparent;
+  color: #f8fafc;
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.22s ease, color 0.22s ease;
+  min-height: 42px;
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.deals-type-tab-roi:first-child { border-left: 0; }
+
+.deals-type-tab-roi:hover { background: rgba(255, 255, 255, 0.04); }
+
+.deals-type-tab-roi.active {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff7ed;
+  box-shadow: none;
+}
+
+/* â”€â”€ Controls row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-controls-wrap {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+/* ── Type filter tabs ──────────────────────────────────────────────────────── */
+.deals-type-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Match Market Explorer (.roi-scope-tab / .roi-sub-tab) pill style */
+.deals-type-tab {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(110, 146, 198, 0.14);
+  background: rgba(8, 14, 28, 0.72);
+  color: rgba(148, 163, 184, 0.82);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  white-space: nowrap;
+}
+
+.deals-type-tab:hover {
+  border-color: rgba(96, 165, 250, 0.24);
+  color: #e2e8f0;
+  transform: translateY(-1px);
+  background: rgba(8, 14, 28, 0.72);
+}
+
+.deals-type-tab.active {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(54, 72, 128, 0.92), rgba(24, 34, 68, 0.98));
+  border-color: rgba(125, 155, 255, 0.78);
+  color: #fff;
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(75, 105, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* â”€â”€ Filter right (search + sort) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-filter-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+  overflow: visible;
+}
+
+.deals-filter-right .deals-search-wrap {
+  flex: 1;
+}
+
+/* â”€â”€ Search wrap â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(110,146,198,0.12);
+  background: rgba(6,11,22,0.9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.deals-search-wrap:focus-within {
+  border-color: rgba(96,165,250,0.28);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.07);
+}
+
+.deals-search-wrap > i {
+  color: #7dd3fc;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.deals-search-wrap input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f8fafc;
+  font-size: 14px;
+}
+
+.deals-search-wrap input::placeholder {
+  color: rgba(148,163,184,0.5);
+}
+
+.deals-search-clear {
+  background: none;
+  border: none;
+  color: rgba(148,163,184,0.5);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  transition: color 0.15s;
+}
+
+.deals-search-clear:hover { color: #f8fafc; }
+
+/* â”€â”€ Dropdown select â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-dd-wrap {
+  position: relative;
+  display: grid;
+  gap: 5px;
+  min-width: 170px;
+  z-index: 50;
+}
+
+.deals-dd-wrap.is-open {
+  z-index: 220;
+}
+
+.deals-dd-wrap > span {
+  color: #7dd3fc;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.deals-dd-trigger {
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(110,146,198,0.12);
+  background: rgba(6,11,22,0.9);
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.deals-dd-trigger:hover,
+.deals-dd-trigger.open {
+  border-color: rgba(96,165,250,0.25);
+  transform: translateY(-1px);
+}
+
+.deals-dd-trigger i {
+  color: rgba(191,219,254,0.7);
+  transition: transform 0.2s ease;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.deals-dd-trigger.open i { transform: rotate(180deg); }
+
+.deals-dd-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid rgba(110,146,198,0.14);
+  background: rgba(8,13,26,0.99);
+  box-shadow: 0 20px 44px rgba(2,6,23,0.45);
+  display: grid;
+  gap: 2px;
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 9999;
+}
+
+.deals-dd-menu.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.deals-dd-option {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s ease;
+}
+
+.deals-dd-option:hover,
+.deals-dd-option.active {
+  background: linear-gradient(180deg, rgba(59,130,246,0.92), rgba(37,99,235,0.88));
+  color: #fff;
+}
+
+/* â”€â”€ Progress bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-progress-outer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deals-progress-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(30,41,59,0.8);
+  overflow: hidden;
+}
+
+.deals-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3b82f6, #38bdf8);
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(56,189,248,0.4);
+}
+
+.deals-progress-label {
+  color: rgba(148,163,184,0.6);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* â”€â”€ Meta bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 2px;
+}
+
+.deals-meta-count {
+  color: rgba(226,232,240,0.75);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.deals-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(148,163,184,0.55);
+  font-size: 12px;
+}
+
+.deals-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.2);
+  color: #4ade80;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.deals-live-pill i {
+  font-size: 7px;
+  animation: dealsPulse 1.6s ease-in-out infinite;
+}
+
+/* â”€â”€ Status banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-status {
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(59,130,246,0.15);
+  background: rgba(15,23,42,0.6);
+  color: rgba(147,197,253,0.9);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deals-status.err {
+  border-color: rgba(248,113,113,0.18);
+  background: rgba(127,29,29,0.14);
+  color: #fecaca;
+}
+
+.deals-status.warn {
+  border-color: rgba(251,191,36,0.22);
+  background: rgba(120,53,15,0.16);
+  color: #fde68a;
+}
+
+.deals-live-pill.loading {
+  background: rgba(59,130,246,0.1);
+  border-color: rgba(59,130,246,0.2);
+  color: #93c5fd;
+}
+
+.deals-live-pill.loading i {
+  animation: none;
+}
+
+/* â”€â”€ Table card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-card {
+  position: relative;
+  z-index: 1;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: linear-gradient(180deg, rgba(12, 20, 36, 0.92), rgba(6, 11, 22, 0.96));
+  box-shadow: none;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: dealsReveal 0.55s ease 120ms forwards;
+}
+
+.deals-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 8-column grid: img | name | steam | skinport | csfloat | white | dmarket | waxpeer */
+.deals-thead,
+.deals-row,
+.deals-skeleton-row {
+  display: grid;
+  grid-template-columns: 72px minmax(200px, 1.4fr) repeat(6, minmax(96px, 1fr));
+  gap: 0 10px;
+  align-items: center;
+  min-width: 820px;
+}
+
+.deals-thead {
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(110, 146, 198, 0.1);
+  background: rgba(6, 11, 22, 0.55);
+  color: rgba(148, 163, 184, 0.58);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.deals-thead span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* The prices below are left-aligned in their cells, so the market names sit
+   on the same edge: right-aligned they ended up a whole column's width away
+   from the figures they label (user, 2026-10-04: "the dmarket is displaced"). */
+.deals-thead span:nth-child(n+3) {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.deals-market-head {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.deals-market-head img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  border-radius: 2px;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.deals-row {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(110, 146, 198, 0.055);
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: background 0.16s ease, box-shadow 0.16s ease;
+}
+
+.deals-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 0 999px 999px 0;
+  background: transparent;
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.deals-row:last-child { border-bottom: 0; }
+
+.deals-row:hover {
+  background: rgba(59, 130, 246, 0.045);
+}
+
+.deals-row.is-clickable:hover::before {
+  background: #4ade80;
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.45);
+}
+
+.deals-row-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(96, 165, 250, 0.12), transparent 58%),
+    rgba(6, 11, 22, 0.88);
+  border: 1px solid rgba(110, 146, 198, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.deals-row-img img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35));
+}
+
+.deals-row-placeholder {
+  font-size: 13px;
+  font-weight: 800;
+  color: #e5eefc;
+  letter-spacing: 0.04em;
+}
+
+/* â”€â”€ Name cell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-row-info {
+  padding-right: 16px;
+}
+
+.deals-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.3;
+}
+
+.deals-item-sub {
+  font-size: 12px;
+  color: rgba(148,163,184,0.6);
+  margin-top: 3px;
+}
+
+/* â”€â”€ Price cells â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-price {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.deals-price.na {
+  color: rgba(148,163,184,0.35);
+  font-size: 14px;
+}
+
+/* Marketplace that has not answered yet: a quiet shimmer rather than a dash,
+   so "still loading" cannot be mistaken for "no listing". */
+.deals-price.deals-price-pending {
+  display: inline-block;
+  width: 46px;
+  height: 11px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.1), rgba(148, 163, 184, 0.24), rgba(148, 163, 184, 0.1));
+  background-size: 200% 100%;
+  animation: dealsPricePending 1.25s ease-in-out infinite;
+  vertical-align: middle;
+}
+
+@keyframes dealsPricePending {
+  0% { background-position: 0% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deals-price.deals-price-pending {
+    animation: none;
+  }
+}
+
+.deals-price.cheapest,
+.deals-price.cheaper {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.deals-price,
+.deals-price-link {
+  justify-self: end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.deals-price-link {
+  font-size: 15px;
+  font-weight: 700;
+  color: #cfe0f5;
+  text-decoration: none;
+  width: max-content;
+  transition: color 0.15s ease;
+}
+.deals-price-link:hover {
+  color: #fff;
+}
+.deals-price-link.cheaper {
+  color: #4ade80;
+}
+.deals-price-link.cheaper:hover {
+  color: #86efac;
+}
+
+.deals-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(148,163,184,0.55);
+  font-size: 14px;
+}
+
+.deals-diff {
+  font-size: 14px;
+  font-weight: 700;
+}
+.deals-diff.less { color: #4ade80; }
+.deals-diff.more { color: #f87171; }
+
+.deals-save {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.deals-save.pos { color: #4ade80; }
+.deals-save.neg { color: rgba(148,163,184,0.5); }
+
+/* â”€â”€ Best deal cell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ Platform badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ Savings cell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-savings {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.deals-savings.hot   { color: #f87171; }
+.deals-savings.good  { color: #fb923c; }
+.deals-savings.ok    { color: #facc15; }
+.deals-savings.muted { color: rgba(148,163,184,0.4); }
+
+/* â”€â”€ Skeleton loader â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-skeleton-row {
+  padding: 18px 28px;
+  border-bottom: 1px solid rgba(110,146,198,0.055);
+}
+
+.deals-skel {
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(15,23,42,0.85), rgba(30,41,59,0.4), rgba(15,23,42,0.85));
+  background-size: 200% 100%;
+  animation: dealsSweep 1.5s ease-in-out infinite;
+}
+
+.deals-skel.img {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+}
+
+/* â”€â”€ Empty state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-save-pill {
+  justify-self: end;
+  min-width: 68px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-align: center;
+  border: 1px solid transparent;
+}
+
+.deals-save-pill.hot {
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(248, 113, 113, 0.24);
+}
+
+.deals-save-pill.good {
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.14);
+  border-color: rgba(251, 146, 60, 0.22);
+}
+
+.deals-save-pill.ok {
+  color: #fde047;
+  background: rgba(234, 179, 8, 0.12);
+  border-color: rgba(250, 204, 21, 0.2);
+}
+
+.deals-save-pill.muted {
+  color: rgba(148, 163, 184, 0.45);
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(110, 146, 198, 0.08);
+}
+
+.deals-empty {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 56px 32px;
+}
+
+.deals-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  color: rgba(125, 211, 252, 0.55);
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.deals-empty strong {
+  font-size: 17px;
+  color: #f8fafc;
+}
+
+.deals-empty span {
+  color: rgba(148,163,184,0.6);
+  font-size: 14px;
+}
+
+/* â”€â”€ Load more â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.deals-load-more {
+  display: flex;
+  justify-content: center;
+}
+
+.deals-more-btn {
+  min-height: 48px;
+  padding: 0 30px;
+  border-radius: 14px;
+  border: 1px solid rgba(96,165,250,0.16);
+  background: linear-gradient(180deg, rgba(28,38,56,0.94), rgba(14,20,38,0.98));
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.deals-more-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(96,165,250,0.28);
+  background: linear-gradient(180deg, rgba(37,99,235,0.88), rgba(29,78,216,0.86));
+}
+
+/* Footer alignment handled globally in index.css */
+
+/* â”€â”€ Animations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@keyframes dealsReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dealsPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes dealsSweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Desktop table: the item column takes a bigger share and every market name
+   and price is centred in its column, so the six markets sit further right
+   and spread to the table's edge instead of bunching left with an empty
+   strip after Waxpeer (user, 2026-10-04: "move the marketplaces more to the
+   right"). The narrower breakpoints below set their own columns. */
+@media (min-width: 901px) {
+  .deals-thead,
+  .deals-row,
+  .deals-skeleton-row {
+    grid-template-columns: 72px minmax(240px, 2fr) repeat(6, minmax(96px, 1fr));
+  }
+
+  .deals-thead span:nth-child(n+3) {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .deals-row > .deals-cell {
+    text-align: center;
+  }
+}
+
+@media (max-width: 1200px) {
+  .deals-thead,
+  .deals-row,
+  .deals-skeleton-row {
+    grid-template-columns: 64px minmax(160px, 1.2fr) repeat(6, minmax(88px, 1fr));
+  }
+
+  .deals-compare-chip {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 980px) {
+  .deals-shell {
+    width: min(100%, calc(100% - 28px));
+    margin-top: 18px;
+    gap: 14px;
+  }
+
+  .deals-hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .deals-compare-chip {
+    grid-column: 1 / -1;
+  }
+
+  .deals-row,
+  .deals-skeleton-row {
+    grid-template-columns: 56px minmax(150px, 1.2fr) repeat(6, minmax(84px, 1fr));
+    padding: 14px 16px;
+    gap: 0 8px;
+  }
+
+  .deals-price,
+  .deals-price-link {
+    font-size: 13px;
+  }
+
+  .deals-filter-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .deals-vs-badge {
+    display: none;
+  }
+
+  .deals-dd-wrap {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .deals-chart-wrap { height: 220px; }
+
+  .deals-chart-header { padding: 14px 16px 0; }
+
+  .deals-type-tabs {
+    gap: 6px;
+  }
+
+  .deals-type-tab {
+    padding: 7px 13px;
+    font-size: 12px;
+  }
+}
+
+.deals-row {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: dealsRowIn 0.42s ease forwards;
+  animation-delay: calc(var(--row-index, 0) * 18ms);
+  transition: background 0.16s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.deals-row.is-clickable {
+  cursor: pointer;
+}
+
+.deals-row.is-clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.1);
+}
+
+.deals-row.is-clickable:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(96,165,250,0.28), 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+@keyframes dealsRowIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Phone: the 7-column table (min-width 820px) cannot fit a 375px screen, so
+   each row becomes a card and every price carries its marketplace name.
+   --------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* Search gets the full width of the frame; Category and Sort by share the
+     row under it. */
+  /* A ≤980px rule turns this into a column; wrapping a column just throws the
+     dropdowns into a second column off-screen, so force the row back. */
+  .deals-filter-right {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .deals-filter-right > .deals-search-wrap {
+    order: -1;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+  }
+
+  .deals-filter-right > .deals-dd-wrap {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+  }
+
+  .deals-table-scroll {
+    overflow-x: visible;
+  }
+
+  .deals-thead {
+    display: none;
+  }
+
+  .deals-row,
+  .deals-skeleton-row {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+    min-width: 0;
+    padding: 14px 14px 16px;
+  }
+
+  .deals-row-img,
+  .deals-skeleton-row .deals-skel.img {
+    grid-column: span 1;
+  }
+
+  .deals-row-info,
+  .deals-skeleton-row > div:nth-child(2) {
+    grid-column: span 5;
+    min-width: 0;
+  }
+
+  .deals-row > .deals-price,
+  .deals-row > .deals-price-link,
+  .deals-skeleton-row > .deals-skel:nth-child(n+3) {
+    grid-column: span 2;
+    display: block;
+    justify-self: stretch;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .deals-row > .deals-price::before,
+  .deals-row > .deals-price-link::before {
+    content: attr(data-market);
+    display: block;
+    margin-bottom: 2px;
+    color: rgba(148, 163, 184, 0.7);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .deals-row > .deals-price.deals-price-pending {
+    min-height: 32px;
+  }
+}
+
+/* ==========================================================================
+   Deals — light theme layer
+   --------------------------------------------------------------------------
+   Additive only. Everything above this line is the original dark design and is
+   never edited; these rules apply solely under html[data-theme="light"], so the
+   dark page renders exactly as it always did.
+   ========================================================================== */
+
+html[data-theme="light"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ---- shell, panels, cards ---------------------------------------------- */
+html[data-theme="light"] .deals-shell,
+html[data-theme="light"] .deals-hero,
+html[data-theme="light"] .deals-empty {
+  background: transparent;
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-controls,
+html[data-theme="light"] .deals-table-wrap,
+html[data-theme="light"] .deals-card,
+html[data-theme="light"] .deals-panel,
+html[data-theme="light"] .deals-row,
+html[data-theme="light"] .deals-skeleton-row {
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: var(--card-shadow);
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-table-head,
+html[data-theme="light"] .deals-thead,
+html[data-theme="light"] thead.deals-thead th {
+  border-color: var(--border);
+  background: var(--field);
+  color: var(--muted);
+}
+
+html[data-theme="light"] .deals-row:hover {
+  background: var(--tint);
+}
+
+html[data-theme="light"] .deals-row + .deals-row,
+html[data-theme="light"] .deals-table tbody tr {
+  border-top-color: var(--border);
+}
+
+/* ---- text --------------------------------------------------------------- */
+html[data-theme="light"] .deals-title,
+html[data-theme="light"] .deals-item-name,
+html[data-theme="light"] .deals-price,
+html[data-theme="light"] .deals-cell strong,
+html[data-theme="light"] .deals-count {
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-sub,
+/* .deals-item-sub, not .deals-sub - the row subtitle under each item name
+   ("Cosmetic - 77 listed on Steam - save 66% on DMarket"). The two class
+   names are one word apart and this one was missed, so it kept the dark
+   design's rgba(148,163,184,0.6), which composites to rgb(191,200,212) on
+   the white row: 1.69:1, measured live on tf2price.eu/tf2/deals in light
+   mode, against the 4.5:1 that body text needs. var(--muted) puts it at
+   5.52:1 and matches every other subtitle on the page. Owner, 2026-09-30:
+   "make the smaller text black in the white mode its buggind there". */
+html[data-theme="light"] .deals-item-sub,
+html[data-theme="light"] .deals-meta,
+html[data-theme="light"] .deals-label,
+html[data-theme="light"] .deals-hint,
+html[data-theme="light"] .deals-cell small,
+html[data-theme="light"] .deals-market-name {
+  color: var(--muted);
+}
+
+/* ---- controls ----------------------------------------------------------- */
+html[data-theme="light"] .deals-search,
+html[data-theme="light"] .deals-search input,
+html[data-theme="light"] .deals-select,
+html[data-theme="light"] select.deals-select,
+html[data-theme="light"] .deals-input {
+  border-color: var(--border);
+  background: var(--field);
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-search input::placeholder,
+html[data-theme="light"] .deals-input::placeholder {
+  color: var(--muted);
+}
+
+/* The filter panel paints with a gradient, so background-color alone does not
+   reach it — the shorthand has to be reset. */
+html[data-theme="light"] .deals-filter-frame {
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: var(--card-shadow);
+  color: var(--text);
+}
+
+/* The real control classes on the page: the search shell, the custom select
+   trigger and its menu. */
+html[data-theme="light"] .deals-search-wrap,
+html[data-theme="light"] .deals-dd-trigger {
+  border-color: var(--border);
+  background: var(--field);
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-search-wrap input,
+html[data-theme="light"] .deals-dd-trigger span {
+  color: var(--text);
+}
+
+/* The glyphs inside those controls are dark-theme pastels — #7dd3fc and
+   rgba(191,219,254,.7) — which all but vanish on the light field. */
+html[data-theme="light"] .deals-search-wrap > i,
+html[data-theme="light"] .deals-dd-trigger i {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .deals-dd-menu {
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: 0 18px 40px rgba(16, 24, 64, 0.12);
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-dd-option:hover,
+html[data-theme="light"] .deals-dd-option.is-active {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+html[data-theme="light"] .deals-type-tab,
+html[data-theme="light"] .deals-chip,
+html[data-theme="light"] .deals-filter-chip {
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-type-tab:hover,
+html[data-theme="light"] .deals-chip:hover,
+html[data-theme="light"] .deals-filter-chip:hover {
+  background: var(--tint);
+}
+
+html[data-theme="light"] .deals-type-tab.active,
+html[data-theme="light"] .deals-chip.active,
+html[data-theme="light"] .deals-filter-chip.is-active {
+  border-color: var(--accent);
+  background: var(--tint);
+  color: var(--accent);
+}
+
+/* ---- state colours ------------------------------------------------------ */
+html[data-theme="light"] .deals-gap,
+html[data-theme="light"] .deals-up,
+html[data-theme="light"] .deals-save-pill {
+  color: var(--positive);
+}
+
+html[data-theme="light"] .deals-down,
+html[data-theme="light"] .deals-status.err {
+  color: var(--negative);
+}
+
+html[data-theme="light"] .deals-status.err {
+  border-color: color-mix(in srgb, var(--negative) 24%, transparent);
+  background: color-mix(in srgb, var(--negative) 10%, transparent);
+}
+
+html[data-theme="light"] .deals-status {
+  border-color: var(--border);
+  background: var(--field);
+  color: var(--muted);
+}
+
+/* ---- item art ----------------------------------------------------------- */
+/* The thumbnails are cut out on a dark plate; on white they need a lighter
+   pad behind them rather than the navy one. */
+html[data-theme="light"] .deals-thumb,
+html[data-theme="light"] .deals-item-img {
+  background: var(--field);
+  border-color: var(--border);
+}
+
+/* Drop shadows built for a dark page bruise a light one. */
+html[data-theme="light"] .deals-row,
+html[data-theme="light"] .deals-controls,
+html[data-theme="light"] .deals-card {
+  box-shadow: var(--card-shadow);
+}
+
+/* Light mode (user, 2026-09-30): the price links were the dark page's pale
+   blue (#cfe0f5) on white - they are dark text now, the cheapest in a green
+   that reads on white; and the item art sits straight on the row, without the
+   navy plate the dark page gives it. Covers the CS2 and the TF2 Deals page. */
+html[data-theme="light"] .deals-price-link {
+  color: var(--text);
+}
+
+html[data-theme="light"] .deals-price-link:hover {
+  color: var(--accent);
+}
+
+html[data-theme="light"] .deals-price.cheapest,
+html[data-theme="light"] .deals-price.cheaper,
+html[data-theme="light"] .deals-price-link.cheaper,
+html[data-theme="light"] .deals-price-link.cheaper:hover {
+  color: #16a34a;
+}
+
+html[data-theme="light"] .deals-row-img {
+  background: none;
+  border-color: transparent;
+}
+
+/* Light mode: the dark chips' drop shadow is a grey halo on white. */
+html[data-theme="light"] .deals-type-tab,
+html[data-theme="light"] .deals-type-tab.active,
+html[data-theme="light"] .deals-chip,
+html[data-theme="light"] .deals-chip.active,
+html[data-theme="light"] .deals-filter-chip,
+html[data-theme="light"] .deals-filter-chip.is-active {
+  box-shadow: none;
+}
+
+/* ===========================================================================
+   Deals - phone card layout (owner, 2026-10-03)
+   ---------------------------------------------------------------------------
+   Desktop keeps the table. Below 768px each row becomes a card: a header with
+   thumbnail, name, sub-line and a saving badge, then a five-column market
+   strip underneath. The markup is the same one the table renders - the row
+   already carries an image, a name, a sub-line and one cell per marketplace -
+   so this is a re-layout rather than a second component.
+   ======================================================================== */
+@media (max-width: 767px) {
+  /* ---- 1. header -------------------------------------------------------- */
+  /* No visible page title (owner, 2026-10-03). The "Deals" tab in the bar is
+     lit while you are here, so the heading repeated what the chrome already
+     said. The <header> stays in the DOM on purpose: mobile-shell.css hides the
+     top bar via :has(.mdeals-head), which matches on presence, and the <h1>
+     stays for screen readers and for the document outline - clipped, not
+     display:none, so both keep it. */
+  .mdeals-head {
+    padding: 0;
+  }
+
+  .mdeals-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---- 2. filter chips --------------------------------------------------- */
+  .mdeals-chips {
+    display: flex;
+    gap: 8px;
+    /* Carries the top gap the header used to provide. */
+    padding: 14px 16px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mdeals-chips::-webkit-scrollbar { display: none; }
+
+  .mdeals-chip {
+    flex: none;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid #2A3350;
+    background: #0F1527;
+    color: #C9D2E3;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .mdeals-chip.is-active {
+    border-color: var(--accent);
+    background: #16225A;
+    color: #FFFFFF;
+  }
+
+  /* ---- 3. results row ---------------------------------------------------- */
+  .mdeals-results {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 16px 10px;
+  }
+
+  .mdeals-count {
+    font-size: 13px;
+    color: #8B96B5;
+  }
+
+  .mdeals-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid #2A3350;
+    background: #0F1527;
+    color: #C9D2E3;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ---- 4. the cards ------------------------------------------------------ */
+  .deals-thead { display: none; }
+
+  /* The rows live in .deals-table-scroll inside .deals-card - there is no
+     .deals-table or .deals-tbody, which is why the first version of this rule
+     matched nothing and the cards sat flush to the screen edge. */
+  .deals-card {
+    border: 0;
+    border-radius: 0;
+    background: none;
+    padding: 0;
+  }
+
+  .deals-table-scroll {
+    display: block;
+    overflow: visible;
+    padding: 0 16px;
+    background: none;
+    border: 0;
+  }
+
+  /* Six equal columns. The header's three items are placed explicitly and
+     together fill row 1; the six market cells span two columns each, so they
+     auto-flow into rows 2 and 3 as three per row, always in the same order,
+     with no wrapper element needed in the markup. */
+  .deals-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: center;
+    column-gap: 4px;
+    row-gap: 10px;
+    margin: 0 0 10px;
+    padding: 12px;
+    border: 1px solid #1C2439;
+    border-radius: 12px;
+    background: #0F1527;
+  }
+
+  .deals-row-img {
+    grid-row: 1;
+    grid-column: 1;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #121A2E;
+  }
+
+  .deals-row-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .deals-row-info { grid-row: 1; grid-column: 2 / span 4; min-width: 0; padding-left: 6px; }
+
+  .deals-item-name {
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .deals-item-sub {
+    font-size: 12px;
+    color: #8B96B5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mdeals-save,
+  .mdeals-cheapest-steam {
+    grid-row: 1;
+    grid-column: 6;
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  .mdeals-save {
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #0F2A22;
+    color: #3DD68C;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .mdeals-cheapest-steam {
+    font-size: 12px;
+    color: #8B96B5;
+  }
+
+  /* ---- the market strip -------------------------------------------------- */
+  /* Always five columns in a fixed order, so the same marketplace sits in the
+     same position on every card and the eye can compare down the list. */
+  .deals-row > .deals-cell {
+    /* no explicit column: auto-placement puts them across rows 2-3 in order */
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+    padding: 6px 2px;
+    border-radius: 6px;
+  }
+
+  .deals-row > .deals-cell.is-cheapest { background: #0F2A22; }
+
+  .mdeals-cell-label {
+    font-size: 10px;
+    color: #8B96B5;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .deals-row .deals-price,
+  .deals-row .deals-price-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #C9D2E3;
+  }
+
+  .deals-row .deals-cell.is-cheapest .mdeals-cell-label,
+  .deals-row .deals-cell.is-cheapest .deals-price,
+  .deals-row .deals-cell.is-cheapest .deals-price-link {
+    color: #3DD68C;
+    font-weight: 700;
+  }
+
+  .deals-row .deals-price.na { color: #6B7699; }
+
+  /* ---- 6. empty state ---------------------------------------------------- */
+  .mdeals-clear {
+    margin-top: 12px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ---- the sort sheet ---------------------------------------------------- */
+  /* The sheet slides up and the scrim fades (owner, 2026-10-03: it used to pop
+     in). Deliberately a CSS animation with a `from`-only keyframe rather than a
+     transition driven by a class: the element is created the moment it opens,
+     so there is no pre-open frame for a transition to run from, and that is the
+     usual reason bottom sheets appear instantly however carefully the
+     transition is written.
+
+     `from`-only also means the resting state IS the natural one. Nothing is
+     left at opacity 0 or pushed off-screen if the animation never runs, which
+     is what makes the reduced-motion case below safe. */
+  .mdeals-sheet-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: flex-end;
+    background: rgba(4, 8, 20, 0.6);
+    animation: mdealsScrimIn 180ms ease both;
+  }
+
+  @keyframes mdealsScrimIn {
+    from { opacity: 0; }
+  }
+
+  @keyframes mdealsSheetIn {
+    from { transform: translateY(100%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mdeals-sheet-scrim,
+    .mdeals-sheet {
+      animation: none;
+    }
+  }
+
+  .mdeals-sheet {
+    /* Slightly longer than the scrim and eased out hard, so the panel settles
+       rather than snapping at the end of its travel. */
+    animation: mdealsSheetIn 260ms cubic-bezier(0.22, 0.9, 0.3, 1) both;
+    width: 100%;
+    padding: 8px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    border-radius: 16px 16px 0 0;
+    border-top: 1px solid #1C2439;
+    background: #0F1527;
+  }
+
+  .mdeals-sheet-title {
+    margin: 8px 0 4px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8B96B5;
+  }
+
+  .mdeals-sheet-option,
+  .mdeals-sheet-cancel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 4px;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .mdeals-sheet-option.is-active { color: var(--accent); font-weight: 600; }
+
+  /* Form controls do not inherit the page font, and this project has no global
+     `button { font: inherit }` reset - so every one of these was rendering in
+     the browser's default UI font while the text around it used the site face.
+     Most visible in the sort sheet, where four option labels sat next to a
+     styled heading (owner, 2026-10-04). */
+  .mdeals-chip,
+  .mdeals-sort,
+  .mdeals-clear,
+  .mdeals-sheet-option,
+  .mdeals-sheet-cancel {
+    font-family: inherit;
+  }
+
+  .mdeals-sheet-cancel {
+    justify-content: center;
+    margin-top: 6px;
+    border-top: 1px solid #1C2439;
+    color: #8B96B5;
+  }
+
+  /* ---- accessibility ----------------------------------------------------- */
+  .mdeals-chip:focus-visible,
+  .mdeals-sort:focus-visible,
+  .mdeals-clear:focus-visible,
+  .mdeals-sheet-option:focus-visible,
+  .mdeals-sheet-cancel:focus-visible,
+  .deals-row:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}

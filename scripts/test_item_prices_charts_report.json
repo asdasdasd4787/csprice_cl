@@ -1,0 +1,548 @@
+{
+    "generated_at": "2026-07-09T22:20:49+02:00",
+    "base_url": "http://localhost/csgo_price_tracker",
+    "refresh": false,
+    "refresh_results": [],
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "results": [
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "MAC-10 | Neon Rider",
+                "wear": "Factory New",
+                "market_hash_name": "MAC-10 | Neon Rider (Factory New)",
+                "providers": {
+                    "white_market": {
+                        "price": 111.63,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/mac-10-neon-rider-factory-new-4207556551409966",
+                        "history_points": 30,
+                        "range_used": "live",
+                        "ownership_all_wears": 4
+                    },
+                    "steam_wear_rows": 4,
+                    "skinport": {
+                        "price": 97,
+                        "http": 200,
+                        "success": true
+                    },
+                    "csfloat": {
+                        "price": 109.2,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 108.77,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 35,
+                        "current_price": 148.11,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/MAC-10%20%7C%20Neon%20Rider%20%28Factory%20New%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 35,
+                        "current_price": 97,
+                        "synthetic": true,
+                        "market_url": "https://skinport.com/market/730?search=MAC-10+%7C+Neon+Rider+%28Factory+New%29"
+                    },
+                    "csfloat": {
+                        "points": 263,
+                        "current_price": 106.88,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=MAC-10+%7C+Neon+Rider+%28Factory+New%29"
+                    },
+                    "white_market": {
+                        "points": 24,
+                        "current_price": 112.96,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=MAC-10+%7C+Neon+Rider+%28Factory+New%29"
+                    },
+                    "dmarket": {
+                        "points": 35,
+                        "current_price": 108.77,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=MAC-10%20%7C%20Neon%20Rider%20%28Factory%20New%29"
+                    }
+                }
+            }
+        },
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "\u2605 Driver Gloves | Racing Green",
+                "wear": "Factory New",
+                "market_hash_name": "\u2605 Driver Gloves | Racing Green (Factory New)",
+                "providers": {
+                    "white_market": {
+                        "price": 168.71,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/driver-gloves-racing-green-factory-new-6769268599644200",
+                        "history_points": 8,
+                        "range_used": "live",
+                        "ownership_all_wears": 5
+                    },
+                    "steam_wear_rows": 5,
+                    "skinport": {
+                        "price": null,
+                        "http": 200,
+                        "success": false,
+                        "skipped": "gloves often lack Skinport listings"
+                    },
+                    "csfloat": {
+                        "price": 178.88,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 510.6,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 50,
+                        "current_price": 275.61,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/%E2%98%85%20Driver%20Gloves%20%7C%20Racing%20Green%20%28Factory%20New%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 366,
+                        "current_price": 189.18,
+                        "synthetic": false,
+                        "market_url": "https://skinport.com/market/730?search=%E2%98%85+Driver+Gloves+%7C+Racing+Green+%28Factory+New%29"
+                    },
+                    "csfloat": {
+                        "points": 62,
+                        "current_price": 163.76,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=%E2%98%85+Driver+Gloves+%7C+Racing+Green+%28Factory+New%29"
+                    },
+                    "white_market": {
+                        "points": 363,
+                        "current_price": 168.71,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=%E2%98%85+Driver+Gloves+%7C+Racing+Green+%28Factory+New%29"
+                    },
+                    "dmarket": {
+                        "points": 50,
+                        "current_price": 510.6,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=%E2%98%85%20Driver%20Gloves%20%7C%20Racing%20Green%20%28Factory%20New%29"
+                    }
+                }
+            }
+        },
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "MP5-SD | Agent",
+                "wear": "Factory New",
+                "market_hash_name": "MP5-SD | Agent (Factory New)",
+                "providers": {
+                    "white_market": {
+                        "price": 7.03,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/mp5-sd-agent-factory-new-3265350176607563",
+                        "history_points": 24,
+                        "range_used": "live",
+                        "ownership_all_wears": 5
+                    },
+                    "steam_wear_rows": 5,
+                    "skinport": {
+                        "price": 6.22,
+                        "http": 200,
+                        "success": true
+                    },
+                    "csfloat": {
+                        "price": 6.83,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 7.62,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 81,
+                        "current_price": 8.12,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/MP5-SD%20%7C%20Agent%20%28Factory%20New%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 81,
+                        "current_price": 6.22,
+                        "synthetic": true,
+                        "market_url": "https://skinport.com/market/730?search=MP5-SD+%7C+Agent+%28Factory+New%29"
+                    },
+                    "csfloat": {
+                        "points": 276,
+                        "current_price": 6.44,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=MP5-SD+%7C+Agent+%28Factory+New%29"
+                    },
+                    "white_market": {
+                        "points": 12,
+                        "current_price": 7.03,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=MP5-SD+%7C+Agent+%28Factory+New%29"
+                    },
+                    "dmarket": {
+                        "points": 81,
+                        "current_price": 7.64,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=MP5-SD%20%7C%20Agent%20%28Factory%20New%29"
+                    }
+                }
+            }
+        },
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "MAG-7 | Insomnia",
+                "wear": "Factory New",
+                "market_hash_name": "MAG-7 | Insomnia (Factory New)",
+                "providers": {
+                    "white_market": {
+                        "price": 0.7728,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/mag-7-insomnia-factory-new-7211645459335583",
+                        "history_points": 34,
+                        "range_used": "live",
+                        "ownership_all_wears": 5
+                    },
+                    "steam_wear_rows": 5,
+                    "skinport": {
+                        "price": 0.77,
+                        "http": 200,
+                        "success": true
+                    },
+                    "csfloat": {
+                        "price": 0.92,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 0.83,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 161,
+                        "current_price": 1.11,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/MAG-7%20%7C%20Insomnia%20%28Factory%20New%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 161,
+                        "current_price": 0.71,
+                        "synthetic": true,
+                        "market_url": "https://skinport.com/market/730?search=MAG-7+%7C+Insomnia+%28Factory+New%29"
+                    },
+                    "csfloat": {
+                        "points": 359,
+                        "current_price": 1.2,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=MAG-7+%7C+Insomnia+%28Factory+New%29"
+                    },
+                    "white_market": {
+                        "points": 23,
+                        "current_price": 0.84,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=MAG-7+%7C+Insomnia+%28Factory+New%29"
+                    },
+                    "dmarket": {
+                        "points": 161,
+                        "current_price": 0.83,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=MAG-7%20%7C%20Insomnia%20%28Factory%20New%29"
+                    }
+                }
+            }
+        },
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "AK-47 | Redline",
+                "wear": "Field-Tested",
+                "market_hash_name": "AK-47 | Redline (Field-Tested)",
+                "providers": {
+                    "white_market": {
+                        "price": 28.23,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/ak-47-redline-field-tested-6069410132651572",
+                        "history_points": 117,
+                        "range_used": "live",
+                        "ownership_all_wears": 4
+                    },
+                    "steam_wear_rows": 4,
+                    "skinport": {
+                        "price": 24.88,
+                        "http": 200,
+                        "success": true
+                    },
+                    "csfloat": {
+                        "price": 26.66,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 28.25,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 44,
+                        "current_price": 36.38,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Redline%20%28Field-Tested%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 362,
+                        "current_price": 24.97,
+                        "synthetic": true,
+                        "market_url": "https://skinport.com/market/730?search=AK-47+%7C+Redline+%28Field-Tested%29"
+                    },
+                    "csfloat": {
+                        "points": 352,
+                        "current_price": 49.94,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=AK-47+%7C+Redline+%28Field-Tested%29"
+                    },
+                    "white_market": {
+                        "points": 111,
+                        "current_price": 29.15,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=AK-47+%7C+Redline+%28Field-Tested%29"
+                    },
+                    "dmarket": {
+                        "points": 366,
+                        "current_price": 28.44,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=AK-47%20%7C%20Redline%20%28Field-Tested%29"
+                    }
+                }
+            }
+        },
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "AWP | Asiimov",
+                "wear": "Field-Tested",
+                "market_hash_name": "AWP | Asiimov (Field-Tested)",
+                "providers": {
+                    "white_market": {
+                        "price": 116.68,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/awp-asiimov-field-tested-5428824177882499",
+                        "history_points": 104,
+                        "range_used": "live",
+                        "ownership_all_wears": 3
+                    },
+                    "steam_wear_rows": 3,
+                    "skinport": {
+                        "price": 100.29,
+                        "http": 200,
+                        "success": true
+                    },
+                    "csfloat": {
+                        "price": 104.88,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 107.24,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 45,
+                        "current_price": 147.89,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/AWP%20%7C%20Asiimov%20%28Field-Tested%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 362,
+                        "current_price": 101.12,
+                        "synthetic": true,
+                        "market_url": "https://skinport.com/market/730?search=AWP+%7C+Asiimov+%28Field-Tested%29"
+                    },
+                    "csfloat": {
+                        "points": 360,
+                        "current_price": 138.84,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=AWP+%7C+Asiimov+%28Field-Tested%29"
+                    },
+                    "white_market": {
+                        "points": 87,
+                        "current_price": 116.68,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=AWP+%7C+Asiimov+%28Field-Tested%29"
+                    },
+                    "dmarket": {
+                        "points": 366,
+                        "current_price": 107.04,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=AWP%20%7C%20Asiimov%20%28Field-Tested%29"
+                    }
+                }
+            }
+        },
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "M4A1-S | Vaporwave",
+                "wear": "Factory New",
+                "market_hash_name": "M4A1-S | Vaporwave (Factory New)",
+                "providers": {
+                    "white_market": {
+                        "price": 187.96,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/m4a1-s-vaporwave-factory-new-8038364198265295",
+                        "history_points": 73,
+                        "range_used": "live",
+                        "ownership_all_wears": 5
+                    },
+                    "steam_wear_rows": 5,
+                    "skinport": {
+                        "price": 186.65,
+                        "http": 200,
+                        "success": true
+                    },
+                    "csfloat": {
+                        "price": 173.74,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 183.67,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 308,
+                        "current_price": 217.07,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/M4A1-S%20%7C%20Vaporwave%20%28Factory%20New%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 366,
+                        "current_price": 188.07,
+                        "synthetic": false,
+                        "market_url": "https://skinport.com/market/730?search=M4A1-S+%7C+Vaporwave+%28Factory+New%29"
+                    },
+                    "csfloat": {
+                        "points": 364,
+                        "current_price": 188.32,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=M4A1-S+%7C+Vaporwave+%28Factory+New%29"
+                    },
+                    "white_market": {
+                        "points": 69,
+                        "current_price": 187.96,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=M4A1-S+%7C+Vaporwave+%28Factory+New%29"
+                    },
+                    "dmarket": {
+                        "points": 308,
+                        "current_price": 183.67,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=M4A1-S%20%7C%20Vaporwave%20%28Factory%20New%29"
+                    }
+                }
+            }
+        },
+        {
+            "ok": true,
+            "issues": [],
+            "details": {
+                "lookup": "Glock-18 | Water Elemental",
+                "wear": "Factory New",
+                "market_hash_name": "Glock-18 | Water Elemental (Factory New)",
+                "providers": {
+                    "white_market": {
+                        "price": 63.57,
+                        "listings": 1,
+                        "market_url": "https://white.market/item/glock-18-water-elemental-factory-new-7469758357119951",
+                        "history_points": 28,
+                        "range_used": "live",
+                        "ownership_all_wears": 5
+                    },
+                    "steam_wear_rows": 5,
+                    "skinport": {
+                        "price": 54.92,
+                        "http": 200,
+                        "success": true
+                    },
+                    "csfloat": {
+                        "price": 63.05,
+                        "http": 200,
+                        "success": true
+                    },
+                    "dmarket": {
+                        "price": 68.99,
+                        "http": 200,
+                        "success": true
+                    }
+                },
+                "chart": {
+                    "steam": {
+                        "points": 43,
+                        "current_price": 77.42,
+                        "synthetic": false,
+                        "market_url": "https://steamcommunity.com/market/listings/730/Glock-18%20%7C%20Water%20Elemental%20%28Factory%20New%29?l=english"
+                    },
+                    "skinport": {
+                        "points": 43,
+                        "current_price": 54.92,
+                        "synthetic": true,
+                        "market_url": "https://skinport.com/market/730?search=Glock-18+%7C+Water+Elemental+%28Factory+New%29"
+                    },
+                    "csfloat": {
+                        "points": 363,
+                        "current_price": 60.04,
+                        "synthetic": false,
+                        "market_url": "https://csfloat.com/search?market_hash_name=Glock-18+%7C+Water+Elemental+%28Factory+New%29"
+                    },
+                    "white_market": {
+                        "points": 23,
+                        "current_price": 70.18,
+                        "synthetic": false,
+                        "market_url": "https://white.market/item?appId=730&nameHash=Glock-18+%7C+Water+Elemental+%28Factory+New%29"
+                    },
+                    "dmarket": {
+                        "points": 43,
+                        "current_price": 69,
+                        "synthetic": true,
+                        "market_url": "https://dmarket.com/ingame-items/item-list/csgo-skins?title=Glock-18%20%7C%20Water%20Elemental%20%28Factory%20New%29"
+                    }
+                }
+            }
+        }
+    ]
+}

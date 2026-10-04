@@ -1,0 +1,8 @@
+<!-- Skin Crafter: crossed tools. A wrench over a screwdriver, which is the
+     clearest "make something" pair at tile size - a single tool reads as
+     settings, and a brush reads as paint rather than crafting. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <path fill="#ffffff" d="M31.6 5a11 11 0 0 0-9.8 15.9L6.6 36.1a3.6 3.6 0 0 0 5.1 5.1l15.2-15.2A11 11 0 0 0 41.5 12l-6 6-4.2-1.1-1.1-4.2 6-6A11 11 0 0 0 31.6 5Z"/>
+  <path fill="#ffffff" d="m11.4 6.2 7.1 7.1-3.3 3.3-3.6-.9-.9-3.6-3.3 3.3-2.3-2.3a5 5 0 0 1 6.3-6.9Z" opacity=".55"/>
+  <path fill="#ffffff" d="M36.8 29.4a3.2 3.2 0 0 0-4.6 0l-1.6 1.6 11 11a2.3 2.3 0 0 0 3.2-3.2l-11-11 1.6-1.6a3.2 3.2 0 0 0 0-4.6Z" opacity=".55"/>
+</svg>

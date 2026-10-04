@@ -1,0 +1,889 @@
+/* Inventory dashboard — site-aligned open layout */
+
+:root {
+  --inv-bg: #05080f;
+  --inv-panel: rgba(10, 17, 31, 0.78);
+  --inv-panel-soft: rgba(8, 14, 26, 0.62);
+  --inv-border: rgba(110, 146, 198, 0.14);
+  --inv-border-soft: rgba(110, 146, 198, 0.08);
+  --inv-text: #f8fafc;
+  --inv-muted: rgba(148, 163, 184, 0.72);
+  --inv-accent: #60a5fa;
+  --inv-accent-soft: rgba(125, 211, 252, 0.82);
+  --inv-green: #4ade80;
+  --inv-shell: min(1540px, calc(100% - 64px));
+}
+
+body.steam-dashboard-page {
+  display: block;
+  padding: 0 0 56px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background:
+    radial-gradient(920px 440px at 10% -6%, rgba(37, 99, 235, 0.11), transparent 62%),
+    radial-gradient(680px 340px at 92% 2%, rgba(45, 212, 191, 0.05), transparent 58%),
+    var(--inv-bg);
+  color: var(--inv-text);
+}
+
+body.steam-dashboard-page .steam-dashboard,
+body.steam-dashboard-page .inv-page {
+  width: var(--inv-shell);
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 24px 0 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  animation: none;
+}
+
+@keyframes invFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.inv-animate {
+  animation: invFadeUp 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Top profile bar */
+.inv-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--inv-border-soft);
+}
+
+.inv-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.inv-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.88);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.28);
+}
+
+.inv-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.inv-profile-kicker {
+  color: var(--inv-accent-soft);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+/* Profile page: the topbar's left side is the total value, no avatar. */
+.inv-profile--value .inv-profile-copy h1 {
+  margin: 0;
+}
+
+.inv-profile-copy h1 {
+  margin: 0 0 5px;
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+
+.inv-profile-copy p {
+  margin: 0;
+  color: var(--inv-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.inv-topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* Wrapped rows line up on the left so the second row is not ragged. */
+  justify-content: flex-start;
+}
+
+.inv-action {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(110, 146, 198, 0.16);
+  background: var(--inv-panel-soft);
+  color: rgba(226, 232, 240, 0.92);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.inv-action i {
+  display: inline-block;
+  color: rgba(147, 197, 253, 0.92);
+  font-size: 11px;
+}
+
+.inv-action.is-loading i {
+  color: rgba(147, 197, 253, 0.92);
+  font-size: 11px;
+}
+
+.inv-action:hover {
+  color: #fff;
+  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(37, 99, 235, 0.14);
+  transform: translateY(-1px);
+}
+
+.inv-action.danger {
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.2);
+  background: rgba(69, 10, 10, 0.28);
+}
+
+.inv-action.danger i {
+  display: inline-block;
+  color: #fca5a5;
+}
+
+.inv-action.danger:hover {
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(69, 10, 10, 0.4);
+}
+
+.inv-action.is-loading,
+.inv-action:disabled {
+  opacity: 0.72;
+  cursor: wait;
+  transform: none;
+}
+
+.inv-action:disabled:hover {
+  color: rgba(226, 232, 240, 0.92);
+  border-color: rgba(110, 146, 198, 0.16);
+  background: var(--inv-panel-soft);
+  transform: none;
+}
+
+/* Inventory value heading */
+.inv-value-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.inv-value-heading__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.inv-value-heading__copy {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.inv-value-heading__total {
+  color: var(--inv-text);
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.inv-value-heading__meta {
+  margin-left: auto;
+  color: var(--inv-accent-soft);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.inv-value-heading .inventory-ai-btn {
+  flex: 0 0 auto;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(110, 146, 198, 0.16);
+  background: var(--inv-panel-soft);
+  color: rgba(226, 232, 240, 0.92);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.inv-value-heading .inventory-ai-btn i {
+  color: rgba(147, 197, 253, 0.92);
+  font-size: 11px;
+}
+
+.inv-value-heading .inventory-ai-btn:hover:not(:disabled) {
+  color: #fff;
+  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(37, 99, 235, 0.14);
+  filter: none;
+  transform: translateY(-1px);
+}
+
+.inv-value-heading .inventory-ai-btn.is-active,
+.inv-value-heading .inventory-ai-btn.is-loading {
+  color: #fff;
+  border-color: rgba(96, 165, 250, 0.34);
+  background: rgba(37, 99, 235, 0.18);
+}
+
+.inv-value-heading .inventory-ai-btn.is-active i,
+.inv-value-heading .inventory-ai-btn.is-loading i {
+  color: #93c5fd;
+}
+
+.inv-value-heading .inventory-ai-btn:disabled {
+  opacity: 0.72;
+  cursor: wait;
+  transform: none;
+}
+
+/* Workspace */
+.inv-workspace {
+  display: grid;
+  gap: 16px;
+}
+
+/* Controls panel */
+/* Same toolbar as the cases / collections pages (.collections-controls):
+   no box, a hairline under the row (user, 2026-10-03: "make this search
+   bar and the filter like the item one, exact same"). */
+.inv-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 0 0 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(110, 146, 198, 0.16);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.inv-controls-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.inv-controls-main .collections-search-wrap.inventory-search-wrap {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+
+.inv-panel-body,
+.inventory-panel-body {
+  padding-top: 4px;
+}
+
+/* Grid — collection cards */
+.inv-page .inventory-grid,
+.inv-workspace .inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
+}
+
+/* Phone inventory header: data only (owner, 2026-10-04).
+   The dashboard opens with an avatar, a display name and five account actions
+   before any inventory appears - on a phone that is most of the first screen
+   spent on things you are not here for. Hidden: the profile block, Profile,
+   Refresh, AI analysis and Log out. Kept: Export to Excel, the total value and
+   the sort control, which are the page's actual job.
+   Written as "everything except the export button" rather than a list of the
+   four, so a new action added to this row is hidden here by default instead of
+   quietly reappearing on phones. */
+@media (max-width: 767px) {
+  /* :not(.inv-profile--value) because .inv-profile no longer means only the
+     avatar block: inventoryMetricsMarkup() reuses the class for the total
+     value in embedded context, so hiding .inv-profile outright took the total
+     with it. Hide the identity block, keep the number. */
+  .inv-topbar .inv-profile:not(.inv-profile--value) {
+    display: none;
+  }
+
+  /* The whole action row now, Export to Excel included (owner, 2026-10-04).
+     Nothing in it survives on phones, so the row goes rather than being
+     emptied - an empty flex row still carries the topbar's gap. */
+  .inv-topbar .inv-topbar-actions {
+    display: none;
+  }
+
+  /* Bring the sort up under the total. The topbar's 24px margin, 20px padding
+     and divider were separating the value from the only control left, which
+     left a band of empty space where the buttons used to be. */
+  .inv-topbar {
+    gap: 0;
+    margin-bottom: 10px;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .inv-value-heading {
+    margin-bottom: 10px;
+  }
+
+  .inv-workspace {
+    gap: 8px;
+  }
+
+  /* No rule under the sort (owner, 2026-10-04). */
+  .inv-controls {
+    margin-bottom: 10px;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  /* Give the grid the width. .inv-page is sized from --inv-shell
+     (calc(100% - 64px)) in the dashboard context, which spends 32px a side on
+     margin; unscoped here so it also applies inside the embedded profile
+     panel, where the rule below it never matched. */
+  .inv-page {
+    width: 100%;
+    max-width: none;
+  }
+
+  body.steam-dashboard-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  body.steam-dashboard-page .inv-page {
+    width: calc(100% - 16px);
+    max-width: none;
+  }
+
+  .inv-page .inventory-grid,
+  .inv-workspace .inventory-grid {
+    gap: 8px;
+  }
+
+  /* Left, not centred (owner, 2026-10-04). Nothing sets text-align on these,
+     so the centring is the block sitting narrower than the screen and being
+     auto-centred by an ancestor. Both causes are pinned here - the auto
+     margins that centre the block, and an explicit left on the rows - because
+     the embedded profile panel cannot be measured without a signed-in session
+     and guessing which one it is would be a coin flip. */
+  .inv-page,
+  .inv-workspace {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .inv-topbar,
+  .inv-value-heading,
+  .inv-value-heading__row,
+  .inv-controls,
+  .inv-controls-main {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .inv-profile--value,
+  .inv-profile--value .inv-profile-copy {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Embedded profile panel: strip padding and width limits off the whole
+     inventory chain. The dashboard context was already full width when
+     measured, but the embedded one cannot be inspected without a signed-in
+     session - the panel renders a sign-in placeholder otherwise - so every
+     level between .home-ai and the grid is neutralised rather than the one
+     level a guess would pick. Each of these is a no-op where nothing was
+     constraining it. */
+  .home-ai .inv-page,
+  .home-ai .inv-workspace,
+  .home-ai .inventory-panel-body,
+  .home-ai .inventory-grid {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+
+/* Two per row on phones (owner, 2026-10-03). The auto-fill track above has a
+   168px minimum, and two of those plus the gap need 348px - just over a 375px
+   screen's 343px of content width - so it collapsed to a single column and the
+   inventory read as one long strip. A fixed 2-column track at this width is
+   the whole fix; the cards themselves already scale. */
+@media (max-width: 767px) {
+  .inv-page .inventory-grid,
+  .inv-workspace .inventory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card {
+  min-height: 0 !important;
+  padding: 0 !important;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  border-color: rgba(110, 146, 198, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.28);
+  background: linear-gradient(180deg, rgba(13, 21, 38, 0.96), rgba(8, 13, 26, 0.98)) !important;
+}
+
+/* Layout only — rarity wash is the shared .card-media gradient in collections.css. */
+.inv-page .inventory-grid .inventory-card-media,
+.inv-workspace .inventory-grid .inventory-card-media,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-media,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-media,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media {
+  position: relative;
+  min-height: 128px;
+  padding: 18px 12px 12px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.inv-page .inventory-grid .inventory-card-media::before,
+.inv-page .inventory-grid .inventory-card-media::after,
+.inv-workspace .inventory-grid .inventory-card-media::before,
+.inv-workspace .inventory-grid .inventory-card-media::after,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media::before,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media::after,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media::before,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media::after {
+  display: none !important;
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-media-img,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-media-img,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-media img,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-media img {
+  max-height: 88px;
+  min-height: 64px;
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-body,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-body {
+  padding: 10px 12px 12px;
+  gap: 4px;
+  min-height: 0;
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-body h3,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-body h3 {
+  font-size: 13px;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-subtitle,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-subtitle,
+.inv-item-flags,
+.inv-value-heading__meta,
+.inv-profile-copy p,
+.inv-profile-kicker {
+  display: none;
+}
+
+.inv-item-card .card-accent-foot {
+  display: none;
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-label.left,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-label.left {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-label.right,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-label.right {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.inv-item-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 10px 11px;
+  border-radius: 11px;
+  background: rgba(2, 6, 23, 0.58);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.inv-item-stack-cell span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.62);
+}
+
+.inv-item-stack-cell em {
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.inv-item-stack-cell.total em {
+  color: #55afff;
+}
+
+.inv-item-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.inv-item-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(71, 85, 105, 0.32);
+  background: rgba(15, 23, 42, 0.62);
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.inv-item-flag.on {
+  color: var(--inv-green);
+  border-color: rgba(34, 197, 94, 0.26);
+  background: rgba(22, 101, 52, 0.38);
+}
+
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .inventory-stack-badge,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .inventory-stack-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  min-width: 28px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(8, 14, 26, 0.92);
+  border: 1px solid color-mix(in srgb, var(--card-accent, #60a5fa) 28%, transparent);
+  color: rgba(239, 246, 255, 0.96);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.inv-item-card .card-footer {
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.inv-item-card .card-intro {
+  font-size: 12px;
+}
+
+body.steam-dashboard-page .inv-page .card.showcase-card:hover,
+body.steam-dashboard-page .inv-workspace .card.showcase-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(96, 165, 250, 0.28);
+}
+
+.inv-workspace .inventory-empty,
+.inv-workspace .inventory-empty-animated {
+  grid-column: 1 / -1;
+  padding: 28px 20px;
+  border-radius: 16px;
+  border: 1px dashed rgba(110, 146, 198, 0.18);
+  background: rgba(8, 14, 26, 0.45);
+  color: rgba(148, 163, 184, 0.82);
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  body.steam-dashboard-page .inv-page {
+    width: min(100% - 32px, 1540px);
+  }
+}
+
+@media (max-width: 640px) {
+  .inv-controls-main {
+    grid-template-columns: 1fr;
+  }
+
+  .inv-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* Inventory cards: flat surfaces, no rarity glow behind the picture and no
+   gradient on the card body. */
+.inv-page .inventory-grid .card.showcase-card.inv-item-card,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card,
+.inv-page .inventory-grid .inventory-card,
+.inv-workspace .inventory-grid .inventory-card {
+  background: #0b1322 !important;
+  box-shadow: none !important;
+}
+
+.inv-page .inventory-grid .inventory-card-media,
+.inv-workspace .inventory-grid .inventory-card-media,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-media,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-media,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .inventory-card-media {
+  background: rgba(15, 23, 42, 0.55) !important;
+}
+
+/* light-theme:begin */
+/* ===========================================================================
+   Light theme — additive. Dark above is untouched.
+   :where(html[data-theme="light"]) adds no specificity: ties with the base
+   rule, wins on source order, and leaves the sheet's :hover / .is-active /
+   :disabled states in charge exactly as they are in dark.
+   The danger action keeps its own red through --negative rather than becoming
+   generic chrome.
+   ========================================================================= */
+
+/* --inv-bg is the sheet's own page token; the two glows on top of it are
+   re-tinted for a light page rather than removed, so the shape stays. */
+html[data-theme="light"] body.steam-dashboard-page {
+  --inv-bg: var(--bg);
+  background:
+    radial-gradient(920px 440px at 10% -6%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 62%),
+    radial-gradient(680px 340px at 92% 2%, color-mix(in srgb, var(--accent-2) 6%, transparent), transparent 58%),
+    var(--bg);
+}
+
+:where(html[data-theme="light"]) .inv-avatar {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--card-shadow);
+}
+
+:where(html[data-theme="light"]) .inv-action,
+:where(html[data-theme="light"]) .inv-value-heading .inventory-ai-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .inv-action i,
+:where(html[data-theme="light"]) .inv-action.is-loading i,
+:where(html[data-theme="light"]) .inv-value-heading .inventory-ai-btn i {
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .inv-action:hover,
+:where(html[data-theme="light"]) .inv-value-heading .inventory-ai-btn:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--tint);
+}
+
+:where(html[data-theme="light"]) .inv-value-heading .inventory-ai-btn.is-active,
+:where(html[data-theme="light"]) .inv-value-heading .inventory-ai-btn.is-loading {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--tint);
+}
+
+:where(html[data-theme="light"]) .inv-value-heading .inventory-ai-btn.is-active i,
+:where(html[data-theme="light"]) .inv-value-heading .inventory-ai-btn.is-loading i {
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .inv-action.danger,
+:where(html[data-theme="light"]) .inv-action.danger i {
+  color: var(--negative);
+}
+
+:where(html[data-theme="light"]) .inv-action.danger {
+  border-color: color-mix(in srgb, var(--negative) 35%, transparent);
+  background: color-mix(in srgb, var(--negative) 8%, transparent);
+}
+
+:where(html[data-theme="light"]) .inv-action.danger:hover {
+  color: var(--negative);
+  border-color: color-mix(in srgb, var(--negative) 55%, transparent);
+  background: color-mix(in srgb, var(--negative) 14%, transparent);
+}
+
+:where(html[data-theme="light"]) .inv-action:disabled:hover {
+  color: var(--muted);
+  border-color: var(--border);
+  background: var(--card);
+}
+
+:where(html[data-theme="light"]) .inv-controls {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+
+/* TF2 inventory (tf2price.eu, html[data-game="tf2"]): the CS2 dashboard
+   as it is, but flat - no rarity wash behind the render and no gradient on
+   the cards or the controls (user, 2026-09-30: "make it like the cs2
+   inventory just dont show gradients"). */
+html[data-game="tf2"] .inv-page .inventory-grid .inventory-card-media,
+html[data-game="tf2"] .inv-workspace .inventory-grid .inventory-card-media {
+  background: none !important;
+}
+
+html[data-game="tf2"] .inv-page .inventory-grid .inventory-card,
+html[data-game="tf2"] .inv-workspace .inventory-grid .inventory-card {
+  background: #0c1524 !important;
+}
+
+html[data-theme="light"][data-game="tf2"] .inv-page .inventory-grid .inventory-card,
+html[data-theme="light"][data-game="tf2"] .inv-workspace .inventory-grid .inventory-card {
+  background: var(--card) !important;
+}
+
+/* TF2: item names stay white; Steam quality colours (unique = yellow) are
+   not painted on the cards (user, 2026-09-30: "make the text white"). */
+html[data-game="tf2"] .inv-item-card h3,
+html[data-game="tf2"] .inventory-card-name {
+  color: #f8fafc !important;
+}
+
+html[data-theme="light"][data-game="tf2"] .inv-item-card h3,
+html[data-theme="light"][data-game="tf2"] .inventory-card-name {
+  color: var(--text) !important;
+}
+
+/* Trade status tag on every inventory card (user, 2026-09-30: "create tags
+   if the item is tradable"). Sits after the category text in the left label. */
+.inv-item-card .card-label.left .inv-trade-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: none;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+.inv-item-card .card-label.left .inv-trade-tag.is-tradable {
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+}
+
+.inv-item-card .card-label.left .inv-trade-tag.is-locked {
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.14);
+  border: 1px solid rgba(248, 113, 113, 0.32);
+}
+
+html[data-theme="light"] .inv-item-card .card-label.left .inv-trade-tag.is-tradable {
+  color: #15803d;
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+html[data-theme="light"] .inv-item-card .card-label.left .inv-trade-tag.is-locked {
+  color: #b91c1c;
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.28);
+}
+
+/* TF2: the category / quantity label is not painted in the Steam quality
+   colour (unique = yellow, strange = orange); muted like the rest
+   (user, 2026-10-03: "remove the orange or yellow text"). */
+html[data-game="tf2"] .inv-item-card .card-label.left,
+html[data-game="tf2"] .inventory-card-sub {
+  color: #8b96b5 !important;
+  text-shadow: none !important;
+}
+html[data-theme="light"][data-game="tf2"] .inv-item-card .card-label.left,
+html[data-theme="light"][data-game="tf2"] .inventory-card-sub {
+  color: var(--muted, #5d6888) !important;
+}
+
+/* Search and sort on one row, as on the collections page: the dropdown keeps
+   a fixed width instead of the 100% it inherits (user, 2026-10-03). */
+.inv-controls-main {
+  flex-wrap: nowrap;
+}
+.inv-controls-main .collections-sort-dropdown.inventory-sort-dropdown {
+  flex: 0 0 232px;
+  width: 232px;
+  min-width: 0;
+}
+@media (max-width: 640px) {
+  .inv-controls-main {
+    flex-wrap: wrap;
+  }
+  .inv-controls-main .collections-sort-dropdown.inventory-sort-dropdown {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}

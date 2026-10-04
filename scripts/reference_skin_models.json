@@ -1,0 +1,9 @@
+{
+  "items": [
+    {
+      "market_name": "M4A1-S | Vaporwave",
+      "model_url": "assets/models/m4blendmodel.glb",
+      "note": "Gold-standard manual Blender bake: HD mesh + full UV albedo sheet."
+    }
+  ]
+}

@@ -1,0 +1,1698 @@
+/* Collections page — matches CS PRICE site shell */
+html,
+body {
+  background: #0b1220 !important;
+  --collections-page-bg: #0b1220;
+  /* Panel/card fills blend with page (borders + rarity accents remain). */
+  --collections-panel-bg: transparent;
+  --collections-control-bg: transparent;
+  --collections-card-bg: transparent;
+}
+
+body::before {
+  content: none !important;
+  display: none !important;
+}
+
+.collections-shell {
+  max-width: var(--site-shell-max, 1540px);
+  width: var(--site-shell-width, min(1540px, calc(100% - 64px)));
+  /* Equal room above and below the search bar (36px each) so it sits in the
+     middle of the band between the navbar and the card grid. */
+  margin: 20px auto 80px;
+  display: grid;
+  gap: 22px;
+}
+
+/* Toolbar heading: same face/weight as the other page titles, sized to sit
+   directly above the control bar rather than as a hero. */
+.collections-head--toolbar {
+  gap: 6px;
+}
+
+.collections-head.collections-head--toolbar h1 {
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.collections-head--toolbar + .collections-controls {
+  margin-top: -6px;
+}
+
+/* "Pistols  # 498 skins": database total next to the page title, styled as
+   quiet metadata — a translucent brand-blue pill, lighter than the heading. */
+.collections-head-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.collections-head-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
+  margin-top: 4px;
+  padding: 5px 12px 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.16), rgba(37, 99, 235, 0.1));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #93c5fd;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  animation: collectionsHeadIn 0.4s ease both;
+}
+
+/* Data line: "────●────●────●──" with one node per weapon. */
+.collections-head-title.has-data-line {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
+}
+
+/* Visually hidden page title (weapon pages show the line instead). */
+.collections-head-sr-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.collections-head-node-img.is-skin {
+  width: 64px;
+  height: 40px;
+}
+
+.collections-head-line.is-dense .collections-head-node-img.is-skin {
+  width: 44px;
+  height: 30px;
+}
+
+.collections-head-line {
+  position: relative;
+  flex: 1 1 100%;
+  min-width: 240px;
+  height: 66px;
+  margin-top: 6px;
+  align-self: center;
+  animation: collectionsHeadIn 0.5s ease both;
+}
+
+.collections-head-line-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 13px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(96, 165, 250, 0.7) 0%,
+    rgba(96, 165, 250, 0.4) 18%,
+    rgba(148, 163, 184, 0.3) 70%,
+    rgba(148, 163, 184, 0.08) 100%
+  );
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.22);
+}
+
+.collections-head-line-track::before {
+  /* small vertical tick where the line starts */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -4px;
+  width: 1px;
+  height: 9px;
+  background: rgba(96, 165, 250, 0.6);
+}
+
+.collections-head-node {
+  position: absolute;
+  top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 0;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+  animation: collectionsNodeIn 0.4s ease both;
+  animation-delay: calc(120ms + var(--node-i, 0) * 45ms);
+}
+
+.collections-head-node-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0b1220;
+  border: 1.5px solid rgba(147, 197, 253, 0.95);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.collections-head-node-label {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(148, 163, 184, 0.85);
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.collections-head-line.is-dense .collections-head-node-label {
+  display: none;
+}
+
+/* Weapon picture under each node instead of a text label. */
+.collections-head-node-img {
+  width: 56px;
+  height: 34px;
+  object-fit: contain;
+  opacity: 0.85;
+  filter: drop-shadow(0 4px 8px rgba(2, 6, 23, 0.6));
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.collections-head-line.is-dense .collections-head-node-img {
+  width: 40px;
+  height: 28px;
+}
+
+.collections-head-node:hover .collections-head-node-img,
+.collections-head-node:focus-visible .collections-head-node-img {
+  opacity: 1;
+  transform: translateY(-1px) scale(1.12);
+}
+
+.collections-head-node-tip {
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  background: rgba(8, 13, 24, 0.96);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.5);
+  color: #e2e8f0;
+  font-size: 11.5px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 5;
+}
+
+.collections-head-node-tip strong {
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.collections-head-node-tip em {
+  font-style: normal;
+  color: #93c5fd;
+  font-variant-numeric: tabular-nums;
+}
+
+.collections-head-node:hover .collections-head-node-dot,
+.collections-head-node:focus-visible .collections-head-node-dot {
+  transform: scale(1.35);
+  background: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18), 0 0 14px rgba(59, 130, 246, 0.5);
+}
+
+.collections-head-node:hover .collections-head-node-label,
+.collections-head-node:focus-visible .collections-head-node-label {
+  color: #dbeafe;
+}
+
+.collections-head-node:hover .collections-head-node-tip,
+.collections-head-node:focus-visible .collections-head-node-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@keyframes collectionsNodeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 860px) {
+  .collections-head-line {
+    display: none;
+  }
+}
+
+.collections-head-count i {
+  font-size: 10.5px;
+  color: rgba(147, 197, 253, 0.85);
+}
+
+.collections-head-count strong {
+  font-weight: 600;
+  color: #dbeafe;
+}
+
+.collections-head {
+  display: grid;
+  gap: 10px;
+}
+
+.collections-kicker {
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Case/collection detail: Weapon Skins eyebrow (steel-blue from UI sample) */
+.detail-weapon-skins-kicker,
+.detail-shell .collections-kicker.detail-weapon-skins-kicker {
+  color: #5D87B1;
+}
+
+.collections-head h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+  color: #f8fafc;
+}
+
+.collections-head p {
+  margin: 0;
+  max-width: 720px;
+  color: rgba(226, 232, 240, 0.65);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Control bar: search + filter chips + results counter + sort on one row,
+   closed off by a thin divider so it reads as a toolbar, not a floating box. */
+.collections-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 0 0 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(110, 146, 198, 0.16);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.collections-controls .collections-search-wrap {
+  flex: 1 1 320px;
+  min-width: 220px;
+}
+
+.collections-controls .collections-sort-dropdown {
+  flex: 0 0 220px;
+  width: 220px;
+  margin-left: auto;
+}
+
+.collections-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* "Show more" under a catalogue grid. The grid renders in pages of 240 now
+   (CATALOG_PAGE_SIZE in react/catalog-items-page.jsx) because the Skins entry
+   in the navbar opens every weapon finish at once. */
+.catalog-more-row {
+  display: flex;
+  justify-content: center;
+  margin: 28px 0 8px;
+}
+
+.catalog-more-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(75, 105, 255, 0.45);
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.catalog-more-btn:hover {
+  border-color: rgba(75, 105, 255, 0.8);
+  background: rgba(30, 41, 70, 0.85);
+  color: #ffffff;
+}
+
+.catalog-more-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.7);
+  color: rgba(203, 213, 225, 0.92);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filter pills with a count badge (csgodatabase-style), CSPRICE blue when active. */
+.collections-filter-chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 8px 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.collections-filter-chip:hover {
+  border-color: rgba(75, 105, 255, 0.5);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.collections-filter-chip.is-active {
+  border-color: rgba(75, 105, 255, 0.75);
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.42), rgba(58, 85, 217, 0.34));
+  color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(75, 105, 255, 0.16);
+}
+
+.collections-filter-chip .chip-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.7);
+  color: rgba(203, 213, 225, 0.92);
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.collections-filter-chip.is-active .chip-count {
+  border-color: rgba(75, 105, 255, 0.5);
+  background: rgba(2, 6, 23, 0.55);
+  color: #ffffff;
+}
+
+.collections-filter-chip:only-child {
+  display: none;
+}
+
+/* Press feedback: the chip dips, then the grid re-animates below it. */
+.collections-filter-chip:active {
+  transform: translateY(0) scale(0.96);
+  transition-duration: 0.08s;
+}
+
+.collections-filter-chip.is-active {
+  animation: collectionsChipPop 0.28s ease;
+}
+
+.collections-filter-chip.is-active .chip-count {
+  animation: collectionsChipCountIn 0.32s ease;
+}
+
+@keyframes collectionsChipPop {
+  0% { transform: scale(0.96); }
+  55% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+@keyframes collectionsChipCountIn {
+  from {
+    opacity: 0.4;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collections-filter-chip.is-active,
+  .collections-filter-chip.is-active .chip-count,
+  .collections-grid-animated .landing-card-visible {
+    animation: none;
+  }
+}
+
+.collections-results-count {
+  color: rgba(148, 163, 184, 0.78);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.collections-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(110, 146, 198, 0.2);
+  background: rgba(15, 23, 42, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+/* Same blue focus ring the Deals and Market Explorer search boxes use — the
+   green one made this page look like a different site. */
+.collections-search-wrap:focus-within {
+  border-color: rgba(96, 165, 250, 0.28);
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.07), 0 10px 26px rgba(2, 6, 23, 0.3);
+}
+
+.collections-search-wrap > i {
+  color: rgba(125, 211, 252, 0.7);
+  font-size: 14px;
+}
+
+.collections-search-wrap input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f8fafc;
+  font: inherit;
+  font-size: 14px;
+}
+
+.collections-search-wrap input::placeholder {
+  color: rgba(148, 163, 184, 0.62);
+}
+
+.collections-sort {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(110, 146, 198, 0.14);
+  background: var(--collections-control-bg);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.results-meta {
+  color: rgba(191, 219, 254, 0.78);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Count line removed — sit the card grid closer to search/sort. */
+.collections-shell > .collections-controls + .collections-grid {
+  margin-top: -8px;
+}
+
+/* Six cards per row on every desktop width (user, 2026-09-29: "always show
+   the items in lines of 6") - it used to be 5 until wide-screens.css took
+   over at 1500px. Laptops step down to 4 / 3 / 2 / 1 below. */
+.collections-shell .collections-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* Card — inspired by market/deal cards */
+.card {
+  background: var(--collections-card-bg);
+  border: 1px solid rgba(110, 146, 198, 0.12);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+}
+
+.card.showcase-card {
+  --card-accent: #60a5fa;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(96, 165, 250, 0.34);
+  box-shadow: 0 12px 28px rgba(2, 6, 23, 0.28);
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-link:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.55);
+  outline-offset: 2px;
+}
+
+.card-media {
+  position: relative;
+  padding: 24px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 168px;
+}
+
+/* Soft single wash (pre dual-layer intensity) — accent colors stay, no white-hot core.
+   Shared 1:1 with inventory item media so the rarity glow cannot drift. */
+.card-media,
+.inv-page .inventory-grid .inventory-card-media,
+.inv-workspace .inventory-grid .inventory-card-media,
+.inv-page .inventory-grid .card.showcase-card.inv-item-card .card-media,
+.inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-media {
+  background:
+    radial-gradient(90% 70% at 50% 12%, color-mix(in srgb, var(--card-media-accent, var(--card-accent, #60a5fa)) 22%, transparent), transparent 62%);
+}
+
+.collections-grid .card-media {
+  min-height: 160px;
+  padding: 22px 18px 18px;
+}
+
+/* Cases hub: same soft single radial as Collections (~22%); accents via --card-media-accent.
+   Case art sits flush on the media/body join and hides .card-body { border-top }.
+   Clip media overflow and paint the hairline on the body (::before) so every
+   #casesGrid card — cases and terminals — shows the same image/text separator. */
+#casesGrid .card-media {
+  overflow: hidden;
+  background:
+    radial-gradient(90% 70% at 50% 12%, color-mix(in srgb, var(--card-media-accent, var(--card-accent, #60a5fa)) 22%, transparent), transparent 62%);
+}
+
+#casesGrid .card-body {
+  position: relative;
+  z-index: 1;
+  border-top-color: transparent;
+}
+
+#casesGrid .card-body::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: rgba(110, 146, 198, 0.22);
+  pointer-events: none;
+}
+
+.card-media img,
+.card-media-img {
+  width: auto;
+  max-width: 100%;
+  max-height: 150px;
+  min-height: 100px;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55));
+  transition: transform 0.22s ease;
+}
+
+/* XM1014 is a long shotgun: min-height + overflow:hidden + the old 15%
+   clip-path cut muzzle and stock. Fit the complete gun in the media box. */
+.card-media.xm-hide-shell img,
+.card-media.xm-hide-shell .card-media-img,
+.collections-grid .card-media.xm-hide-shell img,
+.collections-grid .card-media.xm-hide-shell .card-media-img {
+  clip-path: none;
+  object-fit: contain;
+  object-position: center;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 150px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.collections-grid .card-media img,
+.collections-grid .card-media-img {
+  max-height: 132px;
+  min-height: 92px;
+}
+
+.card-media img[src*="-source2.svg"] {
+  width: min(100%, 180px);
+  max-height: 150px;
+  min-height: 120px;
+  object-fit: contain;
+}
+
+.card-media img[src*="assets/weapons/"],
+.card-media img[src*="assets/stickers/"],
+.card-media img[src*="assets/cases/"],
+.card-media img[src*="assets/collections/"],
+.card-media img[src*="assets/other/"],
+.card-media img[src*="assets/steam-market-cache/"] {
+  width: min(100%, 220px);
+  max-height: 170px;
+  min-height: 120px;
+  min-width: 0;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+/* Terminals: use the same contained preview box as local case art so the
+   full tablet stays inside the media frame (no overflow zoom/clip). */
+#casesGrid .card-media.card-media-terminal {
+  overflow: hidden;
+  padding: 22px 18px 18px;
+}
+
+#casesGrid .card-media-terminal img,
+#casesGrid .card-media-terminal .card-media-img,
+#casesGrid .card-media img[src*="cdn.csroi.com/weapon_cases/"] {
+  width: min(100%, 220px);
+  max-height: 170px;
+  min-height: 120px;
+  object-fit: contain;
+}
+
+.card:hover .card-media img,
+.card:hover .card-media-img {
+  transform: scale(1.04);
+}
+
+.card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+  min-height: 88px;
+  border-top: 1px solid rgba(110, 146, 198, 0.1);
+}
+
+.card.showcase-card .card-body {
+  min-height: 92px;
+}
+
+.card.landing-card .card-body {
+  min-height: 0;
+  padding: 14px 16px 12px;
+  gap: 6px;
+}
+
+.card.landing-card .card-footer {
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* Match Other/category landing tiles to compact weapon cards (Negev).
+   Do not apply on collections.html (#collectionsGrid): those icons are 32×32
+   source2 SVGs and must be scaled up, not shown at intrinsic size. */
+.collections-shell .collections-grid:not(#collectionsGrid) .card.landing-card .card-media {
+  overflow: hidden;
+  flex: 0 0 auto;
+  min-height: 180px;
+  height: 180px;
+  max-height: 180px;
+  padding: 20px 16px 14px;
+}
+
+.collections-shell .collections-grid:not(#collectionsGrid) .card.landing-card .card-media img,
+.collections-shell .collections-grid:not(#collectionsGrid) .card.landing-card .card-media-img {
+  min-width: 0;
+  min-height: 0;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Collections hub: scale collection art (32px SVGs and PNGs) to fill the media band. */
+#collectionsGrid .card-media img,
+#collectionsGrid .card-media-img {
+  width: min(100%, 168px);
+  max-width: 100%;
+  height: auto;
+  min-height: 120px;
+  max-height: 148px;
+  object-fit: contain;
+}
+
+.card-accent-foot {
+  display: block;
+  width: 100%;
+  height: 4px;
+  flex-shrink: 0;
+  background: var(--card-accent, #60a5fa);
+  opacity: 1;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--card-accent, #60a5fa) 62%, transparent);
+}
+
+.card-top-labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.card-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.card-label.left {
+  color: var(--card-accent, rgba(186, 198, 218, 0.92));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card.showcase-card .card-label.left {
+  color: var(--card-accent, #93c5fd);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--card-accent, #93c5fd) 42%, transparent);
+}
+
+.card-label.right {
+  color: #f8fafc;
+  flex-shrink: 0;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+}
+
+.collections-grid .card h3 {
+  font-size: 15px;
+}
+
+.card-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.72);
+  font-weight: 500;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.card-intro {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #f8fafc;
+}
+
+.card-label.right.loading {
+  color: rgba(148, 163, 184, 0.65);
+  font-weight: 500;
+}
+
+.card-intro-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2dd4bf;
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.16), 0 0 8px rgba(45, 212, 191, 0.45);
+  flex-shrink: 0;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: rgba(148, 163, 184, 0.8);
+}
+
+@media (max-width: 1280px) {
+  .collections-grid,
+  .collections-shell .collections-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .collections-shell {
+    width: min(100%, calc(100% - 28px));
+    margin-top: 18px;
+  }
+
+  .collections-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .collections-grid,
+  .collections-shell .collections-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 720px) {
+  .collections-grid,
+  .collections-shell .collections-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .collections-shell .collections-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.catalog-back-link {
+  color: rgba(125, 211, 252, 0.92);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.catalog-back-link:hover {
+  color: #f8fafc;
+}
+
+.catalog-skeleton .card-media {
+  min-height: 180px;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+/* Sort dropdown — closed trigger + profile-style menu */
+.collections-sort-dropdown {
+  position: relative;
+  width: 100%;
+  min-width: 220px;
+}
+
+.collections-sort-trigger {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(110, 146, 198, 0.14);
+  background: var(--collections-control-bg);
+  color: #f8fafc;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.collections-sort-trigger span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.collections-sort-trigger i {
+  color: rgba(191, 219, 254, 0.72);
+  font-size: 11px;
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+
+.collections-sort-trigger:hover,
+.collections-sort-dropdown.open .collections-sort-trigger {
+  border-color: rgba(96, 165, 250, 0.38);
+  background: rgba(30, 41, 59, 0.86);
+  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.26);
+}
+
+.collections-sort-dropdown.open .collections-sort-trigger i {
+  transform: rotate(180deg);
+}
+
+.collections-sort-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: linear-gradient(180deg, rgba(17, 27, 45, 0.98), rgba(8, 13, 24, 0.98));
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.42);
+  z-index: 300;
+  transform-origin: top right;
+  animation: collectionsSortMenuIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes collectionsSortMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.collections-sort-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 38px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #dbeafe;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+  opacity: 0;
+  animation: collectionsSortOptionIn 0.18s ease both;
+}
+
+@keyframes collectionsSortOptionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.collections-sort-option:hover,
+.collections-sort-option:focus-visible {
+  color: #ffffff;
+  background: rgba(96, 165, 250, 0.12);
+  transform: translateX(2px);
+  outline: none;
+}
+
+.collections-sort-option.active {
+  color: #ffffff;
+  background: rgba(59, 130, 246, 0.32);
+  box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.24);
+}
+
+.collections-sort-option.active:hover,
+.collections-sort-option.active:focus-visible {
+  background: rgba(59, 130, 246, 0.38);
+  transform: none;
+}
+
+.collections-head-animated {
+  animation: collectionsHeadIn 0.55s ease both;
+}
+
+.collections-hero-copy {
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+@keyframes collectionsHeadIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.collections-grid-animated .landing-card-visible {
+  animation: landingCardIn 0.42s ease both;
+  animation-delay: var(--card-stagger, 0ms);
+}
+
+@keyframes landingCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 980px) {
+  .collections-sort-dropdown {
+    min-width: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Phone: give the search bar the whole row back.
+   --------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .collections-results-count {
+    display: none;
+  }
+
+  /* Phones keep the search bar only: the filter chips and the sort dropdown go
+     on every item listing, landings included. */
+  .collections-controls .collections-sort-dropdown,
+  .collections-filter-chips {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Search fields: no doubled focus ring.
+
+   theme.css draws a global `html[data-theme-ready] :focus-visible { outline:
+   2px solid var(--accent) }`. On a search field that lands INSIDE the wrapper,
+   which is already showing focus through .collections-search-wrap:focus-within
+   (border + glow) — so the field ended up with a blue rectangle inside a
+   highlighted box.
+
+   The ring is dropped on the input only. Focus stays visible via the wrapper,
+   so this is not an accessibility regression; every other control keeps the
+   global ring. Applies in both themes, which is why it sits outside the light
+   block below.
+   --------------------------------------------------------------------------- */
+.collections-search-wrap input:focus,
+.collections-search-wrap input:focus-visible,
+.inventory-search-wrap input:focus,
+.inventory-search-wrap input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* light-theme:begin */
+/* ===========================================================================
+   Light theme — additive layer.
+   ---------------------------------------------------------------------------
+   Nothing above this line is touched. The dark design is the default and stays
+   byte-for-byte as it was; this block only adds what light needs.
+
+   Every rule is prefixed with :where(html[data-theme="light"]), which adds no
+   specificity. So a rule here ties with the base rule it shadows and wins on
+   source order (it is last in the file), while the sheet's own state rules
+   (.is-active, :hover, :focus-within, ...) keep their higher specificity and
+   still win — light inherits all of the dark sheet's interaction behaviour
+   instead of having to restate it.
+
+   The exception is where the dark rule is !important (the page background):
+   :where() cannot beat that, so those few carry !important and a real
+   attribute selector.
+
+   Colours come only from the theme.css tokens. Rarity accents (--card-accent)
+   are deliberately NOT remapped: they encode item rarity, not chrome, and read
+   correctly on both themes.
+   ========================================================================= */
+
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background: var(--bg) !important;
+  --collections-page-bg: var(--bg);
+  --collections-panel-bg: var(--card);
+  --collections-control-bg: var(--card);
+  --collections-card-bg: var(--card);
+}
+
+/* ---- page head ---------------------------------------------------------- */
+:where(html[data-theme="light"]) .collections-head h1 {
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .collections-head p,
+:where(html[data-theme="light"]) .collections-hero-copy {
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .collections-kicker,
+:where(html[data-theme="light"]) .detail-shell .collections-kicker.detail-weapon-skins-kicker {
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .collections-head-count {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+:where(html[data-theme="light"]) .collections-head-count i,
+:where(html[data-theme="light"]) .collections-head-count strong {
+  color: var(--accent);
+}
+
+/* The progress rail through the collection timeline. */
+:where(html[data-theme="light"]) .collections-head-line-track {
+  background: var(--border);
+}
+
+:where(html[data-theme="light"]) .collections-head-line-track::before {
+  background: var(--accent);
+}
+
+:where(html[data-theme="light"]) .collections-head-node-dot {
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+:where(html[data-theme="light"]) .collections-head-node-label {
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .collections-head-node:focus-visible .collections-head-node-dot {
+  background: var(--accent);
+}
+
+:where(html[data-theme="light"]) .collections-head-node:focus-visible .collections-head-node-label {
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .collections-head-node-tip {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 18px 40px rgba(16, 24, 64, 0.12);
+}
+
+:where(html[data-theme="light"]) .collections-head-node-tip strong {
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .collections-head-node-tip em {
+  color: var(--accent);
+}
+
+/* ---- toolbar: search, sort, chips --------------------------------------- */
+:where(html[data-theme="light"]) .collections-search-wrap {
+  border: 1px solid var(--border);
+  background: var(--field);
+}
+
+:where(html[data-theme="light"]) .collections-search-wrap:focus-within {
+  background: var(--card);
+  border-color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .collections-search-wrap > i {
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .collections-search-wrap input {
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .collections-search-wrap input::placeholder {
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .collections-sort,
+:where(html[data-theme="light"]) .collections-sort-trigger {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .collections-sort-trigger i {
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .collections-sort-dropdown.open .collections-sort-trigger {
+  background: var(--tint);
+}
+
+:where(html[data-theme="light"]) .collections-sort-menu {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 18px 40px rgba(16, 24, 64, 0.12);
+}
+
+:where(html[data-theme="light"]) .collections-sort-option {
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .collections-sort-option:hover,
+:where(html[data-theme="light"]) .collections-sort-option:focus-visible {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .collections-sort-option.active {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .collections-filter-chip {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .collections-filter-chip:hover {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+/* The selected chip keeps a filled accent in both themes. */
+:where(html[data-theme="light"]) .collections-filter-chip.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+:where(html[data-theme="light"]) .collections-filter-chip .chip-count {
+  border: 1px solid var(--border);
+  background: var(--field);
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .collections-filter-chip.is-active .chip-count {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: transparent;
+  color: var(--on-accent);
+}
+
+:where(html[data-theme="light"]) .collections-results-count,
+:where(html[data-theme="light"]) .results-meta,
+:where(html[data-theme="light"]) .no-results {
+  color: var(--muted);
+}
+
+/* ---- "load more" -------------------------------------------------------- */
+:where(html[data-theme="light"]) .catalog-more-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .catalog-more-btn:hover {
+  background: var(--tint);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .catalog-more-count {
+  border: 1px solid var(--border);
+  background: var(--field);
+  color: var(--muted);
+}
+
+:where(html[data-theme="light"]) .catalog-back-link {
+  color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .catalog-back-link:hover {
+  color: var(--text);
+}
+
+/* ---- cards -------------------------------------------------------------- */
+:where(html[data-theme="light"]) .card {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: var(--card-shadow);
+}
+
+:where(html[data-theme="light"]) .card:hover {
+  box-shadow: 0 12px 28px rgba(16, 24, 64, 0.1);
+}
+
+:where(html[data-theme="light"]) .card h3,
+:where(html[data-theme="light"]) .card-label.right,
+:where(html[data-theme="light"]) .card-intro {
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .card-subtitle,
+:where(html[data-theme="light"]) .card-label.right.loading {
+  color: var(--muted);
+}
+
+/* No coloured glow behind the artwork in light mode (user, 2026-09-29:
+   "remove the gradients on the white mode") - the accent wash read as a pink
+   or blue cloud on white. Same selectors as the base rule, so it ties on
+   specificity and wins on order. */
+:where(html[data-theme="light"]) .card-media,
+:where(html[data-theme="light"]) .inv-page .inventory-grid .inventory-card-media,
+:where(html[data-theme="light"]) .inv-workspace .inventory-grid .inventory-card-media,
+:where(html[data-theme="light"]) .inv-page .inventory-grid .card.showcase-card.inv-item-card .card-media {
+  background: none;
+}
+
+/* The artwork wells sit a shade under the card so the item still pops. */
+:where(html[data-theme="light"]) #casesGrid .card-media,
+:where(html[data-theme="light"]) .inv-workspace .inventory-grid .card.showcase-card.inv-item-card .card-media {
+  background: var(--field);
+}
+
+:where(html[data-theme="light"]) #casesGrid .card-body::before {
+  background: var(--border);
+}
+
+:where(html[data-theme="light"]) .catalog-skeleton .card-media {
+  background: var(--field);
+}
+
+/* ---- surfaces that must not be remapped ---------------------------------
+   .card-accent-foot / .card-label.left read --card-accent, the per-item rarity
+   colour, and .card-intro-dot is the live-data pip. Both carry meaning and are
+   already legible on white, so they are left exactly as the dark sheet sets
+   them. Listed here so a later pass does not "finish the job" by tokenising
+   them. */
+/* light-theme:end */
+
+/* ===========================================================================
+   Phone search screen (owner, 2026-10-03)
+   ---------------------------------------------------------------------------
+   Below 768px the Search tab opens this page as a search screen rather than a
+   catalogue grid: a field, five suggestions and the recent searches. Once a
+   query is submitted the normal grid returns as the results, so there is one
+   page and one URL and the back button behaves. Desktop is untouched.
+   ======================================================================== */
+@media (max-width: 767px) {
+  /* While the screen is up, the catalogue chrome is not. Hiding rather than
+     unmounting keeps the page's own state intact for when the query lands. */
+  .collections-shell.is-msearch > *:not(.msearch) {
+    display: none;
+  }
+
+  .msearch {
+    padding: 0 0 24px;
+  }
+
+  .msearch-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .msearch-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  .msearch-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 44px;
+    padding: 0 10px;
+    border-radius: 12px;
+    border: 1px solid #1C2439;
+    background: #0F1527;
+    overflow: hidden;
+  }
+
+  /* The accent border IS the focus indicator. The browser's own ring drew a
+     second blue outline outside it, which read as a double box (owner,
+     2026-10-03) - so the ring is suppressed on the wrapper and the input, and
+     the border carries the state on its own. */
+  .msearch-field:focus-within {
+    border-color: var(--accent);
+    outline: none;
+  }
+
+  .msearch-field input:focus,
+  .msearch-field input:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .msearch-field > i {
+    flex: none;
+    color: #8B96B5;
+    font-size: 14px;
+  }
+
+  .msearch-field input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    font-size: 15px;
+    outline: none;
+  }
+
+  /* Chrome draws its own clear affordance on type=search; ours is the one
+     that matches the design and carries a label. */
+  .msearch-field input::-webkit-search-cancel-button { display: none; }
+
+  .msearch-clear {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: #8B96B5;
+  }
+
+  /* Progress, not a spinner: the rows below stay readable while it runs. */
+  .msearch-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 40%;
+    background: var(--accent);
+    animation: msearchProgress 900ms ease-in-out infinite;
+  }
+
+  @keyframes msearchProgress {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(350%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .msearch-progress { animation: none; width: 100%; opacity: 0.5; }
+  }
+
+  .msearch-cancel {
+    flex: none;
+    min-height: 44px;
+    padding: 0 4px;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .msearch-label {
+    margin: 10px 0 2px;
+    padding: 0 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8B96B5;
+  }
+
+  .msearch-label--row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .msearch-clear-recent {
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    min-height: 44px;
+  }
+
+  .msearch-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .msearch-row {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 0 16px;
+    border: 0;
+    border-bottom: 1px solid #1C2439;
+    background: none;
+    color: inherit;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  .msearch-recent { min-height: 44px; }
+
+  .msearch-row.is-active { background: rgba(47, 125, 255, 0.10); }
+
+  /* Suggestions arrive rather than appear. A `from`-only keyframe, so the
+     resting state is the natural one and nothing is left invisible if the
+     animation never runs - the same reason the home reveal is written this way.
+     The stagger is capped at five because that is how many rows there are. */
+  @media (prefers-reduced-motion: no-preference) {
+    .msearch-list .msearch-row {
+      animation: msearchRowIn 220ms ease both;
+    }
+
+    .msearch-list li:nth-child(1) .msearch-row { animation-delay: 0ms; }
+    .msearch-list li:nth-child(2) .msearch-row { animation-delay: 35ms; }
+    .msearch-list li:nth-child(3) .msearch-row { animation-delay: 70ms; }
+    .msearch-list li:nth-child(4) .msearch-row { animation-delay: 105ms; }
+    .msearch-list li:nth-child(5) .msearch-row { animation-delay: 140ms; }
+    .msearch-list li:nth-child(n+6) .msearch-row { animation-delay: 175ms; }
+  }
+
+  @keyframes msearchRowIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  .msearch-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #121A2E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .msearch-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .msearch-thumb--icon { color: var(--accent); font-size: 14px; }
+
+  .msearch-copy { min-width: 0; }
+
+  .msearch-name {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .msearch-more .msearch-name { color: var(--accent); white-space: normal; }
+
+  .msearch-sub {
+    display: block;
+    font-size: 12px;
+    color: #8B96B5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .msearch-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: #C9D2E3;
+    white-space: nowrap;
+  }
+
+  .msearch-row:focus-visible,
+  .msearch-cancel:focus-visible,
+  .msearch-clear:focus-visible,
+  .msearch-clear-recent:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+}

@@ -1,0 +1,180 @@
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg,#0b1220,#020617);
+      color: #fff;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+    .auth-card {
+      width: 420px;
+      background: linear-gradient(135deg,#1e293b,#0f172a);
+      border-radius: 18px;
+      padding: 40px;
+      box-shadow: 0 40px 90px rgba(0,0,0,.6);
+      animation: fadeUp .7s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .auth-header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .auth-header p {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .auth-field {
+      margin-bottom: 18px;
+    }
+
+    .auth-field label {
+      font-size: 13px;
+      opacity: 0.8;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .auth-field input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .auth-field input:focus {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+      color: #fff;
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(34,197,94,.4);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .auth-footer a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+*,
+*::before,
+*::after {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-track {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+/* light-theme:begin */
+/* Light theme — additive. Dark above untouched. :where() adds no specificity,
+   so these tie with the base rules and win on source order only.
+   The sign-up button keeps its green: it is the page's single confirm action,
+   and --positive is the token for that meaning. */
+
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .auth-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px rgba(16, 24, 64, 0.14);
+}
+
+:where(html[data-theme="light"]) .auth-field input {
+  background: var(--field);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+:where(html[data-theme="light"]) .auth-field input:focus {
+  background: var(--card);
+  border-color: var(--accent);
+}
+
+:where(html[data-theme="light"]) .auth-btn {
+  color: var(--on-accent);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--positive) 88%, #ffffff),
+    var(--positive));
+}
+
+:where(html[data-theme="light"]) .auth-btn:hover {
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--positive) 35%, transparent);
+}
+
+:where(html[data-theme="light"]) .auth-footer a {
+  color: var(--accent);
+}
+/* light-theme:end */

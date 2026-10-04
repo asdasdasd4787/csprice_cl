@@ -1,0 +1,43 @@
+# Credentials — never commit these
+config.local.php
+access_config.local.php
+deploy/
+*.settings.json
+
+# Generated item pages (rebuild: scripts/build_item_urls.php)
+skins/
+cases/
+stickers/
+agents/
+charms/
+graffiti/
+patches/
+pins/
+music/
+music-kits/
+collections/
+collectibles/
+misc/
+
+# Price and marketplace caches (repopulated by the sync scripts)
+assets/*-cache/
+assets/cache/
+assets/data/
+assets/*.log
+
+# 3D models (regenerate: scripts/export_base_weapon_models.ps1)
+assets/models/
+
+# Scratch and debug artifacts
+_tmp_*
+tmp_*
+*_harness*
+*-harness*
+*.bak
+test-results/
+.tmp-*/
+
+# Tooling
+node_modules/
+__pycache__/
+*.zip

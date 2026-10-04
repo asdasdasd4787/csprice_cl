@@ -1,0 +1,983 @@
+/* ==========================================================================
+   Phone AI home screen (viewport < 768px)
+   --------------------------------------------------------------------------
+   The prompt card sits at the top; the recent chats and the suggestion pills
+   follow it. No bottom input bar on this screen — the footer composer is hidden
+   while the start screen is up and comes back with the thread.
+
+   Every colour is a token from theme.css, so this screen follows the light and
+   dark themes without a rule of its own. Loaded after home-ai.css, which it
+   overrides; the !important markers only answer the ones already there.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  body.page-home {
+    background: var(--bg) !important;
+    color: var(--text);
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    line-height: 1.35;
+  }
+
+  /* The blue --top-glow used to be painted here, fixed behind everything. The
+     owner asked for a flat background (2026-10-03), so it is off - switched off
+     at the rule that turned it on rather than overridden somewhere later, which
+     is the only version that works: this rule carries !important, so a plain
+     `display: none` further down the file loses to it. */
+  body.page-home .home-ai::before {
+    display: none !important;
+  }
+
+  /* No grid texture, no wave field: this screen is the glow and the cards. */
+  body.page-home .home-ai::after {
+    content: none !important;
+  }
+
+  body.page-home .home-ai-waves {
+    display: none !important;
+  }
+
+  body.page-home .home-ai,
+  body.page-home .home-ai-main,
+  body.page-home .home-ai-stage,
+  body.page-home .home-ai-composer-wrap {
+    background: transparent !important;
+  }
+
+  /* ---- header (52px: menu · spacer · ghost · avatar) ------------------- */
+  body.page-home .navbar {
+    height: 52px !important;
+    min-height: 52px !important;
+    max-height: 52px !important;
+    /* 12px, not 20px (owner, 2026-10-03): the ghost and the avatar sit closer
+       to the edges than the text below them, which is what pushes them out of
+       the greeting's column and makes them read as chrome. */
+    padding: 0 12px !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    color: var(--text);
+  }
+
+  body.page-home .navbar .nav-alert-menu,
+  body.page-home .navbar .search-container {
+    display: none !important;
+  }
+
+  /* The game switcher takes the ghost's place (owner, 2026-10-03), and it is
+     the same .nav-game the desktop header uses - rebuilding it here would mean
+     reimplementing the site_handoff.php token handshake that carries the signed
+     session across to tf2price.eu. It lives inside .nav-left, so that column is
+     shown again with everything else in it hidden. */
+  body.page-home .navbar .nav-left {
+    display: flex !important;
+    /* navbar.css collapses this column to width:0 at phone widths - it is only
+       ever a hidden container there - so the switcher inside it overflowed a
+       zero-width box and the row measured as if it were not present. */
+    flex: 0 0 auto;
+    width: auto !important;
+    align-items: center;
+    min-width: 0;
+  }
+
+  body.page-home .navbar .nav-left > :not(.nav-game) {
+    display: none !important;
+  }
+
+  body.page-home .navbar .nav-game {
+    display: block !important;
+  }
+
+  body.page-home .navbar .nav-private-chat {
+    display: none !important;
+  }
+
+  body.page-home .navbar .nav-right {
+    display: flex !important;
+    align-items: center;
+    gap: 16px;
+    /* .nav-left is in the row again, so this side must not claim the full
+       width. It still flex-grows, so the avatar is pinned to the end rather
+       than left floating next to the switcher. */
+    width: auto;
+    /* !important because navbar.css wins otherwise with space-between, and with
+       the ghost and the burger both hidden this row has a single child - which
+       space-between parks at the START, i.e. the avatar sat next to the
+       switcher instead of at the right edge. */
+    justify-content: flex-end !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.page-home .navbar .nav-burger {
+    order: 0;
+    margin-right: auto !important;
+  }
+
+  body.page-home .navbar .nav-private-chat { order: 1; }
+  body.page-home .navbar .nav-profile-slot { order: 2; }
+
+  body.page-home .navbar .nav-burger,
+  body.page-home .navbar .nav-private-chat {
+    position: relative;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--text) !important;
+  }
+
+  /* 22px glyph, 44px tap target. */
+  body.page-home .navbar .nav-burger::after,
+  body.page-home .navbar .nav-private-chat::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+
+  body.page-home .navbar .nav-burger svg,
+  body.page-home .navbar .nav-private-chat svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  body.page-home .navbar .nav-profile-trigger,
+  body.page-home .navbar .nav-profile-slot .nav-login-btn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    /* No ring (owner, 2026-10-03). The avatar is already a circle against the
+       page; the 2px border just drew a second one around it. */
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: var(--card) !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    color: var(--text) !important;
+    font-size: 0 !important;
+  }
+
+  body.page-home .navbar .nav-profile-trigger img,
+  body.page-home .navbar .nav-profile-slot .nav-login-btn img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  body.page-home .navbar .nav-profile-trigger > span:not(.nav-profile-avatar),
+  body.page-home .navbar .nav-profile-trigger i,
+  body.page-home .navbar .nav-profile-name,
+  body.page-home .navbar .nav-profile-caret {
+    display: none !important;
+  }
+
+  /* ---- start screen ---------------------------------------------------- */
+  /* The welcome stage centres its content for the desktop hero; this screen
+     starts at the top instead, so both selectors have to be answered. */
+  body.page-home .home-ai-stage,
+  body.page-home .home-ai-main.is-welcome .home-ai-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    place-items: stretch !important;
+    min-height: 0;
+    padding: 0 !important;
+  }
+
+  /* ======================================================================
+     AI home screen
+     ----------------------------------------------------------------------
+     Greeting -> gradient headline -> side-scrolling suggestion cards ->
+     "Moving now". Every colour is a token from theme.css, so dark mode needs
+     nothing of its own here.
+
+     This replaces the previous phone home, which was a centred hero over a
+     black sheet with its own cyan accent. That palette is gone deliberately:
+     the redesign specifies token-only colours so the two themes stay in step,
+     and a bespoke black for one screen is exactly what stops that.
+     ====================================================================== */
+  .mhome {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 8px 20px 0;
+    box-sizing: border-box;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mhome-greeting {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .mhome-title {
+    margin: 0;
+    color: var(--text);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  /* No gradient on this headline. theme.css's .u-gradient-text clips a
+     blue-to-cyan gradient to the text and sets `color: transparent` to reveal
+     it, so switching to a flat colour means undoing both - setting `color`
+     alone would leave the text invisible. The second line is simply --accent.
+
+     Only the phone headline is flattened; .u-gradient-text keeps its gradient
+     everywhere else it is used. */
+  .mhome-title .u-gradient-text {
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    color: var(--accent);
+  }
+
+  /* ---- suggestion cards -------------------------------------------------
+     The one element on the page allowed to scroll sideways. The negative right
+     margin lets the row bleed past the 20px page gutter so the next card peeks
+     instead of ending flush. */
+  .mhome-cards {
+    display: flex;
+    gap: 10px;
+    margin-right: -20px;
+    padding-right: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mhome-cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The row is a <ul> now, so the list defaults have to go - a browser's 40px
+     padding-inline-start would shove the first card off the headline's left
+     edge. margin-right stays at -20px: that is the bleed that lets the last
+     card sit half off-screen so the row reads as scrollable.
+
+     No padding-left here on purpose. The spec asked for 16px "so the first card
+     lines up with the headline", but .mhome already supplies the page's 20px
+     gutter and this row has no left bleed, so its left edge is ALREADY on the
+     headline. Adding 16px would indent the cards past it and break the very
+     alignment the padding was for. */
+  .mhome-cards {
+    list-style: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  /* The <li> is the flex item now, so it carries the sizing and the snap. */
+  .mhome-cards > li {
+    flex: none;
+    display: flex;
+    scroll-snap-align: start;
+  }
+
+  /* White glyph on the unchanged blue tile (owner, 2026-10-03). The square
+     keeps var(--tint); only the mark flips from accent to white. */
+  /* body.page-home prefix is load-bearing: the original `.mhome-card-icon`
+     rules (accent colour, 18px svg) live LATER in this file, so at equal
+     specificity they would win on source order. (0,3,0) beats (0,1,0)
+     regardless of where either sits. */
+  body.page-home .mhome-card-icon {
+    color: #fff;
+  }
+
+  body.page-home .mhome-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mhome-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .mhome-card {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 170px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    scroll-snap-align: start;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mhome-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background: var(--tint);
+    color: var(--accent);
+  }
+
+  .mhome-card-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mhome-card-title {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .mhome-card-sub {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  /* ---- section label ----------------------------------------------------
+     The spec's label is 11.5px/700/.07em where theme.css's shared .u-label is
+     12px/600/.06em, so the values are restated rather than changing a class
+     every desktop page also uses. */
+  .mhome-label {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  /* ---- movers ----------------------------------------------------------- */
+  .mhome-movers {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+  }
+
+  .mhome-mover {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 40px;
+    padding: 11px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .mhome-mover:first-child {
+    border-top: 0;
+  }
+
+  .mhome-mover-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 13.5px;
+    font-weight: 500;
+  }
+
+  .mhome-mover-price {
+    flex: none;
+    font-size: 13px;
+  }
+
+  .mhome-mover-change {
+    flex: none;
+    width: 56px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .mhome-mover-change.is-up {
+    color: var(--positive);
+  }
+
+  .mhome-mover-change.is-down {
+    color: var(--negative);
+  }
+
+  .mhome-card:focus-visible,
+  .mhome-mover:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ---- input bar --------------------------------------------------------
+     The composer that the thread already uses, restyled to the spec. Not a
+     second input: dictation, attachments and send all live on this one, and a
+     parallel bar would mean keeping two copies of that behaviour in step.
+
+     An empty prompt is the normal state of this screen, so the disabled send
+     stays legible rather than fading to a third of its colour. */
+  body.page-home .home-ai-main.is-welcome .home-ai-starters-block {
+    display: none !important;
+  }
+
+  body.page-home .home-ai-main.is-welcome .home-ai-send:disabled {
+    opacity: 1;
+  }
+
+  /* 12px of the spec's own bottom padding, plus room for the fixed tab bar that
+     mobile-shell.css puts under it. mobile-shell.css deliberately does NOT add
+     body padding on this page - the AI shell manages its own full-height box, so
+     padding there would be counted twice. */
+  /* Both forms, and the .is-welcome one first, because home-ai.css sets this
+     padding with !important inside @media (max-width: 900px) on the grouped
+     selector `.home-ai-composer-wrap, .home-ai-main.is-welcome
+     .home-ai-composer-wrap`. The second member of that group is (0,3,1), which
+     outranks a plain `body.page-home .home-ai-composer-wrap` at (0,2,1) - so the
+     first attempt lost and the composer sat entirely behind the tab bar. */
+  body.page-home .home-ai-main.is-welcome .home-ai-composer-wrap,
+  body.page-home .home-ai-main .home-ai-composer-wrap,
+  body.page-home .home-ai-composer-wrap {
+    display: block !important;
+    /* Bottom gap raised 12px -> 24px (owner, 2026-10-03: "put more space to the
+       bottom below the ai window its way to close"). The composer sits directly
+       above the tab bar, so the only breathing room it gets is this padding -
+       var(--mshell-tabbar-h) is the bar's measured height, not spacing. */
+    padding: 12px 16px calc(24px + var(--mshell-tabbar-h)) !important;
+    background: transparent !important;
+  }
+
+  body.page-home.mshell-keyboard .home-ai-main.is-welcome .home-ai-composer-wrap,
+  body.page-home.mshell-keyboard .home-ai-main .home-ai-composer-wrap,
+  body.page-home.mshell-keyboard .home-ai-composer-wrap {
+    /* Keyboard open: the tab bar is gone, so this is the whole gap. */
+    padding-bottom: 24px !important;
+  }
+
+  /* Side gutter for the chat itself (owner, 2026-10-02: "create some space in
+     the chat its way to close to the sidewall"). .home-ai-thread sets only
+     padding-top/bottom in home-ai.css, so on a phone the question bubble sat
+     flush against the right edge and the answer text against both.
+
+     16px, not an arbitrary gap: it matches the composer's side padding above,
+     so the bubbles line up with the input box under them rather than floating
+     at a different inset. box-sizing is already border-box on the thread, so
+     this eats into the 100% width instead of overflowing it. */
+  body.page-home .home-ai-thread {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Two item cards per row on a phone (owner, 2026-10-03: "place the cards next
+     to each other one left one right"). home-ai.css gives them a fixed
+     width: 148px at <=560px, and the container is flex-wrap - so at 320px two
+     cards plus the gap need 306px against roughly 288px of content width, and
+     the second one wraps onto its own line. A percentage basis fits exactly two
+     at any phone width instead of depending on the viewport being wide enough.
+
+     Specificity: theirs is `.home-ai .cs2-chat-item-card` at (0,2,0); the
+     body.page-home prefix here makes it (0,3,0) so it wins regardless of which
+     sheet loads last. */
+  body.page-home .home-ai .cs2-chat-item-cards {
+    gap: 10px;
+  }
+
+  body.page-home .home-ai .cs2-chat-item-card {
+    flex: 1 1 calc(50% - 5px);
+    width: auto;
+    min-width: 0;
+    max-width: calc(50% - 5px);
+  }
+
+  /* ---- assistant framing on the start screen (2026-10-03) ---------------- */
+
+
+  /* Sub-line under the headline. 14px and secondary, per the spec - it explains
+     the assistant without competing with the headline above it. */
+  .mhome-subtitle {
+    margin: 6px 0 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+
+  /* Staggered entrance for the start screen (owner, 2026-10-03: it used to pop
+     in). Same idiom as .roi-reveal in roi.css - opacity 0 plus a small rise,
+     eased, with a per-element delay - so the two screens feel like one site.
+
+     The whole block sits inside prefers-reduced-motion: no-preference on
+     purpose. Putting `opacity: 0` outside it and only disabling the animation
+     would leave a reduced-motion visitor staring at an invisible page, which is
+     the classic way this pattern breaks. Here, no preference expressed means no
+     rule at all: the content is simply visible. */
+  @media (prefers-reduced-motion: no-preference) {
+    body.page-home .mhome > * {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: mhomeReveal 0.45s ease forwards;
+    }
+
+    body.page-home .mhome > *:nth-child(1) { animation-delay: 30ms; }
+    body.page-home .mhome > *:nth-child(2) { animation-delay: 90ms; }
+    body.page-home .mhome > *:nth-child(3) { animation-delay: 150ms; }
+    body.page-home .mhome > *:nth-child(4) { animation-delay: 210ms; }
+    body.page-home .mhome > *:nth-child(5) { animation-delay: 270ms; }
+    body.page-home .mhome > *:nth-child(6) { animation-delay: 330ms; }
+
+    /* The composer is pinned outside .mhome, so it needs its own line to
+       arrive with the rest rather than being the one thing that pops. */
+    body.page-home .home-ai-main.is-welcome .home-ai-composer-wrap {
+      opacity: 0;
+      animation: mhomeReveal 0.45s ease forwards;
+      animation-delay: 320ms;
+    }
+  }
+
+  @keyframes mhomeReveal {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---- composer ---------------------------------------------------------- */
+
+  /* 150ms cross-fade between rotating examples. The JS flips .is-ph-fading,
+     waits 150ms, swaps the text and clears the class, so the transition runs
+     once out and once back in. Reduced motion kills the cycling in JS, and this
+     drops the transition too so nothing animates even mid-swap. */
+  body.page-home .home-ai-composer input::placeholder {
+    transition: opacity 150ms ease;
+  }
+
+  body.page-home .home-ai-composer input.is-ph-fading::placeholder {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.page-home .home-ai-composer input::placeholder {
+      transition: none;
+    }
+  }
+
+  /* Send turns accent the moment there is something to send. The button is
+     already `disabled` while the field is empty, so :not(:disabled) is exactly
+     "has text or media" without duplicating that condition in CSS. */
+  body.page-home .home-ai-send:not(:disabled) {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  body.page-home .home-ai-send:not(:disabled) i {
+    color: #fff;
+  }
+
+  body.page-home .home-ai-composer {
+    gap: 12px;
+    min-height: 0;
+    padding: 9px 9px 9px 16px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 22px !important;
+    background: var(--card) !important;
+    box-shadow: var(--card-shadow) !important;
+    color: var(--muted);
+  }
+
+  body.page-home .home-ai-composer input[type="text"] {
+    flex: 1;
+    color: var(--text);
+    font-size: 15px;
+  }
+
+  body.page-home .home-ai-composer input[type="text"]::placeholder {
+    color: var(--muted);
+  }
+
+  body.page-home .home-ai-plus {
+    background: transparent !important;
+    color: var(--muted) !important;
+  }
+
+  body.page-home .home-ai-plus svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  body.page-home .home-ai-mic {
+    background: transparent !important;
+    color: var(--muted) !important;
+  }
+
+  body.page-home .home-ai-mic svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  body.page-home .home-ai-send {
+    width: 40px !important;
+    height: 40px !important;
+    flex: none;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: var(--accent) !important;
+    box-shadow: none !important;
+    color: var(--on-accent) !important;
+  }
+
+  body.page-home .home-ai-send svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* The spec's own disabled pair. Literals rather than tokens because there is
+     no token for "inert control on a light surface", and in dark mode the rules
+     below replace both. */
+  body.page-home .home-ai-send:disabled {
+    background: #e8edf6 !important;
+    color: #9aa4bf !important;
+  }
+
+  html[data-theme="dark"] body.page-home .home-ai-send:disabled {
+    background: var(--field) !important;
+    color: var(--muted) !important;
+  }
+
+  /* ======================================================================
+     Drawer
+     ----------------------------------------------------------------------
+     Same order the design asks for: brand + search, New chat, the nav rows,
+     the folded groups, the chats, then the profile row pinned at the bottom.
+     The markup already had these blocks — they are re-ordered and recoloured
+     here rather than rebuilt, so every existing link keeps working.
+     ====================================================================== */
+  /* home-ai.css paints the panel through three selectors at once, the longest
+     of which outranks a plain one here — so all three are answered. */
+  body.page-home .home-ai-sidebar,
+  body.page-home .home-ai.is-sidebar-collapsed .home-ai-sidebar,
+  body.page-home .home-ai.is-sidebar-open .home-ai-sidebar {
+    width: min(300px, 85vw) !important;
+    padding: 16px 14px !important;
+    border: 0 !important;
+    border-right: 1px solid var(--border) !important;
+    border-radius: 0 !important;
+    background: var(--card) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: var(--text);
+  }
+
+  body.page-home .home-ai-sidebar-backdrop {
+    background: var(--drawer-backdrop) !important;
+  }
+
+  body.page-home .home-ai-drawer-head {
+    order: 0;
+  }
+
+  /* The wordmark is a white-on-dark PNG, so its "CS" vanishes on a light
+     panel. Drawn from the tokens instead — same wordmark, both themes. */
+  body.page-home .home-ai-drawer-brand img {
+    display: none;
+  }
+
+  body.page-home .home-ai-drawer-brand {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: Inter, "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  body.page-home .home-ai-drawer-brand::before {
+    content: "CS";
+    color: var(--logo-cs);
+  }
+
+  body.page-home .home-ai-drawer-brand::after {
+    content: "PRICE";
+    color: var(--logo-price);
+  }
+
+  body.page-home .home-ai-drawer-round {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border) !important;
+    border-radius: 50%;
+    background: var(--card) !important;
+    color: var(--text) !important;
+  }
+
+  /* New chat, moved to the top: the row that holds it is otherwise hidden on
+     phones, so it is shown again with the collapse toggle taken out. */
+  body.page-home .home-ai-sidebar-top {
+    display: flex !important;
+    order: 1;
+    margin: 4px 0 0;
+  }
+
+  body.page-home .home-ai-sidebar-toggle {
+    display: none !important;
+  }
+
+  /* Same treatment as the Login button (.u-btn-primary in theme.css): the
+     accent gradient, its inset rim, the glow and the sheen on press. */
+  body.page-home .home-ai-sidebar-top .home-ai-new {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 44px;
+    border: 0 !important;
+    border-radius: 14px !important;
+    background: var(--accent-grad) !important;
+    box-shadow: var(--accent-depth) !important;
+    color: var(--on-accent) !important;
+    font-size: 15px;
+    font-weight: 600;
+    transition:
+      background 0.16s ease,
+      box-shadow 0.16s ease,
+      transform 0.16s ease;
+  }
+
+  body.page-home .home-ai-sidebar-top .home-ai-new::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.3) 46%, transparent 70%);
+    transform: translateX(-130%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  body.page-home .home-ai-sidebar-top .home-ai-new > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  body.page-home .home-ai-sidebar-top .home-ai-new:hover,
+  body.page-home .home-ai-sidebar-top .home-ai-new:focus-visible {
+    background: var(--accent-grad-hover) !important;
+    box-shadow: var(--accent-depth-hover) !important;
+    transform: translateY(-1px);
+  }
+
+  body.page-home .home-ai-sidebar-top .home-ai-new:hover::before,
+  body.page-home .home-ai-sidebar-top .home-ai-new:focus-visible::before {
+    transform: translateX(130%);
+  }
+
+  body.page-home .home-ai-sidebar-top .home-ai-new:active {
+    background: var(--accent-grad-active) !important;
+    box-shadow: var(--accent-depth-active) !important;
+    transform: translateY(1px);
+  }
+
+  body.page-home .home-ai-sidebar-top .home-ai-new i,
+  body.page-home .home-ai-sidebar-top .home-ai-new span {
+    color: var(--on-accent) !important;
+  }
+
+  body.page-home .home-ai-nav {
+    order: 2;
+    margin-top: 16px;
+  }
+
+  body.page-home .home-ai-nav-item,
+  body.page-home .home-ai-browse-link {
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 12px;
+    color: var(--text) !important;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+
+  body.page-home .home-ai-nav-item i,
+  body.page-home .home-ai-nav-item svg,
+  body.page-home .home-ai-browse-link i {
+    color: var(--muted) !important;
+  }
+
+  body.page-home .home-ai-nav-item:hover,
+  body.page-home .home-ai-browse-link:hover {
+    background: var(--bg) !important;
+  }
+
+  body.page-home .home-ai-nav-item.is-active,
+  body.page-home .home-ai-browse-link.is-active {
+    background: var(--tint) !important;
+    color: var(--accent) !important;
+  }
+
+  body.page-home .home-ai-nav-item.is-active i,
+  body.page-home .home-ai-nav-item.is-active svg {
+    color: var(--accent) !important;
+  }
+
+  /* Folded groups: heading is the toggle, chevron flips. */
+  body.page-home .home-ai-browse {
+    order: 3;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  body.page-home .home-ai-browse-toggle {
+    min-height: 40px;
+    padding: 0 12px;
+    color: var(--muted) !important;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  body.page-home .home-ai-browse-toggle i {
+    transition: transform 0.2s ease;
+  }
+
+  body.page-home .home-ai-browse-link {
+    min-height: 38px;
+    padding-left: 44px;
+    font-size: 14px;
+  }
+
+  /* Chats. */
+  body.page-home .home-ai-sidebar-scroll {
+    order: 4;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  body.page-home .home-ai-section-label {
+    color: var(--muted) !important;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  body.page-home .home-ai-history-open {
+    color: var(--text) !important;
+    font-size: 14px;
+  }
+
+  body.page-home .home-ai-history-open i {
+    color: var(--muted) !important;
+  }
+
+  body.page-home .home-ai-history-item:hover {
+    background: var(--bg) !important;
+  }
+
+  /* Profile row, pinned. */
+  body.page-home .home-ai-drawer-bottom {
+    order: 5;
+    margin-top: auto;
+    padding: 12px 0 calc(4px + env(safe-area-inset-bottom, 0px));
+    background: transparent !important;
+  }
+
+  body.page-home .home-ai-drawer-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  body.page-home .home-ai-drawer-avatar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--muted);
+  }
+
+  body.page-home .home-ai-drawer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  body.page-home .home-ai-drawer-profile-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  body.page-home .home-ai-drawer-profile-caret {
+    flex: none;
+    color: var(--muted);
+  }
+
+  /* Nothing on this screen scrolls sideways. */
+  body.page-home,
+  body.page-home .home-ai,
+  body.page-home .home-ai-main {
+    overflow-x: hidden;
+  }
+}
+
+/* No light-theme layer here any more, and that is the point of the redesign:
+   every colour on this screen is a token, so light and dark both come out of
+   theme.css with no per-theme rules to keep in step.
+
+   What used to be here was a light override for .mhome-tile-icon, which set
+   --accent because the tiles used --accent-2 (#0ea5e9, only 2.77:1 on a white
+   tile). The suggestion cards that replaced those tiles use --accent directly in
+   both themes, so the override had nothing left to correct. */

@@ -1,0 +1,268 @@
+/* ==========================================================================
+   Section hubs (tools.html / skins.html / other.html)
+   --------------------------------------------------------------------------
+   The landing pages behind the drawer's Tools, Skins and Other rows. Phone
+   first: one column of tall tap targets; wider screens gain columns.
+
+   Every colour is a token from theme.css, so these pages follow the light and
+   dark themes. They are listed in THEME_LIGHT_PAGES (scripts/inject_theme.php),
+   which is what lets them out of the legacy dark pin.
+   ========================================================================== */
+
+.hub-shell {
+  max-width: var(--site-shell-max, 1540px);
+  width: var(--site-shell-width, min(1100px, calc(100% - 32px)));
+  margin: 18px auto 72px;
+  display: grid;
+  gap: 18px;
+}
+
+.hub-head {
+  display: grid;
+  gap: 6px;
+}
+
+.hub-head h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 7vw, 2.3rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.hub-head p {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.hub-card {
+  display: grid;
+  grid-template-columns: 46px 1fr 14px;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: var(--card-shadow);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  animation: hubCardIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--row-i, 0) * 40ms);
+}
+
+.hub-card:hover,
+.hub-card:focus-visible {
+  border-color: color-mix(in srgb, var(--hub-accent, var(--accent)) 45%, transparent);
+  background: var(--tint);
+  outline: none;
+}
+
+.hub-card:active {
+  transform: scale(0.99);
+}
+
+.hub-card-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  border: 1px solid var(--border);
+  background: var(--field, var(--bg));
+  color: var(--hub-accent, var(--accent));
+  font-size: 17px;
+}
+
+/* The section and weapon artwork is drawn white, so on a light card it has to
+   be inverted back to the ink colour. */
+.hub-card-icon img {
+  width: 26px;
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.94;
+  filter: brightness(0) invert(1);
+}
+
+html[data-theme="light"] .hub-card-icon img {
+  filter: brightness(0) saturate(100%);
+  opacity: 0.72;
+}
+
+.hub-card-body {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.hub-card-body strong {
+  color: var(--text);
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.hub-card-body small {
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.hub-card-go {
+  color: var(--muted);
+  font-size: 12px;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.hub-card:hover .hub-card-go {
+  color: var(--hub-accent, var(--accent));
+  transform: translateX(2px);
+}
+
+@keyframes hubCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-card {
+    animation: none;
+  }
+}
+
+@media (min-width: 700px) {
+  .hub-shell {
+    margin-top: 28px;
+    gap: 22px;
+  }
+
+  .hub-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .hub-card {
+    padding: 15px 16px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hub-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ===========================================================================
+   Skins hub - artwork cards on phones (owner, 2026-10-03)
+   ---------------------------------------------------------------------------
+   The other two hubs (tools, other) keep the compact rows; only skins gets the
+   tall card the Collections page uses - a large media panel with the title and
+   blurb underneath. Scoped on .hub-shell--skins, which hub-pages.jsx derives
+   from the same page name the hub lookup uses.
+   ======================================================================== */
+@media (max-width: 767px) {
+  /* No page header on the skins hub (owner, 2026-10-03). With the top bar gone
+     too, the cards start at the top of the screen and say what they are. The
+     <h1> stays in the DOM, clipped, so the document outline and screen readers
+     keep it. */
+  .hub-shell--skins .hub-head {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .hub-shell--skins .hub-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .hub-shell--skins .hub-card {
+    /* Media on top, copy beneath - the chevron column goes, because a card
+       this size reads as tappable without an affordance pointing at it. */
+    display: block;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .hub-shell--skins .hub-card-go {
+    display: none;
+  }
+
+  /* The media panel. These are the real weapon renders (owner, 2026-10-03),
+     not the white cut-outs, so the panel gives them room and the silhouette
+     filter below has to come back off - brightness(0) invert(1) would flatten
+     a photographic render into a white blob. */
+  .hub-shell--skins .hub-card-icon {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 132px;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    /* The same wash the desktop category cards use (owner, 2026-10-03), not a
+       blue one of its own: collections.css paints .card-media with this exact
+       expression and #34d399, so copying the geometry and the accent is what
+       makes the two match. No base layer - the card's own background shows
+       through, as it does on desktop. */
+    background:
+      radial-gradient(90% 70% at 50% 12%,
+        color-mix(in srgb, #34d399 22%, transparent),
+        transparent 62%);
+  }
+
+  .hub-shell--skins .hub-card-icon img,
+  html[data-theme="light"] .hub-shell--skins .hub-card-icon img {
+    width: 76%;
+    max-width: 260px;
+    height: 104px;
+    object-fit: contain;
+    opacity: 1;
+    /* Beats the silhouette filter on .hub-card-icon img, which is what made
+       every one of these a flat white shape. */
+    filter: none;
+  }
+
+  .hub-shell--skins .hub-card-body {
+    display: block;
+    padding: 12px 14px 14px;
+  }
+
+  .hub-shell--skins .hub-card-body strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .hub-shell--skins .hub-card-body small {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+}

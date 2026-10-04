@@ -1,0 +1,1686 @@
+body {
+  background: #0b1220;
+  --roi-page-bg: #0b1220;
+  /* Match page body — solid, no navy→black gradient */
+  --roi-panel-bg: #0b1220;
+  --roi-control-bg: rgba(6, 11, 22, 0.9);
+  --roi-card-bg: #0c1524;
+}
+
+.nav-item.active {
+  color: #f8fafc;
+}
+
+.roi-clean-shell {
+  width: var(--site-shell-width, min(1540px, calc(100% - 64px)));
+  max-width: var(--site-shell-max, 1540px);
+  margin: 32px auto 76px;
+  display: grid;
+  gap: 22px;
+}
+
+.roi-page-head {
+  display: grid;
+  gap: 14px;
+  position: relative;
+  padding: 8px 0 4px;
+}
+
+
+.roi-page-head > * {
+  position: relative;
+  z-index: 1;
+}
+
+.roi-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.roi-stat {
+  min-width: 108px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(110, 146, 198, 0.12);
+  background: linear-gradient(180deg, rgba(12, 20, 36, 0.92), rgba(6, 11, 22, 0.96));
+  display: grid;
+  gap: 4px;
+}
+
+.roi-stat-label {
+  color: rgba(148, 163, 184, 0.72);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.roi-stat strong {
+  color: #f8fafc;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.roi-stat-highlight strong {
+  color: #4ade80;
+}
+
+.roi-source-chip {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.roi-source-chip i {
+  color: rgba(125, 211, 252, 0.75);
+  font-size: 12px;
+}
+
+.roi-source-chip .accent {
+  color: #86efac;
+}
+
+.roi-kicker,
+.roi-section-kicker,
+.roi-select-shell span {
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.roi-page-head h1 {
+  margin: 0;
+  font-size: clamp(2.7rem, 6vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  color: #f8fafc;
+}
+
+.roi-page-head p {
+  max-width: 860px;
+  margin: 0;
+  color: rgba(226, 232, 240, 0.74);
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.roi-filter-frame,
+.roi-section-card {
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: var(--roi-panel-bg);
+  box-shadow: none;
+}
+
+.roi-filter-frame {
+  display: grid;
+  gap: 14px;
+  position: relative;
+  z-index: 10;
+}
+
+.roi-scope-tabs,
+.roi-sub-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+}
+
+.roi-sub-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.28) transparent;
+  /* Keep room for active pill borders/glow so left/right edges are not clipped */
+  padding: 4px 3px 6px;
+  gap: 10px;
+}
+
+.roi-scope-tab,
+.roi-sub-tab {
+  border: 1px solid rgba(110, 146, 198, 0.14);
+  background: rgba(8, 14, 28, 0.72);
+  border-radius: 999px;
+  color: rgba(148, 163, 184, 0.82);
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.roi-scope-tab {
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  min-height: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roi-sub-tab {
+  min-height: auto;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.roi-scope-tab:hover,
+.roi-sub-tab:hover {
+  border-color: rgba(96, 165, 250, 0.24);
+  color: #e2e8f0;
+  transform: translateY(-1px);
+  background: rgba(8, 14, 28, 0.72);
+}
+
+.roi-scope-tab.active,
+.roi-sub-tab.active {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(54, 72, 128, 0.92), rgba(24, 34, 68, 0.98));
+  border-color: rgba(125, 155, 255, 0.78);
+  color: #fff;
+  /* Border-only outline (no outer 0 0 0 1px ring) so left/right edges match inside overflow scroll */
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(75, 105, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.roi-sub-tab span {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.88);
+  color: #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.roi-sub-tab.active span {
+  background: rgba(8, 14, 28, 0.92);
+  border-color: rgba(99, 130, 255, 0.28);
+  color: #fff;
+}
+
+.roi-filter-row-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.roi-filter-row-label {
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: 48px;
+  flex-shrink: 0;
+}
+
+.roi-type-tabs,
+.roi-source-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(8, 13, 24, 0.92);
+  width: fit-content;
+}
+
+.roi-type-tab,
+.roi-source-tab {
+  border: 0;
+  background: transparent;
+  color: rgba(226, 232, 240, 0.82);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  min-height: 38px;
+  padding: 0 16px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.roi-type-tab + .roi-type-tab,
+.roi-source-tab + .roi-source-tab {
+  border-left: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.roi-type-tab:hover,
+.roi-source-tab:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f8fafc;
+}
+
+.roi-type-tab.active {
+  background: linear-gradient(180deg, rgba(54, 72, 128, 0.92), rgba(24, 34, 68, 0.98));
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28);
+}
+
+.roi-source-tab.active {
+  background: linear-gradient(180deg, rgba(54, 72, 128, 0.92), rgba(24, 34, 68, 0.98));
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28);
+}
+
+.roi-toolbar-clean.compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+}
+
+.roi-search-shell,
+.roi-select-shell select,
+.roi-type-trigger {
+  min-height: 58px;
+  border-radius: 18px;
+  border: 1px solid rgba(110, 146, 198, 0.12);
+  background: var(--roi-control-bg);
+  box-shadow: none;
+}
+
+.roi-search-shell {
+  display: flex;
+  flex: 1 1 280px;
+  align-items: center;
+  gap: 14px;
+  min-width: 220px;
+  padding: 0 18px;
+  background: var(--roi-control-bg);
+  border-color: rgba(110, 146, 198, 0.12);
+  box-shadow: none;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.roi-search-shell:focus-within {
+  transform: none;
+  background: var(--roi-control-bg);
+  border-color: rgba(96, 165, 250, 0.28);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.07);
+}
+
+.roi-type-trigger:hover,
+.roi-type-trigger.open,
+.roi-select-shell select:hover,
+.roi-select-shell select:focus {
+  transform: none;
+  border-color: rgba(96, 165, 250, 0.24);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.07);
+}
+
+.roi-search-shell i {
+  color: #7dd3fc;
+  font-size: 14px;
+}
+
+.roi-search-shell input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f8fafc;
+  font-size: 15px;
+}
+
+.roi-search-shell input::placeholder {
+  color: rgba(148, 163, 184, 0.64);
+}
+
+.roi-type-menu {
+  position: relative;
+  width: 100%;
+}
+
+.roi-type-trigger {
+  width: 100%;
+  padding: 0 18px;
+  color: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.roi-type-trigger span {
+  color: #f8fafc;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.roi-type-trigger i {
+  color: rgba(191, 219, 254, 0.8);
+  transition: transform 0.24s ease;
+}
+
+.roi-type-trigger.open i {
+  transform: rotate(180deg);
+}
+
+.roi-type-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  padding: 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(110, 146, 198, 0.14);
+  background: rgba(9, 14, 27, 0.98);
+  box-shadow: 0 26px 60px rgba(2, 6, 23, 0.36);
+  display: grid;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  z-index: 20;
+}
+
+.roi-type-dropdown.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  max-height: min(360px, 60vh);
+  overflow-y: auto;
+}
+
+.roi-type-option {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.roi-type-option:hover,
+.roi-type-option.active {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.96), rgba(37, 99, 235, 0.92));
+  color: #fff;
+  transform: translateX(2px);
+}
+
+.roi-select-shell.compact {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 8px;
+  min-width: 148px;
+  width: 168px;
+}
+
+.roi-select-shell select {
+  appearance: none;
+  width: 100%;
+  padding: 0 16px;
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.roi-toolbar-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: rgba(148, 163, 184, 0.76);
+  font-size: 13px;
+}
+
+.roi-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.14);
+  background: rgba(15, 23, 42, 0.72);
+  color: #dbeafe;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.roi-meta-pill i {
+  color: rgba(125, 211, 252, 0.78);
+  font-size: 11px;
+}
+
+.roi-meta-pill.muted {
+  color: rgba(148, 163, 184, 0.82);
+  border-color: rgba(148, 163, 184, 0.12);
+  background: rgba(8, 13, 24, 0.72);
+}
+
+.roi-feedback {
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(248, 113, 113, 0.18);
+  background: rgba(127, 29, 29, 0.2);
+  color: #fecaca;
+}
+
+.roi-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.roi-section-head h2 {
+  margin: 6px 0 10px;
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  color: #f8fafc;
+}
+
+.roi-section-head p {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(191, 219, 254, 0.72);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.roi-section-count {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  background: rgba(15, 23, 42, 0.82);
+  color: #bfdbfe;
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.roi-grid.clean-grid,
+.roi-grid.loading {
+  display: grid;
+  /* Six per row on every desktop width, like the collections grid. */
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.roi-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: var(--roi-card-bg);
+  box-shadow: none;
+  color: inherit;
+  text-decoration: none;
+}
+
+.roi-card.clean-card {
+  padding: 18px 16px 20px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 12px;
+  min-height: 360px;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: roiCardReveal 0.5s ease forwards;
+  animation-delay: var(--card-delay, 0ms);
+  will-change: transform, opacity;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.roi-card.clean-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(148, 163, 184, 0.28);
+  box-shadow: none;
+}
+
+.roi-card-media.clean-media {
+  position: relative;
+  height: 180px;
+  min-height: 180px;
+  border-radius: 20px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.roi-card-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Soft ambient wash matching hub ShowcaseCard .card-media accent.
+     --card-glow already carries rgba alpha (~0.34); color-mix brings peak
+     near hub's solid-at-22% intensity so falloff stays seamless. */
+  background: radial-gradient(
+    100% 78% at 50% 12%,
+    color-mix(in srgb, var(--card-glow, rgba(176, 195, 217, 0.28)) 64%, transparent),
+    color-mix(in srgb, var(--card-glow, rgba(176, 195, 217, 0.28)) 28%, transparent) 45%,
+    transparent 70%
+  );
+}
+
+.roi-card-media img,
+.roi-placeholder {
+  position: relative;
+  z-index: 1;
+}
+
+.roi-card-media img {
+  width: 82%;
+  max-height: 150px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.34));
+}
+
+.roi-card-media.xm-hide-shell img {
+  clip-path: none;
+  object-fit: contain;
+  object-position: center;
+  width: auto;
+  max-width: 92%;
+  height: auto;
+  max-height: 150px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.roi-card.category-cases .roi-card-media img,
+.roi-card.category-containers .roi-card-media img {
+  width: 74%;
+  max-height: 132px;
+}
+
+.roi-placeholder {
+  width: 108px;
+  height: 108px;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.84), rgba(15, 23, 42, 0.92));
+  display: grid;
+  place-items: center;
+}
+
+.roi-placeholder span {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #e5eefc;
+}
+
+.clean-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.roi-card-category {
+  color: color-mix(in srgb, var(--rarity-accent, #93c5fd) 88%, white);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.clean-copy {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: 2px;
+  gap: 4px;
+}
+
+.clean-copy h3 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 18px;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  min-height: 2.2em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clean-copy-sub {
+  margin: 0;
+  min-height: 1.45em;
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 13px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clean-copy-sub:empty {
+  visibility: hidden;
+}
+
+.roi-card-price-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 34px;
+  padding-top: 6px;
+}
+
+.roi-card-price-line strong {
+  color: #f8fafc;
+  font-size: 24px;
+  letter-spacing: -0.04em;
+}
+
+.roi-card-roi {
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.roi-card-roi.up {
+  background: rgba(34, 197, 94, 0.16);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.roi-card-roi.down {
+  background: rgba(239, 68, 68, 0.16);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.22);
+}
+
+.roi-card-roi.flat {
+  background: rgba(148, 163, 184, 0.12);
+  color: rgba(226, 232, 240, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.roi-sparkline,
+.roi-sparkline-empty,
+.roi-sparkline-micro {
+  width: 100%;
+  height: 36px;
+  margin: 6px 0 2px;
+}
+
+.roi-sparkline-micro {
+  height: 32px;
+  opacity: 0.92;
+}
+
+.roi-sparkline-empty {
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.28), rgba(15, 23, 42, 0.6));
+}
+
+.roi-sparkline-area {
+  opacity: 0;
+  animation: roiSparkFade 0.5s ease forwards;
+  animation-delay: calc(var(--spark-delay, 0ms) + 40ms);
+}
+
+.roi-sparkline-line {
+  stroke-width: 2.2px;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: roiSparkDraw 0.85s ease forwards;
+  animation-delay: var(--spark-delay, 0ms);
+}
+
+.roi-sparkline-line.positive {
+  stroke: #22c55e;
+}
+
+.roi-sparkline-line.negative {
+  stroke: #ef4444;
+}
+
+.roi-card-data-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  color: #dbeafe;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.roi-card-data-row.muted {
+  color: rgba(148, 163, 184, 0.78);
+  font-weight: 600;
+  margin-top: 14px;
+}
+
+.roi-card-note {
+  margin-top: 2px;
+  color: rgba(125, 211, 252, 0.84);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.roi-card-foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.roi-card-listings {
+  min-height: 18px;
+  color: #dbeafe;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.roi-card-secondary {
+  color: rgba(148, 163, 184, 0.78);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: right;
+  line-height: 1.35;
+}
+
+.clean-actions {
+  margin-top: 4px;
+}
+
+.roi-card-btn {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(96, 165, 250, 0.14);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.98));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.roi-card-btn.clean-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(96, 165, 250, 0.24);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.9), rgba(29, 78, 216, 0.88));
+}
+
+.roi-card-btn.muted,
+.roi-card-btn.muted:hover {
+  cursor: default;
+  transform: none;
+  border-color: rgba(148, 163, 184, 0.1);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.72), rgba(15, 23, 42, 0.8));
+  color: rgba(226, 232, 240, 0.58);
+}
+
+.roi-load-more {
+  display: flex;
+  justify-content: center;
+}
+
+.roi-load-more .roi-card-btn {
+  width: auto;
+  min-width: 240px;
+}
+
+.roi-empty-state {
+  min-height: 220px;
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px dashed rgba(148, 163, 184, 0.14);
+  background: rgba(8, 13, 24, 0.5);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.roi-empty-state i {
+  font-size: 28px;
+  color: rgba(125, 211, 252, 0.72);
+}
+
+.roi-empty-state strong {
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  color: #f8fafc;
+}
+
+.roi-empty-state span {
+  color: rgba(148, 163, 184, 0.78);
+  font-size: 14px;
+}
+
+.roi-card.skeleton {
+  min-height: 420px;
+  padding: 18px;
+  animation: roiPulse 1.4s ease-in-out infinite alternate;
+}
+
+.roi-card.skeleton .roi-card-media,
+.roi-card.skeleton .roi-card-lines span {
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.34), rgba(15, 23, 42, 0.8));
+}
+
+.roi-card-lines {
+  display: grid;
+  gap: 12px;
+}
+
+.roi-card-lines span {
+  display: block;
+  height: 18px;
+  border-radius: 999px;
+}
+
+.roi-card-lines span:first-child {
+  width: 78%;
+}
+
+.roi-card-lines span:nth-child(2) {
+  width: 44%;
+}
+
+.roi-card-lines span:last-child {
+  width: 100%;
+  height: 140px;
+  border-radius: 20px;
+}
+
+.roi-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: roiReveal 0.55s ease forwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes roiReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes roiCardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes roiSparkDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes roiSparkFade {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes roiPulse {
+  from {
+    opacity: 0.88;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1320px) {
+  .roi-toolbar-clean.compact {
+    display: flex;
+  }
+
+  .roi-search-shell {
+    flex: 1 1 100%;
+  }
+}
+
+/* The card ladder matches the collections grid: 6 on every desktop width,
+   4 from 1280px down, then 3 / 2 / 1. */
+@media (max-width: 1280px) {
+  .roi-grid.clean-grid,
+  .roi-grid.loading {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1040px) {
+  .roi-grid.clean-grid,
+  .roi-grid.loading {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .roi-scope-tabs,
+  .roi-sub-tabs {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .roi-grid.clean-grid,
+  .roi-grid.loading {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .roi-clean-shell {
+    width: min(100%, calc(100% - 28px));
+    margin-top: 22px;
+  }
+
+  .roi-toolbar-clean.compact {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .roi-search-shell,
+  .roi-select-shell.compact {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .roi-grid.clean-grid,
+  .roi-grid.loading {
+    grid-template-columns: 1fr;
+  }
+
+  .roi-filter-frame,
+  .roi-section-card,
+  .clean-card {
+    padding: 20px;
+  }
+
+  .roi-section-head,
+  .roi-card-price-line,
+  .roi-card-foot,
+  .roi-toolbar-meta,
+  .roi-hero-stats {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .roi-source-chip {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .roi-scope-tab {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .roi-sub-tab {
+    flex: 0 0 auto;
+  }
+}
+
+html,
+body {
+  background: #0b1220 !important;
+}
+
+body::before {
+  content: none !important;
+  display: none !important;
+}
+
+.roi-clean-shell {
+  margin-bottom: 28px;
+}
+
+/* ---------------------------------------------------------------------------
+   Phone: the toolbar is a column flex box. Stretched by the filter grid it gets
+   a fixed height, and the search shell's flex-basis:100% then fills that column
+   so flex-wrap pushes Type / Source / Sort into a second column off the right
+   edge of the screen. Stack them instead.
+   --------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .roi-toolbar-clean {
+    flex-wrap: nowrap;
+    align-self: start;
+    height: auto;
+  }
+
+  .roi-toolbar-clean > .roi-search-shell {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 48px;
+  }
+
+  .roi-toolbar-clean > .roi-select-shell {
+    flex: 0 0 auto;
+  }
+
+  /* Phones now drop the whole toolbar, not just the source picker (owner,
+     2026-10-02: keep only the scope toggle and the sub-tab counts on mobile).
+     The two rules above are left in place deliberately - they are what makes
+     the toolbar survivable at this width if it is ever shown again, and the
+     light layer below still references .roi-select-source.
+
+     Hidden rather than unmounted because this page has no phone check in JS:
+     roi-page.jsx renders one tree and roi.css already owns the 900px
+     behaviour, so a display:none here is the change that fits the file. The
+     filter state itself keeps working - query, type, source and sort all stay
+     at their defaults, so phones get the unfiltered list the counts describe. */
+  /* Market Explorer only. `.roi-toolbar-clean` is shared by three pages -
+     roi-page.jsx, carepackage-page.jsx and tf2-market-page.jsx - so a bare
+     rule here would also strip the Care Package and TF2 Market toolbars,
+     which nobody asked for. Care Package is excluded by `.roi-clean-shell`
+     (it does not use that shell) and TF2 Market by the data-game guard, since
+     it DOES use the same shell on tf2price.eu. */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-toolbar-clean {
+    display: none;
+  }
+}
+
+/* light-theme:begin */
+/* ==========================================================================
+   Market Explorer — light theme layer
+   --------------------------------------------------------------------------
+   Additive: every selector is scoped to html[data-theme="light"], so the dark
+   page above is untouched. Most of the page draws through the four --roi-*
+   surface variables, so re-pointing those at the tokens carries the bulk of it;
+   the rest is the controls, the tabs and the card internals.
+   ========================================================================== */
+
+/* !important matches the dark `html, body` rule further up the sheet, which
+   carries one; without it the light page keeps the navy background. */
+html[data-theme="light"] html,
+html[data-theme="light"] body {
+  --roi-page-bg: var(--bg);
+  --roi-panel-bg: var(--card);
+  --roi-control-bg: var(--field);
+  --roi-card-bg: var(--card);
+  background: var(--bg) !important;
+  color: var(--text);
+}
+
+/* ---- shell and sections -------------------------------------------------- */
+html[data-theme="light"] .roi-clean-shell,
+html[data-theme="light"] .roi-page-head,
+html[data-theme="light"] .roi-hero-stats,
+html[data-theme="light"] .roi-toolbar-meta {
+  background: transparent;
+  color: var(--text);
+}
+
+html[data-theme="light"] .roi-section-card,
+html[data-theme="light"] .roi-filter-frame,
+html[data-theme="light"] .roi-card,
+html[data-theme="light"] .roi-card.clean-card,
+html[data-theme="light"] .roi-empty-state,
+html[data-theme="light"] .roi-placeholder {
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: var(--card-shadow);
+  color: var(--text);
+}
+
+html[data-theme="light"] .roi-card.clean-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: 0 10px 26px rgba(16, 24, 64, 0.10);
+}
+
+/* No plate behind the item in light mode: the render sits straight on the
+   card (user, 2026-09-29: "remove the div around the item in white mode"). */
+html[data-theme="light"] .roi-card-media,
+html[data-theme="light"] .roi-card-media.clean-media {
+  border-color: transparent;
+  background: transparent;
+}
+
+html[data-theme="light"] .roi-card-glow {
+  opacity: 0.35;
+}
+
+html[data-theme="light"] .roi-card-lines {
+  background: var(--field);
+}
+
+/* ---- text ---------------------------------------------------------------- */
+html[data-theme="light"] .roi-section-head,
+html[data-theme="light"] .roi-card-price-line,
+html[data-theme="light"] .roi-stat-highlight,
+html[data-theme="light"] .roi-card-listings {
+  color: var(--text);
+}
+
+/* The card's own name and price. Setting the colour on `.roi-card-price-line`
+   above does NOT reach its `strong`, because `.roi-card-price-line strong` sets
+   `#f8fafc` itself and a child's own declaration beats an inherited value - so
+   the price stayed near-white on a white card at 1.05:1, and `.clean-copy h3`
+   (the item name) was never covered here at all. Both measured 1.05:1 in light
+   before this rule, and 18.37:1 after. carepackage.html also loads this sheet
+   but renders no `.clean-copy`, so this is Market Explorer only today. */
+html[data-theme="light"] .clean-copy h3,
+html[data-theme="light"] .roi-card-price-line strong {
+  color: var(--text);
+}
+
+/* The release date under the name: rgba(148,163,184,.82) composites to
+   rgb(167,180,197) on a white card, which is 2.10:1 at 13px - not "faint but
+   readable", it fails AA outright. --muted is the intended role and clears it. */
+html[data-theme="light"] .clean-copy-sub {
+  color: var(--muted);
+}
+
+/* The "Type" and "Sort" labels. Their base rule is a three-selector list,
+   `.roi-kicker, .roi-section-kicker, .roi-select-shell span`, and the light layer
+   below picks up the first two but not the third - so these two words kept
+   #7dd3fc and sat at 1.58:1 on --field. Worth a look whenever a light override
+   is written against a grouped selector: covering some of the list reads as
+   done. */
+html[data-theme="light"] .roi-select-shell span {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .roi-kicker,
+html[data-theme="light"] .roi-section-kicker,
+html[data-theme="light"] .roi-section-count,
+html[data-theme="light"] .roi-card-category,
+html[data-theme="light"] .roi-card-note,
+html[data-theme="light"] .roi-card-secondary,
+html[data-theme="light"] .roi-card-data-row.muted,
+html[data-theme="light"] .roi-stat-label,
+html[data-theme="light"] .roi-filter-row-label,
+html[data-theme="light"] .roi-meta-pill.muted {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .roi-card-roi.up { color: var(--positive); }
+html[data-theme="light"] .roi-card-roi.down { color: var(--negative); }
+html[data-theme="light"] .roi-card-roi.flat { color: var(--muted); }
+
+/* ---- controls ------------------------------------------------------------ */
+html[data-theme="light"] .roi-search-shell,
+html[data-theme="light"] .roi-select-shell,
+html[data-theme="light"] .roi-type-trigger,
+html[data-theme="light"] .roi-filter-row-wrap {
+  border-color: var(--border);
+  background: var(--field);
+  color: var(--text);
+}
+
+html[data-theme="light"] .roi-search-shell input,
+html[data-theme="light"] .roi-select-shell select,
+html[data-theme="light"] .roi-type-trigger span {
+  color: var(--text);
+}
+
+/* Same as deals: the search and chevron glyphs are dark-theme pastels that
+   disappear on the light field. Care Package reuses .roi-toolbar-clean, so it
+   is covered by the same rules. */
+html[data-theme="light"] .roi-search-shell i,
+html[data-theme="light"] .roi-toolbar-clean > i,
+html[data-theme="light"] .roi-type-trigger i,
+html[data-theme="light"] .care-catalog-chooser > i {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .roi-search-shell input::placeholder {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .roi-search-shell:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--tint);
+}
+
+html[data-theme="light"] .roi-type-dropdown,
+html[data-theme="light"] .roi-type-menu {
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: 0 18px 40px rgba(16, 24, 64, 0.12);
+}
+
+/* The glow plate behind a card's art is a dark radial on the dark page; on
+   white it has nothing to lift, so it goes. */
+html[data-theme="light"] .roi-card-glow {
+  display: none;
+}
+
+html[data-theme="light"] .roi-type-option {
+  color: var(--text);
+}
+
+html[data-theme="light"] .roi-type-option:hover,
+html[data-theme="light"] .roi-type-option.active {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+/* ---- tabs and chips ------------------------------------------------------ */
+html[data-theme="light"] .roi-scope-tabs,
+html[data-theme="light"] .roi-type-tabs,
+html[data-theme="light"] .roi-source-tabs,
+html[data-theme="light"] .roi-sub-tabs {
+  background: transparent;
+}
+
+html[data-theme="light"] .roi-scope-tab,
+html[data-theme="light"] .roi-type-tab,
+html[data-theme="light"] .roi-source-tab,
+html[data-theme="light"] .roi-sub-tab,
+html[data-theme="light"] .roi-meta-pill,
+html[data-theme="light"] .roi-source-chip,
+html[data-theme="light"] .roi-load-more,
+html[data-theme="light"] .roi-card-btn {
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+html[data-theme="light"] .roi-scope-tab:hover,
+html[data-theme="light"] .roi-type-tab:hover,
+html[data-theme="light"] .roi-source-tab:hover,
+html[data-theme="light"] .roi-sub-tab:hover,
+html[data-theme="light"] .roi-load-more:hover,
+html[data-theme="light"] .roi-card-btn.clean-btn:hover {
+  background: var(--tint);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+html[data-theme="light"] .roi-scope-tab.active,
+html[data-theme="light"] .roi-type-tab.active,
+html[data-theme="light"] .roi-source-tab.active,
+html[data-theme="light"] .roi-sub-tab.active {
+  border-color: var(--accent);
+  background: var(--tint);
+  color: var(--accent);
+}
+
+html[data-theme="light"] .roi-card-btn.muted {
+  background: var(--field);
+  color: var(--muted);
+}
+
+html[data-theme="light"] .roi-card-btn.muted:hover {
+  background: var(--tint);
+  color: var(--accent);
+}
+
+/* ---- sparklines ---------------------------------------------------------- */
+html[data-theme="light"] .roi-sparkline-line.positive { stroke: var(--positive); }
+html[data-theme="light"] .roi-sparkline-line.negative { stroke: var(--negative); }
+html[data-theme="light"] .roi-sparkline-empty { color: var(--muted); }
+
+/* ---- loading ------------------------------------------------------------- */
+html[data-theme="light"] .roi-card.skeleton,
+html[data-theme="light"] .roi-grid.loading .roi-card {
+  border-color: var(--border);
+  background: var(--card);
+}
+
+html[data-theme="light"] .roi-feedback {
+  border-color: var(--border);
+  background: var(--field);
+  color: var(--muted);
+}
+/* light-theme:end */
+
+/* Light mode: no grey halo around the chips. The dark active chip carries a
+   black drop shadow (0 8px 22px rgba(0,0,0,.35)) that reads as a grey outline
+   on white (user, 2026-09-30: "remove the grey outline in market explorer for
+   the white mode"). CS2 and TF2 Market Explorer. */
+html[data-theme="light"] .roi-scope-tab,
+html[data-theme="light"] .roi-scope-tab.active,
+html[data-theme="light"] .roi-sub-tab,
+html[data-theme="light"] .roi-sub-tab.active,
+html[data-theme="light"] .roi-type-tab.active,
+html[data-theme="light"] .roi-source-tab.active {
+  box-shadow: none;
+}
+
+/* ===========================================================================
+   Market Explorer - phone list layout (owner, 2026-10-03)
+   ---------------------------------------------------------------------------
+   The desktop card grid stays exactly as it is; below 768px the same markup is
+   re-laid-out as a compact list. Nothing here changes the DOM - roi-page.jsx
+   already renders an <a> per item carrying a thumbnail, a name, a sub line, a
+   price and a 24h change, which is precisely the row the spec describes, so
+   this is a restyle rather than a second component to keep in step.
+
+   Scoped `html:not([data-game="tf2"])` for the same reason the toolbar rule is:
+   tf2-market-page.jsx shares these class names on tf2price.eu.
+   ======================================================================== */
+@media (max-width: 767px) {
+  /* ---- 1. category tabs ------------------------------------------------- */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-scope-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    border-bottom: 1px solid #1C2439;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-scope-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: #8B96B5;
+    /* The underline is a pseudo-element so switching tabs cannot shift the row
+       by a border's height the way a border-bottom on the button would. */
+    position: relative;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-scope-tab,
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-scope-tab.active {
+    /* The desktop pill carries `box-shadow: 0 8px 22px rgba(0,0,0,.35)`, which
+       on a flat text tab reads as a box drawn around it (owner, 2026-10-03). */
+    box-shadow: none;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-scope-tab.active {
+    color: #FFFFFF;
+    background: none;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-scope-tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  /* ---- 2. sub-category chips -------------------------------------------- */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-sub-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 10px 16px;
+    margin: 0 -16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-sub-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-sub-tab {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid #2A3350;
+    background: #0F1527;
+    color: #C9D2E3;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-sub-tab.active {
+    border-color: var(--accent);
+    background: #16225A;
+    color: #FFFFFF;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-sub-tab > span {
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: #1E2A47;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  /* ---- 5. tabs and chips stay under the top bar ------------------------- */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-filter-frame {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 0 16px;
+    margin: 0 -16px;
+    border: 0;
+    border-radius: 0;
+    background: var(--bg, #0A0F24);
+  }
+
+  /* ---- 4. the list ------------------------------------------------------ */
+  /* The list sits in a 20px-radius card with a hairline border; on a phone the
+     rows ARE the page, so the container around them is one frame too many. */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-section-card {
+    border: 0;
+    border-radius: 0;
+    background: none;
+    padding: 0;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-grid.clean-grid {
+    display: block;
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  }
+
+  /* The card's own children are only [media, copy] - the price and the listing
+     count live INSIDE copy - so the row is two columns here and copy itself
+     carries the name/price split below. */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card.clean-card {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    align-items: center;
+    column-gap: 12px;
+    /* 72px is the row, not a floor: without the cap the price block's own line
+       boxes pushed it to 86. */
+    height: 72px;
+    min-height: 72px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-media {
+    width: 52px;
+    height: 52px;
+    min-height: 0;
+    padding: 4px;
+    border-radius: 10px;
+    /* No plate behind the artwork - the item image carries its own shape. */
+    background: none;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* The decorative glow behind the artwork is card furniture; at 52px it is
+     just haze over the thumbnail. */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-glow {
+    display: none;
+  }
+
+  /* name over listings on the left, price over change on the right. */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name  price"
+      "foot  price";
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 2px;
+    min-width: 0;
+    padding: 0;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-copy > h3 {
+    grid-area: name;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* The spec's second line is the listing count; this slot currently holds the
+     release date, which is card furniture rather than row information. */
+  html:not([data-game="tf2"]) .roi-clean-shell .clean-copy-sub {
+    display: none;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-foot {
+    grid-area: foot;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 12px;
+    color: #8B96B5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-price-line {
+    grid-area: price;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+    text-align: right;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-price-line strong {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-roi {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 0;
+    background: none;
+  }
+
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-roi.up { color: #3DD68C; }
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-roi.down { color: #F26C6C; }
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card-roi.flat { color: #8B96B5; }
+
+  /* ---- accessibility ----------------------------------------------------- */
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-scope-tab:focus-visible,
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-sub-tab:focus-visible,
+  html:not([data-game="tf2"]) .roi-clean-shell .roi-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+}

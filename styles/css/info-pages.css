@@ -1,0 +1,607 @@
+/* About / Contact — content pages matching CSPRICE shell */
+html,
+body {
+  background: #0b1220 !important;
+}
+
+body::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Shared info layout — site shell width; hide Ask Mark on About/Contact.
+   Flex column pins the footer to the viewport bottom while content sits higher. */
+body:has(.info-shell) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body:has(.info-shell) #cs2-nav-root,
+body:has(.info-shell) #cs2-footer-root {
+  flex: 0 0 auto;
+}
+
+body:has(.info-shell) #root {
+  flex: 1 0 auto;
+}
+
+body:has(.info-shell) #cs2-chat-root {
+  display: none !important;
+}
+
+/* Sitewide footer shell + breathing room under the card on About/Contact.
+   Footer is +10px wider on each side vs the content shell (total +20px).
+   Fade/slide-up is gated on .info-footer-enter so soft-nav can remove/re-add
+   the class (with a forced reflow) and replay infoFadeUp on About↔Contact. */
+body:has(.info-shell) #cs2-footer-root .site-footer,
+body:has(.info-shell) .site-footer {
+  width: min(calc(var(--site-shell-max, 1540px) + 20px), calc(100% - 44px)) !important;
+  max-width: calc(var(--site-shell-max, 1540px) + 20px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-top: 16px !important;
+  margin-bottom: 12px !important;
+  box-sizing: border-box !important;
+}
+
+#cs2-footer-root .site-footer.info-footer-enter,
+.site-footer.info-footer-enter {
+  animation: infoFadeUp 0.55s 0.2s ease both;
+}
+
+/* About-only: slightly less air above the footer so it sits a bit higher. */
+body.page-about:has(.info-shell) #cs2-footer-root .site-footer,
+body.page-about:has(.info-shell) .site-footer {
+  margin-top: 8px !important;
+}
+
+/* Contact-only: extra air above the footer so it sits a bit lower. */
+body.page-contact:has(.info-shell) #cs2-footer-root .site-footer,
+body.page-contact:has(.info-shell) .site-footer {
+  margin-top: 56px !important;
+}
+
+.info-shell {
+  max-width: var(--site-shell-max, 1540px);
+  width: var(--site-shell-width, min(1540px, calc(100% - 64px)));
+  /* Top air under the site header — content/gun sit higher; footer stays put. */
+  margin: 32px auto 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 400px);
+  gap: 28px 40px;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.info-main {
+  display: grid;
+  gap: 28px;
+  min-width: 0;
+}
+
+@keyframes infoFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.info-head {
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+  position: relative;
+  padding: 8px 0 4px;
+  animation: infoFadeUp 0.5s ease both;
+}
+
+.info-kicker {
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.info-head h1 {
+  margin: 0;
+  font-size: clamp(2.7rem, 6vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  color: #f8fafc;
+}
+
+.info-head > p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.74);
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.info-body {
+  display: grid;
+  gap: 22px;
+  max-width: 720px;
+  animation: infoFadeUp 0.55s 0.1s ease both;
+}
+
+/* Skin showcase — breathe idle; rarity-tinted ambient glow */
+@property --showcase-glow {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #eb4b4b;
+}
+
+.info-showcase {
+  position: sticky;
+  top: max(88px, 12vh);
+  align-self: center;
+  justify-self: stretch;
+  display: grid;
+  gap: 0;
+  justify-items: center;
+  padding: 0;
+  margin-block: 0;
+  animation: infoFadeUp 0.6s 0.16s ease both;
+  isolation: isolate;
+  --showcase-glow: #eb4b4b;
+  transition: --showcase-glow 0.55s ease;
+}
+
+.info-showcase[data-rarity="consumer"] {
+  --showcase-glow: #b0c3d9;
+}
+.info-showcase[data-rarity="industrial"] {
+  --showcase-glow: #5e98d9;
+}
+.info-showcase[data-rarity="milspec"] {
+  --showcase-glow: #4b69ff;
+}
+.info-showcase[data-rarity="restricted"] {
+  --showcase-glow: #8847ff;
+}
+.info-showcase[data-rarity="classified"] {
+  --showcase-glow: #d32ce6;
+}
+.info-showcase[data-rarity="covert"] {
+  --showcase-glow: #eb4b4b;
+}
+.info-showcase[data-rarity="extraordinary"],
+.info-showcase[data-rarity="contraband"] {
+  --showcase-glow: #e4ae39;
+}
+
+/* Soft large rarity radial (mirrors .home-ai::before, tinted by skin rarity) */
+.info-showcase-glow {
+  position: absolute;
+  inset: -4% -8% 8%;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      64% 52% at 50% 48%,
+      color-mix(in srgb, var(--showcase-glow) 16%, transparent) 0%,
+      color-mix(in srgb, var(--showcase-glow) 9%, transparent) 28%,
+      color-mix(in srgb, var(--showcase-glow) 4%, transparent) 52%,
+      transparent 78%
+    ),
+    radial-gradient(
+      48% 40% at 50% 54%,
+      color-mix(in srgb, var(--showcase-glow) 8%, transparent) 0%,
+      color-mix(in srgb, var(--showcase-glow) 3.5%, transparent) 36%,
+      transparent 72%
+    ),
+    radial-gradient(
+      34% 28% at 50% 50%,
+      color-mix(in srgb, var(--showcase-glow) 5%, transparent) 0%,
+      transparent 70%
+    );
+  opacity: 0.85;
+  transform: scale(1);
+  filter: none;
+  transition:
+    opacity 0.4s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.4s ease;
+}
+
+/* Faint grid + film grain (tinted toward current rarity glow) */
+.info-showcase-texture {
+  position: absolute;
+  inset: 2% 0 12%;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 40%;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E"),
+    linear-gradient(
+      color-mix(in srgb, var(--showcase-glow) 2.5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--showcase-glow) 2.5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 180px 180px, 28px 28px, 28px 28px;
+  mask-image: radial-gradient(
+    ellipse 58% 62% at 50% 48%,
+    black 18%,
+    rgba(0, 0, 0, 0.65) 48%,
+    transparent 78%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 58% 62% at 50% 48%,
+    black 18%,
+    rgba(0, 0, 0, 0.65) 48%,
+    transparent 78%
+  );
+  opacity: 0.28;
+  transition: opacity 0.4s ease;
+}
+
+/* Mild hover on ambient only — skin transform stays on the breathe loop */
+.info-showcase:hover .info-showcase-glow {
+  opacity: 0.95;
+  transform: scale(1.06);
+  filter: brightness(1.08) saturate(1.05);
+}
+
+.info-showcase:hover .info-showcase-texture {
+  opacity: 0.36;
+}
+
+.info-showcase-fade {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  width: 100%;
+  opacity: 1;
+  transition: opacity 0.42s ease;
+}
+
+.info-showcase-fade.is-out {
+  opacity: 0;
+}
+
+.info-showcase-stage {
+  position: relative;
+  z-index: 1;
+  width: min(100%, min(380px, calc(100vh - 280px)));
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+
+.info-showcase-caption {
+  position: relative;
+  z-index: 1;
+  max-width: 360px;
+  text-align: center;
+  color: rgba(226, 232, 240, 0.55);
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.info-showcase-link {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 12px;
+  outline: none;
+}
+
+.info-showcase-link:focus-visible {
+  box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.85);
+}
+
+.info-showcase-skin {
+  max-width: 88%;
+  max-height: 88%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.48));
+  user-select: none;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.info-showcase-skin.is-breathing {
+  animation: infoSkinBreathe 2.8s ease-in-out infinite;
+}
+
+/* Soft idle float — subtle pulse */
+@keyframes infoSkinBreathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.04);
+  }
+}
+
+.info-section {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.info-section h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #e2e8f0;
+}
+
+.info-section p,
+.info-section li {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.65);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.info-section ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 6px;
+}
+
+.info-section a {
+  color: #7dd3fc;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.info-section a:hover {
+  color: #bae6fd;
+  text-decoration: underline;
+}
+
+.info-notice {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(110, 146, 198, 0.16);
+  background: rgba(8, 13, 24, 0.72);
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.info-notice a {
+  color: #7dd3fc;
+  text-decoration: none;
+}
+
+.info-notice a:hover {
+  color: #bae6fd;
+  text-decoration: underline;
+}
+
+/* Match .footer-newsletter-btn (footer Subscribe) — dark navy gradient, blue border, white label */
+.info-section a.info-email,
+.info-email {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(75, 105, 255, 0.45);
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  box-shadow:
+    0 0 0 1px rgba(75, 105, 255, 0.22) inset,
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: background 0.14s ease, transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.info-section a.info-email i,
+.info-email i {
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.info-section a.info-email:hover,
+.info-section a.info-email:focus-visible,
+.info-email:hover,
+.info-email:focus-visible {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.46), rgba(75, 105, 255, 0.26));
+  border-color: rgba(75, 105, 255, 0.55);
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.info-section a.info-email:visited,
+.info-email:visited {
+  color: #fff;
+}
+
+.info-email-wrap {
+  display: grid;
+  gap: 12px;
+}
+
+@media (max-width: 980px) {
+  .info-shell {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .info-showcase {
+    position: relative;
+    top: auto;
+    order: -1;
+    align-self: stretch;
+    padding: 4px 0;
+    max-width: 360px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .info-showcase-stage {
+    width: min(100%, 320px);
+  }
+}
+
+@media (max-width: 720px) {
+  .info-shell {
+    margin: 32px auto 8px;
+    gap: 20px;
+  }
+
+  .info-showcase {
+    max-width: 280px;
+  }
+
+  .info-showcase-stage {
+    width: min(100%, 260px);
+  }
+
+  .info-section a.info-email,
+  .info-email {
+    font-size: 13px;
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    padding: 0 14px;
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-head,
+  .info-body,
+  .info-showcase,
+  body:has(.info-shell) #cs2-footer-root .site-footer,
+  body:has(.info-shell) .site-footer {
+    animation: none;
+  }
+
+  .info-showcase-skin.is-breathing {
+    animation: none;
+  }
+
+  .info-showcase-glow,
+  .info-showcase-texture {
+    transition: none;
+  }
+
+  .info-showcase {
+    transition: none;
+  }
+
+  .info-showcase:hover .info-showcase-glow {
+    transform: none;
+    filter: none;
+    opacity: 0.85;
+  }
+
+  .info-showcase:hover .info-showcase-texture {
+    opacity: 0.28;
+  }
+
+  .info-showcase-fade {
+    transition: opacity 0.28s ease;
+  }
+}
+
+/* light-theme:begin (generated by gen_light.php - do not edit by hand) */
+/* Additive light layer: dark rules above are untouched. 16 rules. */
+html:where([data-theme="light"]),
+:where(html[data-theme="light"]) body {
+  background: var(--bg) !important;
+}
+:where(html[data-theme="light"]) .info-kicker {
+  color: color-mix(in srgb, #7dd3fc 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .info-head h1 {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-head > p {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-showcase-caption {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-section h2 {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-section p,
+:where(html[data-theme="light"]) .info-section li {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-section a {
+  color: color-mix(in srgb, #7dd3fc 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .info-section a:hover {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-notice {
+  background: var(--card);
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-notice a {
+  color: color-mix(in srgb, #7dd3fc 62%, #0b1230);
+}
+:where(html[data-theme="light"]) .info-notice a:hover {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-section a.info-email,
+:where(html[data-theme="light"]) .info-email {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-section a.info-email i,
+:where(html[data-theme="light"]) .info-email i {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-section a.info-email:hover,
+:where(html[data-theme="light"]) .info-section a.info-email:focus-visible,
+:where(html[data-theme="light"]) .info-email:hover,
+:where(html[data-theme="light"]) .info-email:focus-visible {
+  color: var(--text);
+}
+:where(html[data-theme="light"]) .info-section a.info-email:visited,
+:where(html[data-theme="light"]) .info-email:visited {
+  color: var(--text);
+}
+/* light-theme:end */

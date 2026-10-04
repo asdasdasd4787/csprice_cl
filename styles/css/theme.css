@@ -1,0 +1,536 @@
+/* ==========================================================================
+   CSPRICE design tokens — light and dark
+   --------------------------------------------------------------------------
+   Every colour the redesigned surfaces use is defined here and nowhere else.
+   Components read the tokens; they never carry their own hex values.
+
+   Themes
+     html[data-theme="light"]  light (the new default look)
+     html[data-theme="dark"]   the original CSPRICE navy
+     no attribute              resolved by the boot script in <head> from the
+                               saved choice or the OS setting, before paint.
+
+   Legacy pages
+     The page stylesheets written before this system still hold ~5k literal
+     colours. Until each one is converted, its page opts out of light with
+     html[data-legacy-dark] (set by the same boot script) so it keeps the dark
+     palette instead of rendering dark cards on a light shell. Remove a page
+     from THEME_LIGHT_PAGES in scripts/inject_theme.php as it is converted.
+   ========================================================================== */
+
+:root,
+html[data-theme="light"] {
+  --bg: #f3f6fc;
+  --card: #ffffff;
+  /* A near-black hairline rather than the old #e2e8f3: at 20% it reads as a
+     crisp grey-black line on both the white cards and the #f3f6fc page, where
+     the pale blue-grey all but disappeared. */
+  --border: rgba(11, 18, 48, 0.2);
+  --text: #0b1230;
+  --muted: #5d6888;
+  --accent: #2563eb;
+  --accent-2: #0ea5e9;
+  --on-accent: #ffffff;
+  --tint: rgba(37, 99, 235, 0.10);
+  /* Input and field surfaces — a shade off --card so a control reads as
+     recessed inside a panel. */
+  --field: #f7f9fe;
+  /* Primary button: the Login button's treatment, expressed from --accent so
+     both themes get the same depth without a second hex value. */
+  --accent-grad: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 82%, #ffffff) 0%,
+    var(--accent) 48%,
+    color-mix(in srgb, var(--accent) 88%, #000000) 100%
+  );
+  --accent-grad-hover: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 74%, #ffffff) 0%,
+    color-mix(in srgb, var(--accent) 92%, #ffffff) 48%,
+    var(--accent) 100%
+  );
+  --accent-grad-active: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 92%, #000000) 0%,
+    color-mix(in srgb, var(--accent) 84%, #000000) 100%
+  );
+  --accent-depth:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, #ffffff),
+    inset 0 -1px 0 rgba(10, 16, 48, 0.22),
+    0 1px 2px rgba(16, 24, 64, 0.18),
+    0 8px 20px -8px color-mix(in srgb, var(--accent) 70%, transparent);
+  --accent-depth-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, #ffffff),
+    0 2px 4px rgba(16, 24, 64, 0.2),
+    0 12px 26px -8px color-mix(in srgb, var(--accent) 80%, transparent);
+  --accent-depth-active:
+    inset 0 2px 5px rgba(6, 10, 32, 0.4),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, #ffffff),
+    0 1px 2px rgba(16, 24, 64, 0.2);
+  /* #16a34a measured 3.30:1 on --card and 2.89:1 on --field, so every green
+     price and gain figure failed AA for text - and text does sit on it, unlike
+     the highlight stop of --accent-grad, which is why that one was left alone.
+     #15803d is 5.02:1 on white, still unmistakably green, and used in 21 places.
+     --negative already passes at 4.83:1 and is untouched. Dark keeps #22c55e. */
+  --positive: #15803d;
+  --negative: #dc2626;
+  /* Caution states (stale prices, partial data). Added when deals.css was
+     converted — it had an amber family with no token behind it. */
+  --warning: #b45309;
+  --radius: 18px;
+  --card-shadow: 0 1px 3px rgba(16, 24, 64, 0.06);
+  --top-glow: radial-gradient(ellipse 90% 40% at 50% 0%, rgba(37, 99, 235, 0.12), transparent 70%);
+  --drawer-backdrop: rgba(11, 18, 48, 0.35);
+  /* The mobile spec calls this --scrim. Same value as --drawer-backdrop, so it is
+     an alias rather than a second definition - two names drifting apart is how a
+     sheet ends up with two slightly different overlay tints. */
+  --scrim: var(--drawer-backdrop);
+  --logo-cs: #0b1230;
+  --logo-price: #2563eb;
+  color-scheme: light;
+}
+
+html[data-theme="dark"],
+html[data-legacy-dark] {
+  --bg: #0a0f24;
+  --card: #0f1632;
+  --border: rgba(120, 160, 255, 0.15);
+  --text: #eef2ff;
+  --muted: #8a96bd;
+  --accent: #2f7dff;
+  --accent-2: #3fd0ff;
+  --on-accent: #ffffff;
+  --tint: rgba(47, 125, 255, 0.15);
+  --field: #0b1129;
+  /* Same treatment on navy: heavier shadows, because the page behind is dark. */
+  --accent-depth:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, #ffffff),
+    inset 0 -1px 0 rgba(10, 16, 48, 0.35),
+    0 1px 2px rgba(5, 9, 24, 0.5),
+    0 8px 20px -8px color-mix(in srgb, var(--accent) 85%, transparent);
+  --accent-depth-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, #ffffff),
+    0 2px 4px rgba(5, 9, 24, 0.5),
+    0 12px 26px -8px color-mix(in srgb, var(--accent) 95%, transparent);
+  --accent-depth-active:
+    inset 0 2px 5px rgba(6, 10, 32, 0.55),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, #ffffff),
+    0 1px 2px rgba(5, 9, 24, 0.45);
+  --positive: #22c55e;
+  --negative: #ff5a6a;
+  --warning: #fde68a;
+  --card-shadow: none;
+  --top-glow: radial-gradient(ellipse 70% 40% at 50% 32%, rgba(47, 125, 255, 0.22), transparent 70%);
+  --drawer-backdrop: rgba(0, 0, 0, 0.55);
+  --scrim: var(--drawer-backdrop);
+  --logo-cs: #ffffff;
+  --logo-price: #2f7dff;
+  color-scheme: dark;
+}
+
+/* ---- base ---------------------------------------------------------------
+   Light only. This used to set the page background, colour, typeface and
+   line-height for every converted page in BOTH themes, which quietly restyled
+   the dark home page: index.css sets Arial on html, body, and the chat answers
+   inherit from it, so every answer changed typeface, line spacing and text
+   colour. Dark is now left exactly as its own stylesheets paint it; the tokens
+   only take over in light, which is the theme that needs them. */
+html[data-theme="light"]:not([data-legacy-dark]),
+html[data-theme="light"]:not([data-legacy-dark]) body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+html[data-theme="light"]:not([data-legacy-dark]) body {
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  line-height: 1.35;
+}
+
+/* Prices, percentages and every other figure line up column for column.
+   Light only: in dark this changed digit widths in the chat's item cards, and
+   dark is meant to render exactly as it did before the theme system. */
+html[data-theme="light"] .price,
+html[data-theme="light"] [data-numeric],
+html[data-theme="light"] .tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- theme switch animation -------------------------------------------- */
+html[data-theme-animating] body,
+html[data-theme-animating] body * {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme-animating] body,
+  html[data-theme-animating] body * {
+    transition: none !important;
+  }
+}
+
+/* ---- shared utilities --------------------------------------------------- */
+.u-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+}
+
+.u-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.u-gradient-text {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.u-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--top-glow);
+}
+
+.u-up { color: var(--positive); }
+.u-down { color: var(--negative); }
+
+/* The site's primary button, one design: the Login button's gradient, inset
+   rim and glow, its sheen on hover and its press. Anything filled with the
+   accent uses this rather than a flat colour. */
+.u-btn-primary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0;
+  background: var(--accent-grad);
+  box-shadow: var(--accent-depth);
+  color: var(--on-accent);
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.16s ease;
+}
+
+/* Sheen sweep. The label sits above it (children are lifted below). */
+.u-btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.3) 46%, transparent 70%);
+  transform: translateX(-130%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.u-btn-primary > * {
+  position: relative;
+  z-index: 1;
+}
+
+.u-btn-primary:hover,
+.u-btn-primary:focus-visible {
+  background: var(--accent-grad-hover);
+  box-shadow: var(--accent-depth-hover);
+  color: var(--on-accent);
+  transform: translateY(-1px);
+}
+
+.u-btn-primary:hover::before,
+.u-btn-primary:focus-visible::before {
+  transform: translateX(130%);
+}
+
+.u-btn-primary:active {
+  background: var(--accent-grad-active);
+  box-shadow: var(--accent-depth-active);
+  transform: translateY(1px);
+}
+
+.u-btn-primary:disabled {
+  opacity: 0.45;
+  transform: none;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .u-btn-primary,
+  .u-btn-primary::before {
+    transition: none;
+  }
+}
+
+/* ---- focus ring --------------------------------------------------------- */
+html[data-theme-ready] :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Shared chrome in light
+   --------------------------------------------------------------------------
+   The navbar, the footer, the search overlay and the sign-in dialog are drawn
+   dark by navbar.css / index.css, which still hold their own literals. Rather
+   than rewriting those sheets (they are shared with every legacy page), the
+   light versions live here, under html[data-theme="light"].
+
+   A legacy page can never match: its boot script pins data-theme="dark", so
+   these rules only reach a page that has been converted. Deleting a block from
+   here is all it takes to hand a surface back to its own stylesheet.
+   ========================================================================== */
+html[data-theme="light"] .navbar {
+  background: var(--card) !important;
+  border-bottom: 1px solid var(--border) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  color: var(--text);
+}
+
+html[data-theme="light"] .navbar .nav-primary-link,
+html[data-theme="light"] .navbar .nav-menu-trigger,
+html[data-theme="light"] .navbar .search-placeholder,
+html[data-theme="light"] .navbar .nav-profile-name {
+  color: var(--text) !important;
+}
+
+/* No pill behind a nav label in light mode either. Dark has not had one since
+   the gradient underline took over the hover and active states (see the "No
+   pill on hover or active" rule in navbar.css); light kept a --tint chip, so
+   pointing at a link drew a pale blue box around the word while the underline
+   was already saying the same thing. The accent colour stays - that is the
+   hover feedback, together with the underline. */
+html[data-theme="light"] .navbar .nav-primary-link:hover,
+html[data-theme="light"] .navbar .nav-menu-trigger:hover {
+  color: var(--accent) !important;
+}
+
+html[data-theme="light"] .navbar .search-container {
+  border: 1px solid var(--border) !important;
+  background: var(--field) !important;
+  box-shadow: none !important;
+  color: var(--muted) !important;
+}
+
+html[data-theme="light"] .navbar .nav-menu-dropdown,
+html[data-theme="light"] .navbar .nav-profile-dropdown,
+html[data-theme="light"] .nav-alert-dropdown {
+  border: 1px solid var(--border) !important;
+  background: var(--card) !important;
+  box-shadow: 0 18px 40px rgba(16, 24, 64, 0.12) !important;
+  color: var(--text);
+}
+
+html[data-theme="light"] .navbar .nav-menu-item,
+html[data-theme="light"] .navbar .nav-profile-dropdown a,
+html[data-theme="light"] .nav-alert-item-link {
+  color: var(--text) !important;
+}
+
+html[data-theme="light"] .navbar .nav-menu-item:hover,
+html[data-theme="light"] .navbar .nav-profile-dropdown a:hover {
+  background: var(--tint) !important;
+  color: var(--accent) !important;
+}
+
+/* The light wordmark used to live here: the PNG was hidden and CSPRICE was
+   redrawn from ::before/::after in Inter. It looked close but it was type,
+   not the logo - different letterforms, different spacing - so the owner
+   asked for the real mark back. There is now a logo_light.png with the white
+   half recoloured, and navbar.css picks the right file per theme, the same
+   way it already did for TF2. Nothing to do here. */
+
+/* Search overlay. */
+html[data-theme="light"] .srch-overlay {
+  background: rgba(11, 18, 48, 0.28);
+}
+
+html[data-theme="light"] .srch-box {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 24px 60px rgba(16, 24, 64, 0.16);
+}
+
+html[data-theme="light"] .srch-input,
+html[data-theme="light"] .srch-row-name {
+  color: var(--text);
+}
+
+html[data-theme="light"] .srch-row:hover {
+  background: var(--tint);
+}
+
+/* Footer. index.css paints it through `html body #cs2-footer-root
+   .site-footer.site-footer`, so the light version has to carry the same
+   weight to win. */
+html[data-theme="light"] body #cs2-footer-root .site-footer.site-footer,
+html[data-theme="light"] body .tv-page + .site-footer.site-footer,
+html[data-theme="light"] .site-footer {
+  border: 1px solid var(--border) !important;
+  background: var(--card) !important;
+  box-shadow: var(--card-shadow) !important;
+  color: var(--muted) !important;
+}
+
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-container,
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-bottom,
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-col {
+  background: transparent !important;
+  border-color: var(--border) !important;
+  color: var(--muted) !important;
+}
+
+html[data-theme="light"] .footer-newsletter-input,
+html[data-theme="light"] .site-footer input[type="email"] {
+  border: 1px solid var(--border) !important;
+  background: var(--field) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme="light"] .footer-newsletter-input::placeholder {
+  color: var(--muted) !important;
+}
+
+html[data-theme="light"] .site-footer a {
+  color: var(--muted) !important;
+}
+
+html[data-theme="light"] .site-footer a:hover {
+  color: var(--accent) !important;
+}
+
+html[data-theme="light"] .site-footer h4,
+html[data-theme="light"] .site-footer strong {
+  color: var(--text) !important;
+}
+
+/* The footer rules above set `color: var(--muted)` on the footer and its
+   containers, but index.css gives these two their own rgb(148,163,184), and an
+   element's own declaration always beats an inherited value - so both stayed at
+   2.56:1 on the white footer, on every page. Same shape as the Market Explorer
+   price: colouring the container is not colouring its children. Found by
+   scanning a live item page, the page type with the most traffic and the one
+   nobody had measured. */
+html[data-theme="light"] .site-footer .footer-brand p,
+html[data-theme="light"] .site-footer .footer-view-toggle,
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-brand p,
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-view-toggle {
+  color: var(--muted) !important;
+}
+
+/* Sign-in dialog. */
+html[data-theme="light"] .cs2-login-overlay {
+  background: rgba(11, 18, 48, 0.32);
+}
+
+html[data-theme="light"] .cs2-login-modal--auth,
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-panel {
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: 0 24px 60px rgba(16, 24, 64, 0.16);
+  color: var(--text);
+}
+
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-input {
+  border: 1px solid var(--border);
+  background: var(--field);
+  color: var(--text);
+}
+
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-label,
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-switch {
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   Theme controls
+   ========================================================================== */
+
+/* Segmented Light / Dark / System control in the profile menu. */
+.theme-segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 36px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.theme-segmented button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  min-width: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.theme-segmented button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.theme-segmented button.is-active {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--card-shadow);
+}
+
+/* Quick light/dark flip in the desktop bar. */
+.theme-quick-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  /* No ring: the bell beside it is borderless, and the hover tint is enough
+     of an affordance. */
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.theme-quick-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-quick-toggle:hover {
+  background: var(--tint);
+}
+
+/* The bar on a legacy (still dark) page keeps its own colours, so the button
+   has to stay legible there too. */
+html[data-legacy-dark] .theme-quick-toggle {
+  color: #e2e8f0;
+  border: 0;
+}

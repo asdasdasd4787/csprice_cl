@@ -1,0 +1,4 @@
+# CS2 equipment weapon icons
+
+Source: https://github.com/Juknum/counter-strike-icons (Valve game assets, extracted from CS2).
+Used in the site navbar weapon preview and category links.

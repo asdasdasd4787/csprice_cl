@@ -1,0 +1,3578 @@
+/* Unified navbar chrome — matches Skin Crafter across all pages */
+/* Do not set the BODY font here; pages keep their own typeface (Arial via
+   index.css). The header itself is pinned below — that is deliberate. */
+
+#cs2-nav-root,
+#cs2-footer-root {
+  display: block;
+  width: 100%;
+}
+
+#cs2-nav-root {
+  position: relative;
+  z-index: 5500;
+}
+
+#root.cs2-soft-nav-pending {
+  opacity: 0.72;
+  transition: opacity 0.12s ease;
+  pointer-events: none;
+}
+
+/* ===========================================================================
+   Two-tier header
+   ---------------------------------------------------------------------------
+   Row 1 (.navbar, 50px)            logo + tool menus | centred search | account
+   Row 2 (.nav-categories-bar, 34px) the item-category strip
+
+   The rows add up to the same 84px the old single bar was, which is the number
+   page layouts measure against (viewer3d.css `calc(100vh - 84px)`,
+   home-ai.css), so nothing below the header moves.
+
+   The strip is a sibling of .navbar, not a child: every rule the bar already
+   carries — the phone drawer, the centred phone logo, the dropdown stacking —
+   keeps working untouched, and the strip simply hides itself on phones where
+   the drawer already lists the same links.
+   ========================================================================= */
+/* One row, 64px. The category strip that made this a two-tier header is gone,
+   so the bar no longer needs to carry 84px between two rows - a single row of
+   links has no use for that much height and just pushed every page down.
+
+   64 is not free: viewer3d.css sizes the crafter with `calc(100vh - 84px)` and
+   home-ai.css pins a rail at `top: 84px`. Both were changed to 64 with this.
+   If you change it again, change those two as well. */
+.navbar {
+  height: 64px !important;
+  min-height: 64px !important;
+  max-height: 64px !important;
+  padding: 0 24px !important;
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center !important;
+  /* The AI sidebar rail's panel, value for value from `.home-ai-sidebar` in
+     home-ai.css: rgba(8,12,22,0.82) over blur(18px). The two floating panels
+     on the site are now the same panel. */
+  background: rgba(8, 12, 22, 0.82) !important;
+  /* Dormant today: the bar sits in normal flow, so there is nothing behind it
+     to blur. It costs nothing and it is what makes the translucency above read
+     as glass the moment the header becomes sticky. */
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  /* No edge here. On phones the bar runs the full width, and a border there is
+     the hard line across the page that got removed once already. The floating
+     card below adds the rail's hairline, which is a card edge, not a rule. */
+  border: 0 !important;
+  box-shadow: 0 3px 10px -8px rgba(75, 105, 255, 0.5) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   One typeface for the header.
+
+   Every part of the bar used to inherit whatever the page under it was set in,
+   so the same header rendered in Arial on the home page and in Inter on the
+   item pages (item_page.css sets `Inter, "Segoe UI", Arial` on body) — the
+   chrome changed face as you navigated. Pin it to the site's base stack, the
+   one the home page's prompt cards use, so the header reads the same
+   everywhere. Scoped to the header only: page bodies keep their own type.
+   --------------------------------------------------------------------------- */
+.navbar,
+.navbar button,
+.navbar input,
+.nav-categories-bar,
+.nav-categories-bar button,
+.nav-drawer-backdrop {
+  font-family: Arial, sans-serif !important;
+}
+
+.navbar .logo {
+  flex: 0 0 auto;
+}
+
+/* 42px in a 64px bar. The wordmark is the only thing carrying the brand up
+   here, so it takes the height the row can spare - 11px of air above and
+   below, which still clears the 36px login button and the 34px search field
+   on the other end. */
+.navbar .logo img {
+  height: 42px !important;
+  width: auto !important;
+  display: block;
+}
+
+.navbar .nav-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 26px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+/* Row 1 links. Uppercase and tightly tracked, the way marketplace headers set
+   them, so the row reads as chrome rather than as content. Every tool is
+   spelled out here — no menu to open — which makes this the widest thing in
+   the bar, so it scrolls sideways rather than ever pushing into the search
+   field and the account cluster. */
+.navbar .nav-primary {
+  display: flex;
+  align-items: center;
+  /* Was 22px between bare labels. The links carry their own padding now (they
+     hover as pills), so the gap drops to almost nothing and the spacing you
+     see between words comes out the same - the row is within a few px of the
+     width it was. */
+  gap: 4px;
+  min-width: 0;
+  flex: 0 1 auto;
+  /* NOT `overflow-x: auto`. The row used to scroll sideways, but overflow on
+     one axis forces a clipping box on the other, and the Weapons / Other
+     panels hang below the bar - they were being cut off at the row's bottom
+     edge. The row fits without scrolling now that fifteen sections have become
+     six groups, and the media queries below tighten it on narrow desktops. */
+  overflow: visible;
+}
+
+.navbar .nav-primary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  /* Padding so hover has a chip to fill rather than hugging the glyphs, and
+     the rail's 14px corner from `.home-ai-nav-item`. */
+  padding: 7px 9px;
+  border-radius: 14px;
+  border: 0;
+  background: transparent;
+  /* Full white, not the old #a9b6cc. Colour used to carry the hover and active
+     states on its own; the hover pill and the gradient rule below do that now,
+     so the labels no longer need to sit dimmed to leave them room. */
+  color: #ffffff;
+  /* Set like the home page's prompt-card titles (.home-ai-starter-copy strong
+     in home-ai.css): 14px, weight 650, -0.01em, sentence case. The bar used to
+     be 12px/700 uppercase with +0.07em tracking — same Arial, but such a
+     different setting that it read as a different typeface. */
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.navbar .nav-primary-link:hover,
+.navbar .nav-primary-link:focus-visible,
+.navbar .nav-primary-link.active {
+  color: #ffffff;
+  outline: none;
+}
+
+/* No pill on hover or active: the gradient rule below is the only state the
+   links carry. It previews at part strength under the pointer and lands at
+   full strength on the current section, so a filled chip behind the label
+   would only compete with it. */
+.navbar .nav-primary-link:hover,
+.navbar .nav-primary-link:focus-visible,
+.navbar .nav-primary-link.active,
+.navbar .nav-primary-link.active:hover,
+.navbar .nav-primary-link.active:focus-visible {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Active-page indicator.
+
+   Colour alone was carrying it - white for the current section, grey for the
+   rest - which is a difference you have to go looking for. This is a 2px
+   gradient rule under the active link with a faint glow of its own colour,
+   deliberately not the flat bright underline every nav uses.
+
+   It lives on ::after rather than border-bottom so it can animate: it wipes
+   out from the middle on activation, and shows at a third strength under
+   whatever you are pointing at, so hover previews where the line will land.
+
+   Works on the dropdown triggers too (.nav-menu-trigger is also a
+   .nav-primary-link), so "Skins" stays underlined while you are on Rifles.
+   --------------------------------------------------------------------------- */
+.navbar .nav-primary-link {
+  position: relative;
+}
+
+.navbar .nav-primary-link::after {
+  content: "";
+  position: absolute;
+  /* Inset by the link's own horizontal padding so the rule spans the label,
+     not the pill around it. */
+  left: 9px;
+  right: 9px;
+  bottom: 1px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #4b69ff 0%, #38bdf8 100%);
+  box-shadow: 0 0 8px rgba(75, 105, 255, 0.75);
+  opacity: 0;
+  transform: scaleX(0.35);
+  pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navbar .nav-primary-link:hover::after,
+.navbar .nav-primary-link:focus-visible::after {
+  opacity: 0.38;
+  transform: scaleX(0.72);
+}
+
+.navbar .nav-primary-link.active::after {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar .nav-primary-link::after {
+    transition: none;
+  }
+}
+
+/* TF2 carries five categories in the row - Cosmetic, Unusual items, Melee
+   Weapon, Primary Weapon, Secondary Weapon - on top of Deals / Mann Up
+   calculator / Market Explorer / More, and its labels run longer than CS2's.
+   At the base 9px padding those nine links overrun the row and clip "More";
+   two pixels off each side gives 36px back.
+
+   The track is NOT elastic: at 1600px .nav-primary gets exactly 918px, what
+   is left of .nav-left after the wordmark (95) and the game switcher (87).
+   Measure `wrap.clientWidth` on a freshly loaded page - mutating link text by
+   hand lets the flex row re-solve and reports a track that does not exist.
+   Measured on the live navbar at 1600px:
+     9px padding, "Mann Up"             926px of links in 918   8 over, clipped
+     8px padding, "Mann Up"             908 in 918              fits
+     8px padding, "Mann Up calculator"  945 in 918 (rename +69) 27 over
+     7px padding, "Mann Up calculator"  959 in 918              41 over
+   So at 1600px the row scrolls and "More" starts off-screen; 7px only makes
+   the scroll shorter. It fits at 1920px. That is a deliberate trade - the
+   product owner chose the full label over a shorter one. Getting it back on
+   one line at 1600px needs ~41px of label, not padding: "Melee" / "Primary" /
+   "Secondary" without "Weapon" would free ~120px.
+
+   Only above 1500px: the tiers below already tighten this padding themselves
+   (8px under 1500, 7px under 1180), and TF2 scrolls the row there exactly as
+   CS2 does. CS2 is untouched and keeps the roomier 9px. Paired with
+   NAV_TF2_CATEGORY_LINKS in react/shared-components.jsx and with
+   nav_dropPackage in react/i18n.js: change either and re-measure this. */
+@media (min-width: 1501px) {
+  html[data-game="tf2"] .navbar .nav-primary-link {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  html[data-game="tf2"] .navbar .nav-primary-link::after {
+    left: 7px;
+    right: 7px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Item-group panels (Weapons, Others).
+
+   The fifteen sections that used to run in a strip under the bar are six
+   groups in the bar now; the two that hold more than one section open one of
+   these instead of navigating.
+   --------------------------------------------------------------------------- */
+
+.navbar .nav-menu {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.navbar .nav-menu-trigger {
+  gap: 5px;
+}
+
+.navbar .nav-menu-trigger i {
+  font-size: 9px;
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+}
+
+.navbar .nav-menu.open .nav-menu-trigger i {
+  transform: rotate(180deg);
+}
+
+.navbar .nav-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  /* Flush with the trigger's pill now that the trigger has padding. */
+  left: 0;
+  z-index: 5200;
+  min-width: 212px;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: #101b2e;
+  box-shadow: 0 24px 48px rgba(2, 6, 23, 0.55);
+  /* Drops out of the trigger rather than appearing. It is mounted on open and
+     unmounted on close, so an entrance animation is all that is needed - there
+     is no closing frame to play. */
+  transform-origin: top left;
+  animation: navMenuPanelIn 0.17s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes navMenuPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The rows follow the panel in, one after the next. --row-i is set per item in
+   react/shared-components.jsx; the cap keeps a long menu from lagging. */
+.navbar .nav-menu-item {
+  animation: navMenuItemIn 0.2s ease-out both;
+  animation-delay: calc(60ms + min(var(--row-i, 0) * 22ms, 180ms));
+}
+
+@keyframes navMenuItemIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar .nav-menu-panel,
+  .navbar .nav-menu-item {
+    animation: none;
+  }
+}
+
+.navbar .nav-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  color: #cbd5e1;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar .nav-menu-item > i {
+  flex: 0 0 22px;
+  width: 22px;
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* Same CS2 HUD silhouettes the strip used. Boxed rather than sized by height -
+   ak47.svg is 88.5x32, so height alone would make a rifle three times the
+   width of a knife. */
+.navbar .nav-menu-glyph {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 15px;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0.8;
+}
+
+.navbar .nav-menu-item:hover,
+.navbar .nav-menu-item:focus-visible,
+.navbar .nav-menu-item.active {
+  background: rgba(75, 105, 255, 0.16);
+  color: #ffffff;
+  outline: none;
+}
+
+.navbar .nav-menu-item:hover .nav-menu-glyph,
+.navbar .nav-menu-item.active .nav-menu-glyph {
+  opacity: 1;
+}
+
+/* The old link row is now the phone drawer only — the desktop rows above and
+   below carry the same links. */
+.navbar .nav-links {
+  display: none !important;
+}
+
+.navbar .nav-item {
+  font-size: 14.5px;
+  white-space: nowrap;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.navbar .nav-item i {
+  font-size: 12.5px;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.navbar .nav-item:hover,
+.navbar .nav-item:focus-visible {
+  transform: translateY(-1px);
+}
+
+.navbar .nav-item:hover i,
+.navbar .nav-item.active i,
+.navbar .nav-item:focus-visible i {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.navbar .nav-right {
+  display: flex !important;
+  align-items: center !important;
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  gap: 10px !important;
+  /* `contain: layout` would trap the absolutely positioned search box inside
+     this cluster; the bar itself is the positioning context now. */
+  contain: none !important;
+}
+
+/* A flat, wide search field rather than the old rounded pill. */
+@media (min-width: 901px) {
+  .navbar .search-container {
+    flex: 0 0 auto !important;
+    width: 200px !important;
+    min-width: 0 !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+    padding: 0 12px !important;
+    gap: 10px !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(148, 163, 184, 0.16) !important;
+    background: rgba(148, 163, 184, 0.07) !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .navbar .search-container:hover,
+  .navbar .search-container:focus-visible {
+    border-color: rgba(148, 163, 184, 0.3) !important;
+    background: rgba(148, 163, 184, 0.11) !important;
+  }
+}
+
+/* The field used to be centred on the bar. Row 1 now spells out every tool
+   instead of hiding them behind one menu, so there is no clear middle left to
+   centre on — it sits with the account cluster and just grows with the room
+   the bar has. */
+@media (min-width: 1201px) {
+  .navbar .search-container {
+    width: clamp(220px, 16vw, 300px) !important;
+  }
+}
+
+/* Narrow desktops: eight spelled-out links need every pixel, and the field's
+   ~180px is the cheapest thing to give back. It shrinks to its magnifier, the
+   way the phone bar does — the overlay still opens on click. */
+@media (min-width: 901px) and (max-width: 1279px) {
+  .navbar .search-container {
+    width: 34px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  /* !important because the unguarded `display: block` below this block would
+     otherwise win on source order — the label would still be in the box,
+     merely clipped by its width. */
+  .navbar .search-container .search-placeholder {
+    display: none !important;
+  }
+}
+
+.navbar .search-container i {
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+}
+
+.navbar .search-container .search-placeholder {
+  display: block;
+  min-width: 0;
+  font-size: 13px;
+  color: #94a3b8 !important;
+}
+
+/* The bell sits in a row of bare icons, so it drops the pill it used to wear. */
+.navbar .nav-alert-menu {
+  flex: 0 0 32px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  position: relative;
+}
+
+.navbar .nav-alert-trigger {
+  width: 32px !important;
+  height: 32px !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.navbar .nav-alert-trigger:hover,
+.navbar .nav-alert-menu.open .nav-alert-trigger {
+  background: rgba(148, 163, 184, 0.12) !important;
+}
+
+.navbar .nav-alert-trigger {
+  transform: none !important;
+}
+
+.navbar .nav-alert-menu.open .nav-alert-trigger {
+  transform: none !important;
+}
+
+.navbar .nav-alert-trigger,
+.navbar .nav-alert-trigger i {
+  color: #ffffff !important;
+}
+
+.navbar .nav-profile-dropdown a i {
+  color: #ffffff !important;
+}
+
+.navbar .nav-profile-dropdown a.nav-profile-logout,
+.navbar .nav-profile-dropdown a.nav-profile-logout i {
+  color: #fca5a5 !important;
+}
+
+.navbar .nav-profile-menu,
+.navbar .nav-alert-menu {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.navbar .nav-profile-slot {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navbar details.nav-profile-menu,
+.navbar .nav-profile-menu {
+  display: inline-block !important;
+  width: fit-content !important;
+  max-width: 148px !important;
+  position: relative;
+}
+
+.navbar .nav-profile-menu,
+.navbar button.nav-profile-trigger,
+.navbar .nav-profile-menu > summary.nav-profile-trigger,
+.navbar .nav-profile-trigger {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start;
+  width: fit-content !important;
+  max-width: 148px !important;
+  min-width: 0 !important;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.navbar .nav-profile-trigger > img,
+.navbar .nav-profile-fallback {
+  display: inline-flex !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+}
+
+/* Avatar only, at every width (owner, 2026-09-30: "when i log in i only see
+   my pfp pic not the name"). The name and the chevron are hidden rather than
+   removed from the markup: the dropdown head still shows the name, and
+   `.nav-profile-name` is what the skeleton and the light theme target.
+
+   The chevron is matched on its Font Awesome class, not a `.nav-profile-
+   chevron` hook - that class is what the old 480px rule aimed at and the
+   element has never carried it, so that rule only ever hid the name. */
+.navbar .nav-profile-trigger .nav-profile-name,
+.navbar .nav-profile-trigger > i.fa-chevron-down {
+  display: none !important;
+}
+
+/* With the label gone the chip is just the avatar, so it grows a little to
+   keep its presence in the bar: 28 -> 32px inside the 34px trigger. */
+.navbar .nav-profile-trigger > img,
+.navbar .nav-profile-trigger .nav-profile-fallback {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+}
+
+.navbar .nav-profile-trigger {
+  gap: 0 !important;
+  padding: 0 !important;
+  max-width: 34px !important;
+}
+
+.navbar .nav-profile-skeleton {
+  width: auto !important;
+  max-width: 148px !important;
+}
+
+.navbar .nav-profile-skeleton-text {
+  flex: 0 0 56px !important;
+  width: 56px !important;
+  max-width: 56px !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Login button.
+
+   The only filled control in the header, so it carries the call to action. It
+   keeps the CS2 blue (#4b69ff) the rest of the site is built on and stays the
+   same 32px box as before — what changed is depth: a top-lit gradient, a
+   hairline rim, and a coloured glow that lifts it off the navy bar instead of
+   sitting flat on it.
+
+   The rim and the highlight are inset box-shadows, NOT a border: fracture.css
+   sets `.login-btn { border: 0 !important }`, which would strip a real border
+   on any page that loads it.
+
+   Desktop flattens all of this again further down - see the min-width: 1081px
+   block. Narrow bars keep the depth treatment.
+   --------------------------------------------------------------------------- */
+.navbar .nav-login-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-left: 2px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  padding: 0 16px;
+  /* 8px at every width, matching the footer's Subscribe button (see the
+     min-width: 1081px block below). Under 1081px index.css collapses this to
+     its icon, and 8px reads as a rounded square there. */
+  border-radius: 8px;
+  border: 0;
+  background: linear-gradient(180deg, #6076ff 0%, #4b69ff 48%, #3a54ee 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px rgba(150, 170, 255, 0.42),
+    inset 0 -1px 0 rgba(10, 16, 48, 0.35),
+    0 1px 2px rgba(5, 9, 24, 0.5),
+    0 8px 20px -8px rgba(75, 105, 255, 0.85);
+  color: #fff;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  gap: 7px;
+  box-sizing: border-box;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  text-decoration: none;
+  transition:
+    background 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.16s ease;
+}
+
+/* Sheen that sweeps across on hover. It sits behind the label because the
+   children below are lifted to z-index 1, and `isolation: isolate` keeps the
+   whole thing out of the navbar's stacking context. */
+.navbar .nav-login-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 22%,
+    rgba(255, 255, 255, 0.3) 46%,
+    transparent 70%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.navbar .nav-login-btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.navbar .nav-login-btn:hover,
+.navbar .nav-login-btn:focus-visible {
+  background: linear-gradient(180deg, #7186ff 0%, #5a76ff 48%, #4360f4 100%);
+  border-color: transparent;
+  color: #fff;
+  filter: none;
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 0 0 1px rgba(168, 186, 255, 0.55),
+    0 2px 4px rgba(5, 9, 24, 0.5),
+    0 12px 26px -8px rgba(90, 118, 255, 0.95);
+}
+
+.navbar .nav-login-btn:hover::before,
+.navbar .nav-login-btn:focus-visible::before {
+  transform: translateX(130%);
+}
+
+.navbar .nav-login-btn:active {
+  transform: translateY(1px);
+  background: linear-gradient(180deg, #4560f0 0%, #3d59ea 100%);
+  box-shadow:
+    inset 0 2px 5px rgba(6, 10, 32, 0.55),
+    inset 0 0 0 1px rgba(120, 142, 235, 0.4),
+    0 1px 2px rgba(5, 9, 24, 0.45);
+}
+
+.navbar .nav-login-btn:focus-visible {
+  outline: 2px solid rgba(147, 197, 253, 0.85);
+  outline-offset: 2px;
+}
+
+.navbar .nav-login-btn i {
+  font-size: 13px;
+  line-height: 1;
+  /* The Steam mark is supporting detail, not the message. */
+  opacity: 0.92;
+}
+
+/* ---------------------------------------------------------------------------
+   Desktop login button: the footer's Subscribe button.
+
+   One control, one design - the header's call to action and the footer's are
+   the same button at two sizes.
+
+   Scoped to the width where the label is actually shown: at 1080px and below
+   index.css drops the label and collapses the button to its icon, so the
+   narrow bars keep the filled treatment further up.
+   --------------------------------------------------------------------------- */
+@media (min-width: 1081px) {
+  /* The footer's Subscribe button, copied value for value from
+     `.footer-newsletter-btn` in index.css (line ~4072): the translucent blue
+     gradient, 8px corners, weight 600, its inset ring and drop shadow, and its
+     springy press.
+
+     Two deliberate departures. Size - the footer button is 32px / 0 12px /
+     13px, and this one is a size up so the header's one call to action is not
+     the smallest thing in its cluster. And the 1px border, because
+     fracture.css sets `.login-btn { border: 0 !important }` and would strip it
+     on any page that loads it; its colour is an inset ring instead, which
+     lands on the same pixels - the footer button is border-box, so its border
+     sits inside the height either way.
+
+     No Steam mark - the label says Login. */
+  .navbar .nav-login-btn {
+    overflow: visible;
+    height: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    padding: 0 18px;
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow:
+      inset 0 0 0 1px rgba(75, 105, 255, 0.45),
+      0 10px 24px rgba(0, 0, 0, 0.28);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    gap: 7px;
+    filter: none;
+    transform: scale(1);
+    transition:
+      transform 0.38s cubic-bezier(0.22, 1.55, 0.32, 1),
+      filter 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  /* No gradient rim and no hover sheen - ::before is off entirely here. */
+  .navbar .nav-login-btn::before {
+    content: none;
+  }
+
+  .navbar .nav-login-btn .nav-login-icon-steam {
+    display: none;
+  }
+
+  /* The footer button holds still on hover - only the press reacts. */
+  .navbar .nav-login-btn:hover,
+  .navbar .nav-login-btn:focus-visible {
+    background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+    color: #fff;
+    filter: none;
+    transform: none;
+    box-shadow:
+      inset 0 0 0 1px rgba(75, 105, 255, 0.45),
+      0 10px 24px rgba(0, 0, 0, 0.28);
+  }
+
+  .navbar .nav-login-btn:active {
+    transform: scale(0.96);
+    filter: brightness(1.12);
+    box-shadow:
+      inset 0 0 0 1px rgba(129, 161, 255, 0.72),
+      0 0 14px rgba(75, 105, 255, 0.4);
+    transition-duration: 0.08s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar .nav-login-btn,
+  .navbar .nav-login-btn::before {
+    transition: none;
+  }
+
+  .navbar .nav-login-btn:hover,
+  .navbar .nav-login-btn:active {
+    transform: none;
+  }
+
+  /* Only the narrow-bar sheen is parked off-screen here. On desktop ::before
+     is the gradient rim, which must stay exactly where it is. */
+  @media (max-width: 1080px) {
+    .navbar .nav-login-btn:hover::before {
+      transform: translateX(-130%);
+    }
+  }
+}
+
+.navbar .collections-mega,
+.navbar .cases-mega,
+.navbar .stickers-mega {
+  width: 520px !important;
+  min-height: 372px;
+  max-height: 420px;
+  padding: 20px !important;
+  overflow: hidden !important;
+}
+
+.navbar .collections-mega-grid,
+.navbar .cases-mega-grid,
+.navbar .stickers-mega-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  max-height: 286px !important;
+  overflow: auto !important;
+  padding-right: 0 !important;
+  scrollbar-width: none !important;
+}
+
+.navbar .collections-mega-grid::-webkit-scrollbar,
+.navbar .cases-mega-grid::-webkit-scrollbar,
+.navbar .stickers-mega-grid::-webkit-scrollbar,
+.navbar .collections-mega::-webkit-scrollbar,
+.navbar .cases-mega::-webkit-scrollbar,
+.navbar .stickers-mega::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Row 2: the item-category strip.
+   --------------------------------------------------------------------------- */
+.nav-categories-bar {
+  position: relative;
+  z-index: 4900;
+  height: 34px;
+  box-sizing: border-box;
+  background: #0a1120;
+  border-top: 1px solid rgba(148, 163, 184, 0.07);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+.nav-categories {
+  display: flex;
+  align-items: stretch;
+  /* `safe` keeps the first link reachable once the row overflows — plain
+     `center` would push it past the left edge with no way to scroll back. */
+  justify-content: center;
+  justify-content: safe center;
+  gap: 24px;
+  height: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav-categories::-webkit-scrollbar {
+  display: none;
+}
+
+/* Typography copied from .nav-primary-link above, not approximated: the strip
+   is a SIBLING of .navbar, so it inherits from <body> rather than from the bar
+   and drifted to its own size and tracking. Same family, same 12px, same
+   0.07em, and full white rather than the muted grey — these are the site's top
+   level sections, not secondary chrome. */
+.nav-category-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: #ffffff;
+  /* Same setting as row 1 above, a shade smaller so the strip stays secondary
+     to it. */
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+/* The CS2 HUD silhouettes. They ship as white SVGs on a wide canvas (ak47.svg
+   is 88.5x32), so they are boxed and contained rather than sized by height -
+   otherwise a rifle would be three times the width of a knife. Dimmed at rest
+   so the labels stay the thing you read, full strength on the active section. */
+.nav-category-glyph {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 14px;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0.62;
+  transition: opacity 0.15s ease;
+}
+
+.nav-category-link:hover .nav-category-glyph,
+.nav-category-link:focus-visible .nav-category-glyph,
+.nav-category-link.active .nav-category-glyph {
+  opacity: 1;
+}
+
+/* Font Awesome fallback for the sections the game has no equipment icon for. */
+.nav-category-link > i {
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.62;
+  transition: opacity 0.15s ease;
+}
+
+.nav-category-link:hover > i,
+.nav-category-link:focus-visible > i,
+.nav-category-link.active > i {
+  opacity: 1;
+}
+
+.nav-category-link:hover,
+.nav-category-link:focus-visible {
+  color: #ffffff;
+  outline: none;
+}
+
+.nav-category-link.active {
+  color: #ffffff;
+  border-bottom-color: #4b69ff;
+}
+
+@media (max-width: 1500px) {
+  .navbar .nav-left {
+    gap: 20px !important;
+  }
+
+  .navbar .nav-primary {
+    gap: 2px;
+  }
+
+  .navbar .nav-primary-link {
+    padding: 7px 8px;
+    font-size: 13.5px;
+  }
+
+  .navbar .nav-primary-link::after {
+    left: 8px;
+    right: 8px;
+  }
+
+  .nav-categories {
+    gap: 18px;
+  }
+
+  .nav-category-link {
+    gap: 6px;
+    font-size: 12.5px;
+  }
+
+  .nav-category-glyph {
+    width: 20px;
+    height: 13px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .navbar .nav-left {
+    gap: 16px !important;
+  }
+
+  .navbar .nav-primary {
+    gap: 0;
+  }
+
+  .navbar .nav-primary-link {
+    padding: 7px 7px;
+    font-size: 13px;
+  }
+
+  .navbar .nav-primary-link::after {
+    left: 7px;
+    right: 7px;
+  }
+
+  .nav-category-link {
+    font-size: 12px;
+  }
+
+  .nav-categories {
+    gap: 14px;
+    justify-content: flex-start;
+  }
+
+}
+
+/* The labels are what you navigate by, so the glyphs are what goes when the
+   strip runs long. With them hidden it holds one line down to ~1080px; the
+   1180px block above is too late, the row already overflows at 1280. */
+@media (max-width: 1340px) {
+  .nav-category-link > i,
+  .nav-category-glyph {
+    display: none;
+  }
+}
+
+/* Tightest desktop tier — must come after the 1180px block above to win.
+   Below 900px the phone drawer takes over and row 1 disappears entirely. */
+@media (min-width: 901px) and (max-width: 1080px) {
+  .navbar .nav-left {
+    gap: 13px !important;
+  }
+
+  /* The logo is the one thing here that can give up width without costing a
+     link. */
+  .navbar .logo img {
+    height: 26px !important;
+  }
+
+  .navbar .nav-primary {
+    gap: 0;
+  }
+
+  .navbar .nav-primary-link {
+    padding: 7px 6px;
+    font-size: 12.5px;
+  }
+
+  .navbar .nav-primary-link::after {
+    left: 6px;
+    right: 6px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Floating bar.
+
+   The header is a rounded card inset from the page edges rather than a band
+   spanning them, so the page background shows around it on all four sides.
+
+   The wrapper's padding plus the bar's height still add up to exactly 64px -
+   6 + 52 + 6 - because that total is what viewer3d.css sizes the crafter
+   against (`calc(100vh - 64px)`) and what home-ai.css pins its rail to. The
+   bar got shorter rather than the header getting taller.
+
+   Desktop only: on phones the bar stays edge to edge, where 16px of gutter on
+   each side is width the links cannot spare.
+   --------------------------------------------------------------------------- */
+@media (min-width: 901px) {
+  /* 12 above, 8 below: the bar sits a little further down the page than it
+     did, and the header block comes to 78px (12 + 58 + 8). That number is
+     what viewer3d.css sizes the crafter against and what home-ai.css pins its
+     rail to - both move with it. */
+  #cs2-nav-root {
+    padding: 12px 16px 8px;
+    box-sizing: border-box;
+  }
+
+  .navbar {
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    padding: 0 18px !important;
+    /* The rail's card edge and lift (.home-ai-sidebar): a 1px hairline of
+       white at 8% and a deep soft shadow. 18px of radius rather than the
+       rail's 24 - the rail is a tall column, this is a 52px strip, and 24
+       would round it most of the way to a pill. */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  /* 38px in a 58px bar: 10px of air above and below. */
+  .navbar .logo img {
+    height: 38px !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Phone / small tablet: burger menu instead of the link row.
+   --------------------------------------------------------------------------- */
+.navbar .nav-burger {
+  display: none;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.92);
+  color: #e2e8f0;
+  font-size: 17px;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    position: relative;
+    padding: 0 12px !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+  }
+
+  .navbar .logo img {
+    height: 34px !important;
+  }
+
+  .navbar .nav-left {
+    gap: 8px !important;
+    flex: 1 1 auto !important;
+  }
+
+  .navbar .nav-burger {
+    display: inline-flex;
+  }
+
+  /* Both desktop rows fold into the drawer, which lists the same links. */
+  .navbar .nav-primary,
+  .nav-categories-bar {
+    display: none !important;
+  }
+
+  /* The link row becomes a dropdown panel under the bar. */
+  .navbar .nav-links {
+    display: none !important;
+  }
+
+  .navbar.nav-open .nav-links {
+    display: flex !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 5600;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 6px 10px 14px;
+    background: #0b1220;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: 0 18px 32px rgba(2, 6, 23, 0.6);
+    max-height: calc(100vh - 64px);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .navbar.nav-open .nav-links .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 10px;
+    font-size: 15.5px !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    transform: none !important;
+  }
+
+  .navbar.nav-open .nav-links .nav-item i,
+  .navbar.nav-open .nav-links .nav-item .nav-cases-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .navbar .nav-right {
+    gap: 8px !important;
+  }
+
+  /* Search shrinks to its icon; the overlay still opens on tap. */
+  .navbar .search-container {
+    flex-basis: 40px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  .navbar .search-container .search-placeholder {
+    display: none;
+  }
+}
+
+.navbar .nav-alert-footer .nav-alert-login-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.navbar .nav-alert-footer .nav-alert-login-trigger i {
+  color: #ffffff;
+}
+
+.navbar .nav-alert-footer .nav-alert-login-trigger:hover,
+.navbar .nav-alert-footer .nav-alert-login-trigger:focus-visible {
+  color: #ffffff;
+  outline: none;
+}
+
+/* Welcome Back login modal — CSPRICE navy, not neon green */
+.cs2-login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: rgba(2, 6, 23, 0.78);
+  backdrop-filter: blur(12px);
+}
+
+.cs2-login-modal {
+  width: min(420px, calc(100vw - 32px));
+  padding: 26px 28px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(100, 120, 160, 0.22);
+  background: #0f172a;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  color: #e2e8f0;
+  font-family: Inter, Arial, sans-serif;
+  animation: cs2LoginIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Sign-in dialog: the form on its own. It used to be a two-panel card with a
+   branded grid panel (.cs2-login-art) on the left, which is why this is still
+   a grid - a single column now, sized to the form. The share dialog on item
+   pages reuses the plain .cs2-login-modal above and is not affected. */
+.cs2-login-modal--auth {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(420px, calc(100vw - 32px));
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.cs2-login-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 34px 32px;
+}
+
+.cs2-login-modal--auth .cs2-login-head {
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.cs2-login-modal--auth .cs2-login-title {
+  font-size: 26px;
+}
+
+.cs2-login-modal--auth .cs2-login-close {
+  flex-basis: 42px;
+  width: 42px;
+  height: 42px;
+  margin: 0;
+  border: 1px solid rgba(100, 120, 160, 0.28);
+  border-radius: 12px;
+  background: #0b1120;
+  color: #cbd5e1;
+  font-size: 16px;
+}
+
+.cs2-login-modal--auth .cs2-login-close:hover,
+.cs2-login-modal--auth .cs2-login-close:focus-visible {
+  border-color: rgba(148, 163, 184, 0.45);
+  background: #131c33;
+  color: #fff;
+}
+
+.cs2-login-modal--auth .cs2-login-form {
+  gap: 18px;
+}
+
+.cs2-login-modal--auth .cs2-login-label {
+  font-size: 12px;
+  color: #a3b1c6;
+}
+
+.cs2-login-modal--auth .cs2-login-input {
+  height: 52px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border-color: rgba(100, 120, 160, 0.24);
+  background: #0b1120;
+  font-size: 15px;
+}
+
+.cs2-login-modal--auth .cs2-login-input-wrap .cs2-login-input {
+  padding-right: 48px;
+}
+
+.cs2-login-modal--auth .cs2-login-eye {
+  right: 10px;
+  width: 34px;
+  height: 34px;
+}
+
+.cs2-login-modal--auth .cs2-login-forgot {
+  font-size: 13px;
+}
+
+/* The desktop navbar Login button, value for value (.nav-login-btn in the
+   min-width: 1081px block above): 36px, 0 18px, 8px corners, the translucent
+   blue gradient with its inset ring and drop shadow, 13.5px / 600, no
+   uppercase, no hover sheen, only the springy press reacts. */
+.cs2-login-modal--auth .cs2-login-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* As wide as the fields above it; everything else is the Login button. */
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  min-height: 36px;
+  max-height: 36px;
+  align-self: stretch;
+  margin-top: 10px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  box-shadow:
+    inset 0 0 0 1px rgba(75, 105, 255, 0.45),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  transform: scale(1);
+  transition:
+    transform 0.38s cubic-bezier(0.22, 1.55, 0.32, 1),
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cs2-login-modal--auth .cs2-login-submit:hover,
+.cs2-login-modal--auth .cs2-login-submit:focus-visible {
+  background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+  color: #fff;
+  transform: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(75, 105, 255, 0.45),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  outline: none;
+}
+
+.cs2-login-modal--auth .cs2-login-submit:active {
+  transform: scale(0.96);
+  filter: brightness(1.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(129, 161, 255, 0.72),
+    0 0 14px rgba(75, 105, 255, 0.4);
+  transition-duration: 0.08s;
+}
+
+.cs2-login-modal--auth .cs2-login-submit:disabled {
+  opacity: 0.6;
+  transform: none;
+  filter: none;
+}
+
+.cs2-login-modal--auth .cs2-login-switch {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.cs2-login-modal--auth .cs2-login-divider {
+  margin: 26px 0 18px;
+  font-size: 12px;
+}
+
+.cs2-login-modal--auth .cs2-login-socials {
+  gap: 14px;
+}
+
+.cs2-login-modal--auth .cs2-login-social {
+  flex: 1 1 0;
+  width: auto;
+  height: 50px;
+  border-radius: 12px;
+  border-color: rgba(100, 120, 160, 0.28);
+  background: #0b1120;
+  font-size: 20px;
+}
+
+.cs2-login-modal--auth .cs2-login-social.is-live {
+  border-color: rgba(100, 120, 160, 0.34);
+  background: #0b1120;
+}
+
+.cs2-login-modal--auth .cs2-login-social.is-live:hover,
+.cs2-login-modal--auth .cs2-login-social.is-live:focus-visible {
+  border-color: rgba(75, 105, 255, 0.7);
+  background: #131c33;
+}
+
+@media (max-width: 820px) {
+  .cs2-login-panel {
+    padding: 26px 24px 26px;
+  }
+}
+
+@keyframes cs2LoginIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cs2-login-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.cs2-login-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  line-height: 1.2;
+}
+
+.cs2-login-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  margin: -6px -8px 0 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.cs2-login-close:hover,
+.cs2-login-close:focus-visible {
+  background: rgba(148, 163, 184, 0.10);
+  color: #e2e8f0;
+  outline: none;
+}
+
+.cs2-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cs2-login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.cs2-login-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cs2-login-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.cs2-login-forgot {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #93c5fd;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cs2-login-forgot:hover,
+.cs2-login-forgot:focus-visible {
+  color: #bfdbfe;
+  outline: none;
+  text-decoration: underline;
+}
+
+.cs2-login-input-wrap {
+  position: relative;
+}
+
+.cs2-login-input {
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(100, 120, 160, 0.28);
+  background: rgba(2, 6, 23, 0.72);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 14px;
+  caret-color: #cbd5f5;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.cs2-login-input-wrap .cs2-login-input {
+  padding-right: 42px;
+}
+
+.cs2-login-input::placeholder {
+  color: #64748b;
+}
+
+/* ---------------------------------------------------------------------------
+   Autofilled fields.
+
+   Chrome and Brave paint their own near-white background on a field they have
+   filled, and they do it in a way `background` cannot reach - the declaration
+   is ignored outright. The way through is an inset box-shadow thick enough to
+   cover the field, plus -webkit-text-fill-color for the text, since `color` is
+   overridden the same way.
+
+   The long transition is the other half of the trick: the browser repaints its
+   background right after the fill, and a delay that never arrives means the
+   repaint never lands.
+   --------------------------------------------------------------------------- */
+.cs2-login-input:-webkit-autofill,
+.cs2-login-input:-webkit-autofill:hover,
+.cs2-login-input:-webkit-autofill:focus,
+.cs2-login-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(2, 6, 23, 0.72) inset;
+  box-shadow: 0 0 0 1000px rgba(2, 6, 23, 0.72) inset;
+  -webkit-text-fill-color: #e2e8f0;
+  caret-color: #cbd5f5;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+/* The auth modal's fields are a solid #0b1120 rather than the translucent
+   default, so their autofill cover has to match that instead. */
+.cs2-login-modal--auth .cs2-login-input:-webkit-autofill,
+.cs2-login-modal--auth .cs2-login-input:-webkit-autofill:hover,
+.cs2-login-modal--auth .cs2-login-input:-webkit-autofill:focus,
+.cs2-login-modal--auth .cs2-login-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #0b1120 inset;
+  box-shadow: 0 0 0 1000px #0b1120 inset;
+}
+
+/* Firefox uses its own mechanism and respects a plain background. */
+.cs2-login-input:autofill {
+  background: rgba(2, 6, 23, 0.72);
+  color: #e2e8f0;
+}
+
+.cs2-login-input:focus {
+  outline: none;
+  border-color: rgba(75, 105, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(75, 105, 255, 0.16);
+}
+
+.cs2-login-eye {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #94a3b8;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.cs2-login-eye:hover,
+.cs2-login-eye:focus-visible {
+  color: #e2e8f0;
+  outline: none;
+}
+
+.cs2-login-hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+
+.cs2-login-error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  background: rgba(239, 68, 68, 0.12);
+  color: #fecaca;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.cs2-login-submit {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 4px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid #3b63ff;
+  background: #2f56f0;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.14s ease, transform 0.14s ease, border-color 0.14s ease;
+}
+
+.cs2-login-submit:hover,
+.cs2-login-submit:focus-visible {
+  background: #3a62ff;
+  border-color: #4d72ff;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.cs2-login-switch {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.cs2-login-switch button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #93c5fd;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cs2-login-switch button:hover,
+.cs2-login-switch button:focus-visible {
+  color: #bfdbfe;
+  outline: none;
+  text-decoration: underline;
+}
+
+.cs2-login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 16px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cs2-login-divider::before,
+.cs2-login-divider::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: rgba(100, 120, 160, 0.28);
+}
+
+.cs2-login-socials {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.cs2-login-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(100, 120, 160, 0.28);
+  background: rgba(15, 23, 42, 0.92);
+  color: #e2e8f0;
+  font-size: 18px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease, transform 0.14s ease;
+}
+
+.cs2-login-social.is-live {
+  border-color: rgba(75, 105, 255, 0.45);
+  background: #182553;
+  color: #fff;
+}
+
+.cs2-login-social.is-live:hover,
+.cs2-login-social.is-live:focus-visible {
+  border-color: rgba(75, 105, 255, 0.58);
+  background: #1f2f68;
+  transform: translateY(-1px);
+  outline: none;
+  color: #fff;
+}
+
+.cs2-login-social:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .cs2-login-modal {
+    padding: 22px 18px 20px;
+    border-radius: 16px;
+  }
+
+  .cs2-login-title {
+    font-size: 20px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Bell: the "confirm your email" prompt.
+
+   Sits above the alert list, styled as a card rather than a list row, because
+   it is not a price alert and does not get cleared with them. Lives here, not
+   in index.css, so it ships with the versioned stylesheet the bar already has.
+   --------------------------------------------------------------------------- */
+.nav-alert-verify {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 11px;
+  margin: 8px 8px 0;
+  padding: 11px 12px;
+  border: 1px solid rgba(96, 165, 250, 0.26);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.16), rgba(37, 99, 235, 0.07));
+}
+
+.nav-alert-verify-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: rgba(96, 165, 250, 0.16);
+  color: #93c5fd;
+  font-size: 13px;
+}
+
+.nav-alert-verify-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nav-alert-verify-copy strong {
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nav-alert-verify-copy span {
+  color: rgba(191, 219, 254, 0.86);
+  font-size: 11.5px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.nav-alert-verify-btn {
+  border: 1px solid rgba(147, 197, 253, 0.4);
+  border-radius: 9px;
+  padding: 6px 11px;
+  background: rgba(15, 23, 42, 0.5);
+  color: #dbeafe;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease;
+}
+
+.nav-alert-verify-btn:hover:not(:disabled) {
+  border-color: rgba(147, 197, 253, 0.7);
+  background: rgba(37, 99, 235, 0.3);
+}
+
+.nav-alert-verify-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* The sign-in dialog has no header row: no "Welcome Back" line and no ×. It
+   closes by clicking outside it or with Escape. Scoped to the auth dialog:
+   item_page.css reuses these classes for its share dialog, which keeps both. */
+.cs2-login-modal--auth .cs2-login-head {
+  display: none;
+}
+
+/* Bell that rings while an email address is waiting to be confirmed. The
+   trigger itself is pinned to transform: none above, so the glyph swings. */
+@keyframes navBellRing {
+  0%, 100% { transform: rotate(0); }
+  8% { transform: rotate(16deg); }
+  16% { transform: rotate(-14deg); }
+  24% { transform: rotate(11deg); }
+  32% { transform: rotate(-8deg); }
+  40% { transform: rotate(5deg); }
+  48% { transform: rotate(-2deg); }
+  54% { transform: rotate(0); }
+}
+
+.navbar .nav-alert-trigger.is-ringing i {
+  display: inline-block;
+  transform-origin: 50% 0;
+  animation: navBellRing 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar .nav-alert-trigger.is-ringing i {
+    animation: none;
+  }
+}
+
+/* ── Avatar editor (profile picture crop dialog) ─────────────────────── */
+.cs2-avatar-editor {
+  width: min(480px, calc(100vw - 32px));
+  padding: 22px 24px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(100, 120, 160, 0.22);
+  background: #0f172a;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  color: #e2e8f0;
+  font-family: Inter, Arial, sans-serif;
+  animation: cs2LoginIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cs2-avatar-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cs2-avatar-editor-head h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+}
+
+.cs2-avatar-editor-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-right: -8px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.cs2-avatar-editor-close:hover,
+.cs2-avatar-editor-close:focus-visible {
+  background: rgba(148, 163, 184, 0.12);
+  color: #f8fafc;
+  outline: none;
+}
+
+.cs2-avatar-editor-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 432 / 360;
+  border-radius: 12px;
+  background: #0b1120;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cs2-avatar-editor-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.cs2-avatar-editor-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cs2-avatar-editor-loading,
+.cs2-avatar-editor-error {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.cs2-avatar-editor-error {
+  color: #fca5a5;
+}
+
+.cs2-avatar-editor-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 6px 4px;
+}
+
+.cs2-avatar-editor-zoom-icon {
+  color: #94a3b8;
+}
+
+.cs2-avatar-editor-zoom-icon.is-small {
+  font-size: 12px;
+}
+
+.cs2-avatar-editor-zoom-icon.is-large {
+  font-size: 19px;
+}
+
+.cs2-avatar-editor-zoom {
+  flex: 1 1 auto;
+  height: 4px;
+  margin: 0;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.28);
+  accent-color: #f8fafc;
+  cursor: pointer;
+}
+
+.cs2-avatar-editor-zoom:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.cs2-avatar-editor-rotate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-left: 8px;
+  border: 1px solid rgba(100, 120, 160, 0.24);
+  border-radius: 10px;
+  background: #131c33;
+  color: #e2e8f0;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+.cs2-avatar-editor-rotate:hover:not(:disabled),
+.cs2-avatar-editor-rotate:focus-visible {
+  background: #1b2747;
+  border-color: rgba(75, 105, 255, 0.55);
+  outline: none;
+}
+
+.cs2-avatar-editor-rotate:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.cs2-avatar-editor-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.cs2-avatar-editor-reset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #93c5fd;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cs2-avatar-editor-reset:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.cs2-avatar-editor-reset:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.cs2-avatar-editor-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cs2-avatar-editor-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(100, 120, 160, 0.28);
+  background: #131c33;
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+.cs2-avatar-editor-btn.is-quiet:hover {
+  background: #1b2747;
+}
+
+.cs2-avatar-editor-btn.is-primary {
+  border-color: #3b63ff;
+  background: #2f56f0;
+  color: #fff;
+}
+
+.cs2-avatar-editor-btn.is-primary:hover:not(:disabled) {
+  background: #3a62ff;
+}
+
+.cs2-avatar-editor-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .cs2-avatar-editor {
+    padding: 18px 16px 16px;
+  }
+
+  .cs2-avatar-editor-foot {
+    flex-wrap: wrap;
+  }
+
+  .cs2-avatar-editor-actions {
+    width: 100%;
+  }
+
+  .cs2-avatar-editor-actions .cs2-avatar-editor-btn {
+    flex: 1 1 0;
+  }
+}
+
+/* ── Unified footer (every page, incl. item pages) ─────────────────────
+   The compact card footer from the Care Package page, applied site-wide so
+   items/skins/index all share it. High specificity on purpose: page sheets
+   (item_page.css, carepackage.css) carry their own !important overrides. */
+html body #cs2-footer-root .site-footer.site-footer,
+html body .tv-page + .site-footer.site-footer {
+  box-sizing: border-box;
+  /* Same shell the card grids use (.collections-shell and friends read the
+     same two variables), so the footer's edges line up with the cards above
+     it. It used to hardcode 1500px / a 48px gutter, which left it ~18px
+     narrower on each side than the grid it sits under. */
+  width: var(--site-shell-width, min(1540px, calc(100% - 64px))) !important;
+  max-width: var(--site-shell-max, 1540px) !important;
+  margin: 16px auto 12px !important;
+  padding: 0 !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(101, 140, 198, 0.14) !important;
+  /* visible, not hidden: the language menu opens upward out of the card and
+     was being clipped at the footer's top edge (English unreachable). */
+  overflow: visible !important;
+  background: #091222 !important;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+html body #cs2-footer-root .site-footer.site-footer::before {
+  display: none !important;
+}
+
+html body #cs2-footer-root .site-footer.site-footer:hover {
+  transform: none !important;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Logo, tagline, newsletter and the Browse / Features / Guides columns sit
+   a few tens of pixels lower than the compact default. */
+html body #cs2-footer-root .site-footer.site-footer .footer-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  padding: 18px 28px 8px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 900px) {
+  html body #cs2-footer-root .site-footer.site-footer,
+  html body .tv-page + .site-footer.site-footer {
+    width: min(100vw - 24px, 1500px) !important;
+  }
+
+  html body #cs2-footer-root .site-footer.site-footer .footer-container {
+    padding: 14px 16px 8px !important;
+  }
+
+  /* No newsletter sign-up on phones. */
+  html body #cs2-footer-root .site-footer .footer-newsletter {
+    display: none !important;
+  }
+}
+
+/* Phone-only AI header chrome (model name + private chat), revealed by the
+   home page's own stylesheet. */
+.nav-model-picker,
+.nav-private-chat,
+.nav-login-icon-account,
+.nav-drawer-head,
+.nav-drawer-bottom,
+.nav-drawer-chats {
+  display: none;
+}
+
+/* Desktop keeps the Font Awesome glyphs; the hand-drawn set is phone-only. */
+.navbar .nav-glyph {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Burger draw-in.
+
+   On a phone the three bars draw themselves on when the page opens, shortest
+   bar first and the two full-width ones after it. Phone-only by construction:
+   this glyph is the `display: none` above everywhere else, and desktop shows a
+   Font Awesome icon instead.
+
+   Each <line> carries pathLength="1", so one dash animation draws all three no
+   matter how long each really is. `html.cs2-nav-intro` is set once when the
+   shared bundle loads and dropped a couple of seconds later, so the intro
+   plays on page load and never again - see armNavMenuIntro().
+   --------------------------------------------------------------------------- */
+@keyframes navGlyphDrawBar {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+html.cs2-nav-intro .nav-glyph-menu .nav-glyph-bar {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  animation: navGlyphDrawBar 0.34s cubic-bezier(0.32, 0.72, 0.35, 1) both;
+}
+
+/* Shortest bar leads; the long ones follow it up the stack. */
+html.cs2-nav-intro .nav-glyph-menu .nav-glyph-bar-short {
+  animation-delay: 0.06s;
+}
+
+html.cs2-nav-intro .nav-glyph-menu .nav-glyph-bar-mid {
+  animation-delay: 0.2s;
+}
+
+html.cs2-nav-intro .nav-glyph-menu .nav-glyph-bar-top {
+  animation-delay: 0.34s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.cs2-nav-intro .nav-glyph-menu .nav-glyph-bar {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* Drawer-only chrome: the phone block below reveals these. */
+.nav-drawer-backdrop,
+.nav-drawer-new,
+.nav-drawer-divider,
+.nav-drawer-label,
+.navbar .nav-item.nav-drawer-ai,
+.navbar .nav-item.nav-drawer-account {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Phone top bar (ChatGPT-style): one burger, no bell. Desktop is untouched.
+   --------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* Price alerts live on the item pages; the phone bar is menu + logo + search. */
+  .navbar .nav-alert-menu {
+    display: none !important;
+  }
+
+  /* Account lives at the bottom of the drawer on phones, so the bar itself
+     carries no login button or avatar. */
+  .navbar .nav-profile-slot,
+  .navbar .nav-profile-menu,
+  .navbar .nav-profile-skeleton,
+  .navbar .nav-login-btn,
+  .navbar .login-btn {
+    display: none !important;
+  }
+
+  /* One icon family on the phone bar: the drawn 24px glyphs replace every
+     Font Awesome mark so the stroke weight and corners match. */
+  .navbar .nav-burger .nav-glyph,
+  .navbar .search-container .nav-glyph,
+  .navbar .nav-private-chat .nav-glyph,
+  .navbar .nav-login-btn .nav-glyph,
+  .navbar .nav-model-trigger .nav-glyph {
+    display: block;
+  }
+
+  .navbar .nav-burger > i,
+  .navbar .search-container > i,
+  .navbar .nav-model-trigger > i {
+    display: none;
+  }
+
+  .navbar .nav-glyph-chevron {
+    width: 18px;
+    height: 18px;
+    opacity: 0.65;
+  }
+
+  /* Burger hard left, logo centred over the bar, search hard right. */
+  .navbar .nav-right {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+  }
+
+  .navbar .nav-left {
+    flex: 0 0 auto !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    gap: 0 !important;
+  }
+
+  .navbar .logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    /* Above .nav-right (z 3), which spans the full width and would otherwise
+       swallow taps on the centred logo. Still under the drawer (z 5600). */
+    z-index: 6;
+  }
+
+  .navbar .nav-burger {
+    order: -1;
+    margin-right: auto;
+    border-color: transparent;
+    background: transparent;
+    font-size: 19px;
+  }
+
+  .navbar .search-container {
+    order: 1;
+    margin-left: auto;
+    border-color: transparent !important;
+    background: transparent !important;
+  }
+
+  /* Signed in, the phone bar shows the bare avatar — no pill around it and no
+     ring on the picture, matching the borderless burger and search. */
+  .navbar .nav-profile-trigger,
+  .navbar .nav-profile-menu > summary.nav-profile-trigger,
+  .navbar .nav-profile-menu[open] .nav-profile-trigger,
+  .navbar .nav-profile-menu.open .nav-profile-trigger {
+    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .navbar .nav-profile-trigger > img,
+  .navbar .nav-profile-fallback {
+    border: none !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     The link row opens as the same left drawer the Mark AI sidebar uses,
+     instead of a full-width list dropping under the bar.
+     --------------------------------------------------------------------- */
+  .navbar.nav-open .nav-links {
+    position: fixed;
+    /* Covers the bar as well — the drawer's own header stands in for it. */
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: 0;
+    z-index: 5600;
+    /* Three quarters of the screen, same as the Mark AI drawer; the strip of
+       page left showing is the tap-away target. */
+    width: 75%;
+    height: var(--app-height, 100dvh);
+    max-height: none;
+    padding: 14px 14px calc(14px + env(safe-area-inset-bottom)) !important;
+    background: #0d1220;
+    border-bottom: none;
+    border-right: none;
+    box-shadow: 0 18px 40px rgba(2, 6, 23, 0.55);
+    overflow-y: auto !important;
+    /* Display flips from none to flex, which cannot transition — an animation
+       gives it the same slide-in the Mark AI drawer has. */
+    animation: nav-drawer-in 0.34s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+
+  @keyframes nav-drawer-in {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+
+  .navbar.nav-open .nav-links .nav-item {
+    min-height: 42px;
+    padding: 0 12px;
+    gap: 12px;
+    border-bottom: none;
+    border-radius: 14px;
+    color: rgba(226, 232, 240, 0.78);
+    font-size: 14px !important;
+    font-weight: 500;
+  }
+
+  /* Drawer header: wordmark on the left, round search button on the right. */
+  .navbar.nav-open .nav-links .nav-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 2px 2px 10px;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-brand {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-brand img {
+    display: block;
+    height: 26px;
+    width: auto;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-round {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 50%;
+    background: transparent;
+    color: #e2e8f0;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  /* Pinned bottom bar: blue chat pill + account avatar. */
+  .navbar.nav-open .nav-links .nav-drawer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    bottom: 0;
+    margin-top: auto;
+    padding: 12px 2px calc(4px + env(safe-area-inset-bottom, 0px));
+    background: #0d1220;
+  }
+
+  /* Same chip as the navbar's Login button. */
+  .navbar.nav-open .nav-links .nav-drawer-new-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid rgba(75, 105, 255, 0.45);
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(75, 105, 255, 0.34), rgba(75, 105, 255, 0.18));
+    box-shadow:
+      0 0 0 1px rgba(75, 105, 255, 0.22) inset,
+      0 10px 24px rgba(0, 0, 0, 0.28);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-new-pill i {
+    font-size: 14px;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.1);
+    color: #e2e8f0;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Spacer only — the drawer reads cleaner without the divider lines. */
+  .navbar.nav-open .nav-links .nav-drawer-divider {
+    display: block;
+    flex: 0 0 auto;
+    height: 1px;
+    margin: 10px 8px;
+    background: none;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-divider-soft {
+    opacity: 0.7;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-label {
+    display: block;
+    margin: 0 8px 6px;
+    color: rgba(248, 250, 252, 0.92);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  /* The chat list, under the three hubs. Same rows as the sections above it,
+     only quieter: this is history, not navigation. */
+  .navbar.nav-open .nav-links .nav-drawer-chats {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 6px 0 2px;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-chats-head {
+    margin: 4px 12px 4px;
+    color: rgba(148, 163, 184, 0.75);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .navbar.nav-open .nav-links .nav-item.nav-drawer-chat {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: rgba(226, 232, 240, 0.86);
+    font-weight: 400;
+  }
+
+  .navbar.nav-open .nav-links .nav-item.nav-drawer-chat span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .navbar.nav-open .nav-links .nav-item.nav-drawer-chat i {
+    color: rgba(148, 163, 184, 0.8);
+    font-size: 13px;
+  }
+
+  /* Folded sections: the heading is the toggle, its chevron flips when open. */
+  .navbar.nav-open .nav-links .nav-drawer-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-group-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-height: 40px;
+    margin: 4px 0 2px;
+    padding: 0 12px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: rgba(248, 250, 252, 0.92);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-group-toggle i {
+    color: rgba(148, 163, 184, 0.75);
+    font-size: 11px;
+    transition: transform 0.18s ease;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-group.is-open .nav-drawer-group-toggle i {
+    transform: rotate(180deg);
+  }
+
+  /* 0fr → 1fr animates all the way to the content's own height. */
+  .navbar.nav-open .nav-links .nav-drawer-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.26s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-group.is-open .nav-drawer-panel {
+    grid-template-rows: 1fr;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-panel-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0.26s;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-group.is-open .nav-drawer-panel-inner {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .navbar.nav-open .nav-links .nav-drawer-panel,
+    .navbar.nav-open .nav-links .nav-drawer-panel-inner {
+      transition: none;
+    }
+  }
+
+  .navbar.nav-open .nav-links .nav-item.nav-drawer-ai,
+  .navbar.nav-open .nav-links .nav-item.nav-drawer-account {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .navbar.nav-open .nav-links .nav-drawer-account-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .navbar.nav-open .nav-links .nav-item:hover,
+  .navbar.nav-open .nav-links .nav-item.active {
+    background: rgba(37, 99, 235, 0.16);
+    color: #ffffff;
+  }
+
+  /* Same 30px icon slot as the AI drawer, so the labels line up there too. */
+  .navbar.nav-open .nav-links .nav-item i,
+  .navbar.nav-open .nav-links .nav-item .nav-cases-icon {
+    flex: 0 0 30px;
+    width: 30px;
+    text-align: center;
+  }
+
+  .navbar.nav-open .nav-links .nav-item .nav-category-icon {
+    flex: 0 0 30px;
+    width: 30px;
+    min-width: 30px;
+    height: 20px;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .nav-drawer-backdrop {
+    display: block;
+    position: fixed;
+    /* From the very top: the drawer covers the bar, so the dim layer beside it
+       has to cover the rest of the bar too. */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Must stay under the drawer (z-index 5600), which shares .navbar's stacking
+       context — a higher value greys the menu out. Above the bar's own icons
+       though, so tapping the dimmed strip closes the drawer instead of hitting
+       search or the account button. */
+    z-index: 20;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: rgba(2, 6, 23, 0.55);
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+    animation: nav-backdrop-in 0.2s ease both;
+  }
+
+  @keyframes nav-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .navbar.nav-open .nav-links,
+    .nav-drawer-backdrop {
+      animation: none;
+    }
+  }
+
+  /* Footer language: the globe and the word "Language" only pad the row out —
+     the flag inside the trigger already says what it is. */
+  html body .site-footer .lang-switcher-label {
+    display: none !important;
+  }
+
+  html body .site-footer .lang-switcher {
+    align-self: flex-start;
+    justify-content: flex-start;
+    margin-left: 0;
+    margin-right: auto;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Phone: the bar shares the page's background.
+
+   The header sits in normal flow, so its own panel - rgba(8,12,22,.82) over a
+   blur - painted as a darker strip above a lighter page. Clearing it lets the
+   page colour through, which is what the AI page already does (home-ai.css
+   clears the bar there), so the two read as one surface.
+
+   Safe because the bar does not scroll: position is static/relative on phones,
+   so there is never page content behind it.
+   --------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  body:not(.page-home) .navbar {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Page width = navbar width.
+
+   On desktop the floating bar is inset 16px from each edge (#cs2-nav-root
+   above). Every page shell used to stop at a 1540px cap inside a 64px gutter,
+   so the bar stuck out past the content on both sides. The shells now run
+   edge to edge with the bar: a 32px gutter and no cap, at every width.
+
+   The home page is a chat column and keeps its own narrower measure. The
+   selectors carry `html` so they outrank the per-page values in index.css and
+   carepackage.css and the per-breakpoint ones in wide-screens.css, which
+   loads after this file.
+   --------------------------------------------------------------------------- */
+@media (min-width: 901px) {
+  html body:not(.page-home) {
+    --site-shell-max: 100000px;
+    --site-shell-gutter: 32px;
+    --site-shell-width: calc(100% - 32px);
+    --care-shell-width: calc(100% - 32px);
+    --inv-shell: calc(100% - 32px);
+  }
+
+  /* carepackage.css sets the care width on the page element itself. */
+  html body:not(.page-home) .care-page {
+    --care-shell-width: calc(100% - 32px);
+    --site-shell-width: calc(100% - 32px);
+  }
+
+  html body:not(.page-home) .care-shell {
+    max-width: none;
+  }
+
+  html body:not(.page-home) .care-page + .site-footer,
+  html body:not(.page-home) #cs2-footer-root .site-footer {
+    max-width: none !important;
+  }
+
+  html body.steam-dashboard-page .steam-dashboard,
+  html body.steam-dashboard-page .inv-page {
+    width: calc(100% - 32px);
+    max-width: none;
+  }
+
+  /* Item pages: the page box keeps 24px of inner padding, which put the cards
+     and the footer 24px inside the bar's edges. No inner padding on desktop,
+     so the cards line up with the bar too. */
+  html body:has(.tv-page) {
+    --tv-page-pad-x: 0px;
+  }
+
+  html body:has(.tv-page) .tv-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  html body:has(.tv-page) #cs2-footer-root .site-footer.site-footer {
+    width: calc(100% - 32px) !important;
+    max-width: none !important;
+  }
+}
+
+/* The bar's inset grows on the wide-screen tiers (wide-screens.css: 24px from
+   1921px wide and 1150px tall, 32px from 2400 x 1700). The shells and the
+   footer follow it, so they stay flush with the bar there as well. */
+@media (min-width: 1921px) and (min-height: 1150px) {
+  html body:not(.page-home) {
+    --site-shell-gutter: 48px;
+    --site-shell-width: calc(100% - 48px);
+    --care-shell-width: calc(100% - 48px);
+    --inv-shell: calc(100% - 48px);
+  }
+
+  html body:not(.page-home) .care-page {
+    --care-shell-width: calc(100% - 48px);
+    --site-shell-width: calc(100% - 48px);
+  }
+
+  html body.steam-dashboard-page .steam-dashboard,
+  html body.steam-dashboard-page .inv-page {
+    width: calc(100% - 48px);
+  }
+
+  html body:has(.tv-page) #cs2-footer-root .site-footer.site-footer {
+    width: calc(100% - 48px) !important;
+  }
+}
+
+@media (min-width: 2400px) and (min-height: 1700px) {
+  html body:not(.page-home) {
+    --site-shell-gutter: 64px;
+    --site-shell-width: calc(100% - 64px);
+    --care-shell-width: calc(100% - 64px);
+    --inv-shell: calc(100% - 64px);
+  }
+
+  html body:not(.page-home) .care-page {
+    --care-shell-width: calc(100% - 64px);
+    --site-shell-width: calc(100% - 64px);
+  }
+
+  html body.steam-dashboard-page .steam-dashboard,
+  html body.steam-dashboard-page .inv-page {
+    width: calc(100% - 64px);
+  }
+
+  html body:has(.tv-page) #cs2-footer-root .site-footer.site-footer {
+    width: calc(100% - 64px) !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Game switcher (CS2 / TF2) and the TF2 wordmark.
+
+   Both are token-driven rather than dark-first with a light override, so they
+   come out right in either theme without an entry in the light block below.
+   --------------------------------------------------------------------------- */
+
+/* The TF2 wordmark, shared by the navbar, the phone drawer and the footer.
+   It is artwork, not type — logo_tf.png (white TF, for a dark bar) and
+   logo_tf_light.png (#0b1230 TF, for a light one), both on logo.png's exact
+   500x200 canvas and glyph slot so they inherit every existing `.logo img`
+   size rule untouched. React renders BOTH and the rules below pick one, since
+   CSS cannot swap an <img src>.
+
+   The default is the dark-bar mark. Each override below is written at a
+   specificity that beats the rule it has to outrank, and those margins are
+   the whole reason the selectors look long — see each comment before
+   shortening one.
+
+   This default is scoped to the three places a mark appears rather than
+   written as a bare `.game-mark-light`, because the base rules that lay the
+   logos out set `display: block` at (0,2,1) — `.navbar .logo img` and the
+   footer's equivalent — and a single class at (0,1,0) loses to them, which
+   showed both marks stacked in dark mode. These are (0,3,0). */
+.navbar .logo .game-mark-light,
+.navbar .nav-drawer-brand .game-mark-light,
+.site-footer .footer-logo-link .game-mark-light {
+  display: none;
+}
+
+/* The drawer panel stays dark in both themes, so it keeps the white mark in
+   both. This has to outrank `.navbar.nav-open .nav-links .nav-drawer-brand img
+   { display: block }` (0,4,1), which would otherwise show both marks stacked;
+   at (0,6,0) it does. */
+.navbar.nav-open .nav-links .nav-drawer-brand.logo-tf .game-mark-dark {
+  display: block;
+}
+
+.navbar.nav-open .nav-links .nav-drawer-brand.logo-tf .game-mark-light {
+  display: none;
+}
+
+/* Light bar, navbar. Both games now ship a light mark, so this is no longer
+   TF2-only: theme.css used to hide `.navbar .logo img` and redraw CSPRICE
+   from ::before/::after text, and that block is gone — the real wordmark
+   shows in both themes. (0,4,0) beats the base `.navbar .logo img`
+   (0,2,1) that lays the marks out, and the (0,3,0) default that hides the
+   light one. */
+html[data-theme="light"] .navbar .logo .game-mark-dark {
+  display: none;
+}
+
+html[data-theme="light"] .navbar .logo .game-mark-light {
+  display: block;
+}
+
+/* Light bar, footer. Same swap, against theme.css's footer rule, which is
+   carried by an id: `html[data-theme="light"] body #cs2-footer-root
+   .site-footer .footer-logo-link img` is (1,3,2), so these are (1,4,2). The
+   #cs2-footer-root and body parts are not decoration — drop either and this
+   loses. */
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-logo-link .game-mark-dark {
+  display: none;
+}
+
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-logo-link .game-mark-light {
+  display: block;
+}
+
+/* theme.css redraws the wordmark in light mode from ::before/::after with the
+   literal strings "CS" and "PRICE", on both the navbar logo and the footer
+   link. In TF2 mode the mark is real elements, so those pseudo-elements would
+   print CS…PRICE around TFPRICE. theme.css is injected after this file, so
+   source order cannot win — these are (0,4,0) against its (0,3,0) and beat it
+   on specificity. Keep the .logo-tf class in every selector; dropping it
+   re-breaks light mode for CS2, which still needs the pseudo-elements. */
+html[data-theme="light"] .navbar .logo.logo-tf::before,
+html[data-theme="light"] .navbar .logo.logo-tf::after,
+html[data-theme="light"] .navbar .nav-drawer-brand.logo-tf::before,
+html[data-theme="light"] .navbar .nav-drawer-brand.logo-tf::after,
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-logo-link.logo-tf::before,
+html[data-theme="light"] body #cs2-footer-root .site-footer .footer-logo-link.logo-tf::after {
+  content: none;
+}
+
+/* The switcher itself. Sits in the 26px gap after the logo, reading as part of
+   the brand cluster rather than as one of the row-1 tools. */
+.navbar .nav-game {
+  position: relative;
+  flex: 0 0 auto;
+  /* .nav-left's 26px gap reads as too much air between the wordmark and a
+     control this small; the negative margin pulls it back to ~14px so the two
+     read as one brand cluster. Measured, not guessed. */
+  margin-left: -6px;
+}
+
+/* No pill and no ring: asked for "just the img". The tile does the work, the
+   short name sits beside it, and the only chrome is a faint tint on hover so
+   the control still announces itself as clickable. Because there is no border
+   to fill, the padding is minimal and the height comes from the tile. */
+.navbar .nav-game-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.navbar .nav-game-trigger:hover,
+.navbar .nav-game.open .nav-game-trigger {
+  background: var(--tint);
+  color: var(--text);
+}
+
+.navbar .nav-game-trigger i {
+  font-size: 11px;
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+}
+
+.navbar .nav-game.open .nav-game-trigger i {
+  transform: rotate(180deg);
+}
+
+.navbar .nav-game-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 5200;
+  /* Asked to be bigger. 308px rather than the 248px it launched at: enough
+     that "Counter-Strike 2" and its count sit well short of the check instead
+     of crowding it, without the panel growing wider than the nav cluster it
+     drops out of. */
+  min-width: 308px;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 24px 48px rgba(2, 6, 23, 0.55);
+  transform-origin: top left;
+  animation: navMenuPanelIn 0.17s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html[data-theme="light"] .navbar .nav-game-panel {
+  /* Matched to the other dropdowns; see .nav-menu-panel above. */
+  box-shadow: 0 8px 24px rgba(16, 24, 64, 0.10);
+}
+
+/* icon, label, then the check pushed to the far edge by its own auto margin.
+   This was `justify-content: space-between`, which worked while the row held
+   two things; with the icon added it spread all three apart and stranded the
+   logo away from its label. */
+.navbar .nav-game-item {
+  display: flex;
+  align-items: center;
+  /* Stated, not merely omitted: dropping the old `space-between` declaration
+     would not have removed it if any other rule still set it, and the row
+     without a check has no auto margin to absorb the free space — it spread
+     the logo and its label 56px apart. */
+  justify-content: flex-start;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  animation: navMenuItemIn 0.2s ease-out both;
+  animation-delay: calc(60ms + min(var(--row-i, 0) * 22ms, 180ms));
+}
+
+/* Hover is the tint alone. The text deliberately does NOT go accent here:
+   asked for plainly — no blue text in these rows — and the background is
+   feedback enough. */
+.navbar .nav-game-item:hover {
+  background: var(--tint);
+  color: var(--text);
+}
+
+/* The current game is marked rather than hidden: a two-option menu that drops
+   the option you are on looks broken. The mark is the check, not the type —
+   the row used to go accent, which turned the active game's name AND its
+   count blue while the other row stayed white, and that is what was wrong. */
+.navbar .nav-game-item.active {
+  color: var(--text);
+}
+
+.navbar .nav-game-item.active::after {
+  content: "\f00c";                        /* fa-check */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 10px;
+  /* The one accent left in the row, and it now needs stating: it used to
+     inherit the row's accent colour, which is gone. */
+  color: var(--accent);
+  /* Takes over from the old space-between: the check keeps to the right edge
+     while the icon and label stay together on the left. */
+  margin-left: auto;
+  padding-left: 12px;
+}
+
+/* The game marks. CS2's is an opaque orange/navy tile, so it is rounded here
+   rather than in the file — a square block of colour sits badly next to a
+   transparent mark. TF2's own artwork already has its corners cut out, and the
+   radius is small enough not to clip it. Both read on a white panel and on the
+   drawer's dark one, so neither needs a per-theme variant. */
+.navbar .nav-game-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+/* Matched to the wordmark's LETTERS, not to its image box. logo.png is a
+   500x200 canvas whose glyphs occupy y52..146, so the 38px box beside this
+   renders only ~18px of visible letter — a 38px tile next to it looked twice
+   the height of the wordmark, which is what was reported.
+   22px is the letter height plus a couple of px, which is as close as the
+   game art can get and still be recognisable; at a literal 18px the CS2
+   silhouette turns to mush. The PANEL tiles stay 38px: those sit beside each
+   other, not beside the wordmark, and were asked to be bigger. */
+.navbar .nav-game-trigger .nav-game-icon {
+  width: 22px;
+  height: 22px;
+  padding: 2px;
+  border-radius: 6px;
+  background: var(--tint);
+  object-fit: contain;
+}
+
+/* Square artwork in a menu row. `.nav-menu-glyph` is 22x15, shaped for the
+   CS2 weapon silhouettes; the TF2 category icons are square item renders and
+   would be squashed by that. object-fit keeps them honest even if the box
+   changes later. */
+.navbar .nav-menu-glyph.nav-menu-glyph-square {
+  /* flex-basis, not just width: the base rule pins the box with
+     `flex: 0 0 22px`, which wins over a plain width and left the icon
+     letterboxed in a 22x20 slot. */
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* ---------------------------------------------------------------------------
+   Switcher rows: a game tile, the full name, and how many items we track.
+   Modelled on the reference picker but built from our own tokens, radius and
+   type scale rather than its palette — the tile sits on --tint so the two
+   games read as a set even though one mark is opaque and the other is not.
+   --------------------------------------------------------------------------- */
+.navbar .nav-game-tile {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--tint);
+  object-fit: contain;
+}
+
+.navbar .nav-game-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+/* Both lines take the foreground colour — white on the dark panel, and
+   --text rather than a literal white so the same rows stay readable on the
+   light one. The count was --muted and the active row was accent, which gave
+   the panel three different text colours at once; it is one colour now, and
+   the hierarchy comes from size and weight instead. */
+.navbar .nav-game-name {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.navbar .nav-game-count {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* The rows are 30px tiles now, so they need more room than the old one-line
+   labels; the check keeps its place at the right-hand edge. */
+.navbar .nav-game-panel .nav-game-item {
+  padding: 9px 10px;
+}
+
+.navbar.nav-open .nav-links .nav-game-tile {
+  background: rgba(148, 163, 184, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar .nav-game-panel,
+  .navbar .nav-game-item {
+    animation: none;
+  }
+}
+
+/* Phone. The top bar is burger + logo + search and has no room for a fourth
+   control, so the switcher there lives in the drawer instead. The drawer copy
+   needs no hiding of its own: it sits inside .nav-drawer-head, which is
+   display:none until the drawer opens. */
+@media (max-width: 900px) {
+  .navbar .nav-left > .nav-game {
+    display: none;
+  }
+
+  /* .nav-drawer-head is space-between with the round search button on the
+     right; margin-right:auto keeps the switcher tucked against the wordmark
+     instead of floating into the middle. */
+  .navbar.nav-open .nav-links .nav-drawer-head .nav-game {
+    display: block;
+    margin-left: 2px;
+    margin-right: auto;
+  }
+
+  /* The drawer keeps its dark panel in light mode (see the note further down
+     about its glyphs), so anything in here that paints from --text or --border
+     comes out dark-on-dark and vanishes. These are the drawer's own colours,
+     the same literals .nav-drawer-round already uses — not theme tokens,
+     deliberately. Verified: without them the whole switcher was invisible on a
+     light-mode phone. The wordmark needs no equivalent any more: it is artwork
+     now, and the drawer is pinned to the white-TF file in both themes. */
+  /* border-color is gone from these: the trigger carries no border anywhere
+     now, and leaving the declarations would have been dead weight implying
+     one exists. */
+  .navbar.nav-open .nav-links .nav-game-trigger {
+    color: #e2e8f0;
+  }
+
+  .navbar.nav-open .nav-links .nav-game-trigger .nav-game-icon {
+    background: rgba(148, 163, 184, 0.16);
+  }
+
+  .navbar.nav-open .nav-links .nav-game-trigger:hover,
+  .navbar.nav-open .nav-links .nav-game.open .nav-game-trigger {
+    background: rgba(148, 163, 184, 0.14);
+    color: #ffffff;
+  }
+
+  .navbar.nav-open .nav-links .nav-game-panel {
+    border-color: rgba(148, 163, 184, 0.22);
+    background: #101b2e;
+    box-shadow: 0 24px 48px rgba(2, 6, 23, 0.55);
+  }
+
+  .navbar.nav-open .nav-links .nav-game-item {
+    color: #e2e8f0;
+  }
+
+  /* Same as desktop: the active row is marked by the check, not by recolouring
+     its type. Both lines stay light on this permanently dark panel, which is
+     why these are literals rather than --text. */
+  .navbar.nav-open .nav-links .nav-game-item.active {
+    color: #e2e8f0;
+  }
+
+  .navbar.nav-open .nav-links .nav-game-item.active::after {
+    color: #2f7dff;
+  }
+
+  .navbar.nav-open .nav-links .nav-game-name,
+  .navbar.nav-open .nav-links .nav-game-count {
+    color: #e2e8f0;
+  }
+
+  .navbar.nav-open .nav-links .nav-game-item:hover {
+    background: rgba(47, 125, 255, 0.16);
+    color: #ffffff;
+  }
+
+  .navbar.nav-open .nav-links .nav-game-item:hover .nav-game-name,
+  .navbar.nav-open .nav-links .nav-game-item:hover .nav-game-count {
+    color: #ffffff;
+  }
+}
+
+/* light-theme:begin */
+/* ===========================================================================
+   Light theme — additive. Dark above is untouched.
+
+   Unlike the other sheets' light layers, these rules carry !important, and
+   they have to: the base rules they shadow are themselves !important
+   (`.navbar .nav-alert-trigger i { color: #ffffff !important }` and the
+   profile-dropdown icons). On a white navbar that forced white made the bell
+   and the menu glyphs invisible — the icons were painting, just in white on
+   white. A :where() layer cannot beat !important, so these are real selectors
+   at (0,4,0) plus !important.
+
+   Everything here is scoped to html[data-theme="light"], so dark keeps the
+   forced white exactly as it was.
+   ========================================================================= */
+
+html[data-theme="light"] .navbar .nav-alert-trigger,
+html[data-theme="light"] .navbar .nav-alert-trigger i {
+  color: var(--text) !important;
+}
+
+html[data-theme="light"] .navbar .nav-alert-trigger:hover,
+html[data-theme="light"] .navbar .nav-alert-trigger:hover i,
+html[data-theme="light"] .navbar .nav-alert-menu.open .nav-alert-trigger,
+html[data-theme="light"] .navbar .nav-alert-menu.open .nav-alert-trigger i {
+  color: var(--accent) !important;
+}
+
+html[data-theme="light"] .navbar .nav-profile-dropdown a i {
+  color: var(--muted) !important;
+}
+
+html[data-theme="light"] .navbar .nav-profile-dropdown a:hover i {
+  color: var(--accent) !important;
+}
+
+/* Log out keeps its warning colour, but #fca5a5 is a dark-theme red and is
+   far too pale on white — take the token instead. */
+html[data-theme="light"] .navbar .nav-profile-dropdown a.nav-profile-logout,
+html[data-theme="light"] .navbar .nav-profile-dropdown a.nav-profile-logout i {
+  color: var(--negative) !important;
+}
+
+/* The burger and the search glyph inherit from .navbar, which theme.css
+   repaints, but the drawer is drawn on its own dark panel in both themes, so
+   its glyphs stay light. Listed so a later pass does not "fix" them.
+
+   This used to say `color: inherit`, which was wrong and shipped that way:
+   inherit resolves to .nav-links' colour, and in light mode that is --text
+   (#0b1230) — dark navy on the drawer's #0d1220 panel. All 27 rows of the
+   phone menu were invisible. The value below is the one the base rule at
+   `.navbar.nav-open .nav-links .nav-item` already uses, so light now matches
+   dark exactly; the icons and the inner <span> inherit it from the anchor,
+   which is why they are no longer listed separately.
+
+   If you are checking this in a browser: the drawer transitions colour, and a
+   throttled/hidden tab freezes that transition at its start value, which looks
+   exactly like this bug. Finish the animations before believing a reading.
+
+   The drawer panel and the accordion body are included, not just the rows:
+   several rows resolve their colour by inheritance, so fixing only .nav-item
+   left the 22 links inside .nav-drawer-panel-inner (Deals, Market Explorer,
+   the weapon classes, …) still inheriting the light --text from their
+   container. Setting the container too makes the result independent of which
+   rule ends up winning on the row itself. */
+html[data-theme="light"] .navbar.nav-open .nav-links,
+html[data-theme="light"] .navbar.nav-open .nav-links .nav-drawer-panel-inner,
+html[data-theme="light"] .navbar.nav-open .nav-links .nav-item {
+  color: rgba(226, 232, 240, 0.78);
+}
+
+/* The Login button, and the modal's Sign in button, are filled with a
+   TRANSLUCENT accent gradient — rgba(75,105,255,.34 → .18). Over the navy bar
+   that composites to a solid-looking blue pill and #fff on it is right. Over
+   the light bar it composites to rgb(194,204,255) → rgb(223,228,255), and the
+   white label lands at 1.57:1 falling to 1.26:1.
+
+   This first used --accent-grad / --accent-depth, which fixed the contrast
+   but kept a gradient and brought a blue glow with it: the measured shadow
+   included `0 8px 20px -8px rgba(37,99,235,.7)`. The agreed light spec is a
+   FLAT --accent fill with at most a 1px ambient shadow and no glow, so that
+   is what these now do. Dark keeps the translucent original untouched.
+
+   Do not drop the :hover/:focus-visible selectors: the base rules repeat the
+   translucent fill on those states, so without them the button fades out
+   again under the cursor. The drawer's New chat pill uses the same fill but
+   sits on the drawer's permanently dark panel, so it is correct as is and is
+   deliberately absent from this list. */
+@media (min-width: 1081px) {
+  /* SUPERSEDES the flat --accent fill described above (owner, 2026-09-30:
+     "keep the button style the same as on the normal site"). The flat fill
+     was a light-spec decision; what they actually want is the dark site's
+     button, which is a translucent CS2 blue over the dark bar. Translucency
+     cannot survive the move - over white it would render pale - so these are
+     the composited values, measured off the dark navbar rather than guessed:
+     rgba(75,105,255,.34) and .18 over the bar resolve to about #1f2c67 and
+     #151e42, and the inset rim rgba(75,105,255,.45) to about #273680.
+
+     The numbers below are the other session's #21306c / #162248 / #2a3b8b,
+     within a couple of RGB points of mine and already in use for the item
+     page's .tv-cta buttons and the KYC tag in light mode. Matching those is
+     worth more than the last two points of accuracy: the point of the request
+     is that every light-mode button looks like one family. */
+  html[data-theme="light"] .navbar .nav-login-btn {
+    background: linear-gradient(180deg, #21306c 0%, #162248 100%);
+    box-shadow:
+      inset 0 0 0 1px #2a3b8b,
+      0 1px 2px rgba(16, 24, 64, 0.12);
+    color: #fff;
+  }
+
+  html[data-theme="light"] .navbar .nav-login-btn:hover,
+  html[data-theme="light"] .navbar .nav-login-btn:focus-visible {
+    background: linear-gradient(180deg, #27397f 0%, #1a2a57 100%);
+    box-shadow:
+      inset 0 0 0 1px #33459d,
+      0 1px 2px rgba(16, 24, 64, 0.12);
+    color: #fff;
+  }
+}
+
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-submit {
+  background: var(--accent);
+  box-shadow: 0 1px 2px rgba(16, 24, 64, 0.12);
+  color: #fff;
+}
+
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-submit:hover,
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-submit:focus-visible {
+  background: #1d4ed8;
+  box-shadow: 0 1px 2px rgba(16, 24, 64, 0.12);
+  color: #fff;
+}
+
+/* The bar's own edge. `.navbar { border: 1px solid rgba(255,255,255,0.08) }`
+   is a dark-mode hairline — a white line on the white bar, invisible and
+   pointless. Measured live before changing it.
+
+   !important is required, not sloppiness: the base is
+   `.navbar { border: 1px solid rgba(255,255,255,0.08) !important }`, so a
+   plain declaration loses however specific it is. Verified by measuring —
+   the first attempt without it did not take. */
+html[data-theme="light"] .navbar {
+  border-color: var(--border) !important;
+}
+
+/* Search glyph. Was rgb(148,163,184), a dark-mode grey that lands at 2.4:1 on
+   the --field background. --muted is the spec's value and measures ~5.2:1.
+   Same !important story: `.navbar .search-container i` is itself !important. */
+html[data-theme="light"] .navbar .search-container i {
+  color: var(--muted) !important;
+}
+
+/* The "log in to use alerts" row inside the bell dropdown. Its icon is
+   #ffffff and its label rgb(226,232,240) — both dark-panel values — on a
+   button with NO background of its own, sitting on the white dropdown.
+   Measured at ~1.0:1: completely invisible in light mode. */
+html[data-theme="light"] .navbar .nav-alert-footer .nav-alert-login-trigger {
+  color: var(--text);
+}
+
+html[data-theme="light"] .navbar .nav-alert-footer .nav-alert-login-trigger i {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .navbar .nav-alert-footer .nav-alert-login-trigger:hover,
+html[data-theme="light"] .navbar .nav-alert-footer .nav-alert-login-trigger:focus-visible {
+  color: var(--accent);
+}
+
+/* The phone burger. `.navbar .nav-burger` sets `color: #e2e8f0` with a dark
+   pill behind it, and the ≤900px block then makes that pill transparent — so
+   in light mode it is a near-white glyph directly on the white bar: 1.23:1,
+   measured at 375px with transitions killed. It sits on the BAR, not on the
+   drawer's permanently dark panel, so the reasoning that keeps the drawer
+   glyphs light does not apply to it.
+
+   Background is forced transparent here as well as the colour, and that is
+   load-bearing: above 900px the base rule still paints the dark pill, and
+   --text on that would swap one invisible glyph for another. Border-color is
+   deliberately left alone so each width keeps the ring it was designed with —
+   a faint one above 900px, none below. */
+html[data-theme="light"] .navbar .nav-burger {
+  background: transparent;
+  color: var(--text);
+}
+
+html[data-theme="light"] .navbar .nav-burger:hover,
+html[data-theme="light"] .navbar .nav-burger:focus-visible {
+  color: var(--accent);
+}
+
+/* The Skins / Other mega-menu panel. theme.css already repaints the sibling
+   surfaces (.nav-menu-dropdown, .nav-profile-dropdown, .nav-alert-dropdown)
+   onto var(--card) in light mode and turns .nav-menu-item text to var(--text),
+   but .nav-menu-panel was never in that list — so the panel kept its dark
+   #101b2e while its rows went dark navy. Knives, Gloves, Pistols, Rifles, SMGs
+   and Heavy were all invisible; only the hovered row, which theme.css recolours
+   to var(--accent), could be read.
+   Giving the panel the light surface is the fix rather than pinning the text
+   light, because it is a bar dropdown like its three siblings, not a drawer —
+   this is the opposite call to the one made for .nav-links, whose panel really
+   does stay dark in both themes. Base is (0,2,0); this is (0,3,0). */
+html[data-theme="light"] .navbar .nav-menu-panel {
+  border-color: var(--border);
+  background: var(--card);
+  /* Was 0 18px 40px rgba(16,24,64,.12) — a dark-mode drop shadow carried into
+     light. The agreed light spec for dropdowns is this shallower one. */
+  box-shadow: 0 8px 24px rgba(16, 24, 64, 0.10);
+}
+
+/* …and the row glyphs have to come with it. They are not tinted by CSS — the
+   source SVGs are drawn pure white (sampled: every opaque pixel is #ffffff,
+   carried at opacity .8), so lightening the panel above would have traded six
+   invisible labels for six invisible icons. brightness(0) collapses white to
+   black; the .8 the base rule already applies then lands it at roughly the
+   muted grey the rest of the light chrome uses. The Font Awesome fallback
+   glyph is a font, not an image, so it takes var(--text) from theme.css and is
+   deliberately not touched here. */
+html[data-theme="light"] .navbar .nav-menu-panel .nav-menu-glyph {
+  filter: brightness(0);
+}
+
+/* Autofill in the login modal. Chrome paints its own yellow unless an inset
+   shadow covers the field, so the rules above cover it with a dark slab and
+   force a light text colour — correct on the dark modal, but in light mode it
+   turned the field near-black with dark text the moment the browser filled it.
+   The tokens give the same treatment in whichever theme is on. :autofill is
+   Firefox's route and needs the same. */
+html[data-theme="light"] .cs2-login-input:-webkit-autofill,
+html[data-theme="light"] .cs2-login-input:-webkit-autofill:hover,
+html[data-theme="light"] .cs2-login-input:-webkit-autofill:focus,
+html[data-theme="light"] .cs2-login-input:-webkit-autofill:active,
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-input:-webkit-autofill,
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-input:-webkit-autofill:hover,
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-input:-webkit-autofill:focus,
+html[data-theme="light"] .cs2-login-modal--auth .cs2-login-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--field) inset;
+  box-shadow: 0 0 0 1000px var(--field) inset;
+  -webkit-text-fill-color: var(--text);
+  caret-color: var(--text);
+}
+
+html[data-theme="light"] .cs2-login-input:autofill {
+  background: var(--field);
+  color: var(--text);
+}
+/* The floating Ask Mark / Ask Dell pill keeps its dark look in light mode
+   (owner, 2026-09-30: "in the white keep the ask mark the same as in the
+   normal mode"). index.css turns it into a white card in light, and login.css
+   restates the same thing; both are written with `:where(html[data-theme=
+   "light"])`, which is zero-specificity by design, so one real rule here
+   outranks both rather than one of them - editing index.css alone would still
+   lose to login.css on that page.
+
+   The dark fill is already all but opaque (.98/.99), so it needs no
+   compositing; the pieces that do are the rim, which is rgba(110,146,198,.16)
+   over near-black and would read as a pale grey ring on white, and the
+   shadow, which would read as a grey halo. The rim is the other session's
+   #243049 - the same family as the light Login button and the Mann Up Run
+   button - and the shadow is kept but tinted, because a floating pill with no
+   shadow stops looking like it floats. */
+html[data-theme="light"] .cs2-chat-fab {
+  border: 1px solid #243049 !important;
+  background: linear-gradient(180deg, #0a111f 0%, #040913 100%) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 12px 28px rgba(16, 24, 64, 0.18) !important;
+}
+
+html[data-theme="light"] .cs2-chat-fab:hover,
+html[data-theme="light"] .cs2-chat-fab:focus-visible {
+  border-color: #33456b !important;
+  background: linear-gradient(180deg, #0e1626 0%, #060b16 100%) !important;
+  box-shadow: 0 16px 34px rgba(16, 24, 64, 0.22) !important;
+}
+
+/* light-theme:end */

@@ -1,0 +1,157 @@
+Wear prices passed: 597/15426
+Chart sample passed: 9/9
+Price failures: 14829
+Chart failures: 0
+
+'Blueberries' Buckshot | NSWC SEAL: fewer than 2 wear prices
+'Medium Rare' Crasswater | Guerrilla Warfare: fewer than 2 wear prices
+'The Doctor' Romanov | Sabre: fewer than 2 wear prices
+'Two Times' McCoy | TACP Cavalry: fewer than 2 wear prices
+'Two Times' McCoy | USAF TACP: fewer than 2 wear prices
+1st Lieutenant Farlow | SWAT: fewer than 2 wear prices
+3rd Commando Company | KSK: fewer than 2 wear prices
+AK-47 | Aphrodite: fewer than 2 wear prices
+AK-47 | Baroque Purple: fewer than 2 wear prices
+AK-47 | Breakthrough: fewer than 2 wear prices
+AK-47 | Crossfade: fewer than 2 wear prices
+AK-47 | Frontside Misty: fewer than 2 wear prices
+AK-47 | Gold Arabesque: fewer than 2 wear prices
+AK-47 | Hydroponic: fewer than 2 wear prices
+AK-47 | Ice Coaled: fewer than 2 wear prices
+AK-47 | Jungle Spray: fewer than 2 wear prices
+AK-47 | Neon Revolution: fewer than 2 wear prices
+AK-47 | Olive Polycam: fewer than 2 wear prices
+AK-47 | Point Disarray: fewer than 2 wear prices
+AK-47 | Redline: fewer than 2 wear prices
+AK-47 | Slate: fewer than 2 wear prices
+AK-47 | The Outsiders: fewer than 2 wear prices
+AK-47 | Wasteland Rebel: fewer than 2 wear prices
+AK-47 | Wild Lotus: fewer than 2 wear prices
+Arno The Overgrown | Guerrilla Warfare: fewer than 2 wear prices
+Aspirant | Gendarmerie Nationale: fewer than 2 wear prices
+AUG | Akihabara Accept: fewer than 2 wear prices
+AUG | Aristocrat: fewer than 2 wear prices
+AUG | Colony: fewer than 2 wear prices
+AUG | Copperhead: fewer than 2 wear prices
+AUG | Creep: fewer than 2 wear prices
+AUG | Flame Jörmungandr: fewer than 2 wear prices
+AUG | Hot Rod: fewer than 2 wear prices
+AUG | Midnight Lily: fewer than 2 wear prices
+AUG | Radiation Hazard: fewer than 2 wear prices
+AUG | Snake Pit: fewer than 2 wear prices
+AUG | Stymphalian: fewer than 2 wear prices
+AUG | Tom Cat: fewer than 2 wear prices
+AUG | Wings: fewer than 2 wear prices
+Autograph Capsule | Astralis | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Astralis | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Astralis | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Challengers (Foil) | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Challengers (Foil) | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Challengers (Foil) | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Challengers (Foil) | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Cloud9 G2A | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Cloud9 | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Cloud9 | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Counter Logic Gaming | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Counter Logic Gaming | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Counter Logic Gaming | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Counter Logic Gaming | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | FaZe Clan | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | FaZe Clan | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | FaZe Clan | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Flipsid3 Tactics | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Flipsid3 Tactics | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Flipsid3 Tactics | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Flipsid3 Tactics | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Flipsid3 Tactics | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Fnatic | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Fnatic | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Fnatic | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Fnatic | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Fnatic | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | G2 Esports | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | G2 Esports | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | G2 Esports | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | G2 Esports | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Gambit Gaming | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Gambit Gaming | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Gambit Gaming | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | GODSENT | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Group A (Foil) | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Group B (Foil) | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Group C (Foil) | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Group D (Foil) | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | HellRaisers | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Legends (Foil) | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Legends (Foil) | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Legends (Foil) | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Legends (Foil) | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Luminosity Gaming | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Luminosity Gaming | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Luminosity Gaming | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | mousesports | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | mousesports | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | mousesports | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | mousesports | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | mousesports | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Natus Vincere | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Natus Vincere | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Natus Vincere | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Natus Vincere | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Natus Vincere | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Ninjas in Pyjamas | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Ninjas in Pyjamas | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Ninjas in Pyjamas | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Ninjas in Pyjamas | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | North | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | OpTic Gaming | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | OpTic Gaming | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Renegades | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | SK Gaming | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | SK Gaming | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Splyce | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Team Dignitas | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Team Dignitas | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Team eBettle | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Team EnVyUs | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Team EnVyUs | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Team EnVyUs | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Team EnVyUs | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Team EnVyUs | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Team Immunity | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Team Kinguin | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Team Liquid | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Team Liquid | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Team Liquid | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Team Liquid | MLG Columbus 2016: fewer than 2 wear prices
+Autograph Capsule | Team SoloMid | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Team SoloMid | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Titan | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Titan | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Vexed Gaming | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Virtus.Pro | Atlanta 2017: fewer than 2 wear prices
+Autograph Capsule | Virtus.Pro | Cluj-Napoca 2015: fewer than 2 wear prices
+Autograph Capsule | Virtus.Pro | Cologne 2015: fewer than 2 wear prices
+Autograph Capsule | Virtus.Pro | Cologne 2016: fewer than 2 wear prices
+Autograph Capsule | Virtus.Pro | MLG Columbus 2016: fewer than 2 wear prices
+AWP | Arsenic Spill: fewer than 2 wear prices
+AWP | BOOM: fewer than 2 wear prices
+AWP | Capillary: fewer than 2 wear prices
+AWP | Containment Breach: fewer than 2 wear prices
+AWP | Dragon Lore: fewer than 2 wear prices
+AWP | Electric Hive: fewer than 2 wear prices
+AWP | Fade: fewer than 2 wear prices
+AWP | Fever Dream: fewer than 2 wear prices
+AWP | Gungnir: fewer than 2 wear prices
+AWP | Ice Coaled: fewer than 2 wear prices
+AWP | Lightning Strike: fewer than 2 wear prices
+AWP | Medusa: fewer than 2 wear prices
+AWP | Neo-Noir: fewer than 2 wear prices
+AWP | Oni Taiji: fewer than 2 wear prices
+AWP | Pit Viper: fewer than 2 wear prices
+AWP | Redline: fewer than 2 wear prices
+AWP | Safari Mesh: fewer than 2 wear prices
+AWP | Sun in Leo: fewer than 2 wear prices
+AWP | The End: fewer than 2 wear prices
+
+
