@@ -1,48 +1,22 @@
 # CSPRICE
 
-A CS2 (Counter-Strike 2) skin and item price tracker. It aggregates listings
-across eleven marketplaces, keeps price history per item and wear, and answers
-questions about the market through a built-in assistant.
+**The first AI chat assistant built for the CS2 economy.**
 
-Live site: https://csprice.eu
+Ask it what to buy, what a skin is worth, where it is cheapest right now, or to
+build you a portfolio for a budget — and it answers from live market data
+across eleven marketplaces, not from model recall. Other CS2 price sites give
+you tables and charts to read; this one you can ask.
 
----
+> "Is AWP | Asiimov worth buying now?"
+> "Build me a €500 portfolio"
+> "Which cases will go up?"
+> "How much is my inventory worth?"
 
-## What it does
+Around that sits a full CS2 market data platform: price aggregation across
+eleven marketplaces, per-item history, deals, a 29,000-item catalogue, a drop
+simulator and a 3D skin crafter.
 
-**Price aggregation.** Every item page compares the live price across Steam,
-Skinport, CSFloat, White.Market, DMarket, Waxpeer, Market.CSGO, ShadowPay,
-Mannco.store, HaloSkins and Buff, showing the cheapest source, each market's
-fee and listing depth, and the saving against the Steam reference price.
-
-**Price history.** Per-item daily history with 7D / 1M / 3M / 6M / 1Y / Max
-ranges, charted per marketplace, plus listing-count distribution so you can see
-where supply actually sits rather than just where the cheapest tag is.
-
-**Deals.** A continuously refreshed list of listings priced below their market
-value, filterable by weapon class and price band, sorted by saving against
-Steam.
-
-**Market Explorer.** The full catalogue — roughly 29,000 items across skins,
-cases, stickers, capsules, charms, agents, patches, pins, graffiti and music
-kits — browsable by category with live prices and listing counts.
-
-**Care Package.** A drop simulator: it deals four items from the active weekly
-pool weighted by their real drop odds, shows what you would keep, and charts
-the dealt items' 30-day trend.
-
-**Skin Crafter.** A 3D viewer for placing stickers and charms on a weapon
-before committing real money to the craft.
-
-**Mark, the assistant.** A market assistant grounded in the site's own data
-rather than a general chatbot bolted on. See [The assistant](#the-assistant)
-below.
-
-**Inventory.** Steam sign-in reads your inventory, values it at current prices
-and exports to Excel.
-
-The site also runs a Team Fortress 2 edition at https://tf2price.eu, sharing
-this codebase with a separate catalogue and its own deployment.
+Live site: https://csprice.eu — [how the assistant works](#the-assistant)
 
 ---
 
@@ -83,6 +57,43 @@ non-AI fallback reply rather than erroring.
 
 The TF2 edition has the same assistant over its own catalogue
 (`tf2_ai_helpers.php`).
+
+---
+
+## What it does
+
+**Price aggregation.** Every item page compares the live price across Steam,
+Skinport, CSFloat, White.Market, DMarket, Waxpeer, Market.CSGO, ShadowPay,
+Mannco.store, HaloSkins and Buff, showing the cheapest source, each market's
+fee and listing depth, and the saving against the Steam reference price.
+
+**Price history.** Per-item daily history with 7D / 1M / 3M / 6M / 1Y / Max
+ranges, charted per marketplace, plus listing-count distribution so you can see
+where supply actually sits rather than just where the cheapest tag is.
+
+**Deals.** A continuously refreshed list of listings priced below their market
+value, filterable by weapon class and price band, sorted by saving against
+Steam.
+
+**Market Explorer.** The full catalogue — roughly 29,000 items across skins,
+cases, stickers, capsules, charms, agents, patches, pins, graffiti and music
+kits — browsable by category with live prices and listing counts.
+
+**Care Package.** A drop simulator: it deals four items from the active weekly
+pool weighted by their real drop odds, shows what you would keep, and charts
+the dealt items' 30-day trend.
+
+**Skin Crafter.** A 3D viewer for placing stickers and charms on a weapon
+before committing real money to the craft.
+
+**Mark, the assistant.** The chat assistant described above, reachable from the
+home page and from every item page.
+
+**Inventory.** Steam sign-in reads your inventory, values it at current prices
+and exports to Excel.
+
+The site also runs a Team Fortress 2 edition at https://tf2price.eu, sharing
+this codebase with a separate catalogue and its own deployment.
 
 ---
 
