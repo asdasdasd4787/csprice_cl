@@ -19,8 +19,14 @@ collections/
 collectibles/
 misc/
 
-# Price and marketplace caches (repopulated by the sync scripts)
+# Price and marketplace caches (repopulated by the sync scripts).
+# roi_catalog.json is the exception: it is the catalogue the search and
+# browse endpoints read, so without it a clone serves pages that return no
+# items. 27 MB is worth it for a repo someone is meant to be able to run.
 assets/*-cache/
+!assets/steam-market-cache/
+assets/steam-market-cache/*
+!assets/steam-market-cache/roi_catalog.json
 assets/cache/
 assets/*.log
 

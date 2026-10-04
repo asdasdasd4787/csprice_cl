@@ -125,7 +125,10 @@ Trimmed deliberately, to keep it reviewable:
   `scripts/build_item_urls.php`.
 - **3D weapon models** (~18 GB) — regenerate with
   `scripts/export_base_weapon_models.ps1`.
-- **Price caches** under `assets/*-cache/` — repopulated by the sync scripts.
+- **Price caches** under `assets/*-cache/` — with one exception:
+  `assets/steam-market-cache/roi_catalog.json` (27 MB) *is* committed,
+  because the search and browse endpoints read it and a clone would
+  otherwise return an empty catalogue. The rest are — repopulated by the sync scripts.
   The catalogue indexes under `assets/data/` *are* committed, since the app
   reads them at runtime.
 - **Deployment configuration and credentials** (`deploy/`,
